@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
+import 'package:foodorder_userapp/Backend/couponBackend.dart';
 import 'package:foodorder_userapp/Backend/getallRestaurents.dart';
 import 'package:foodorder_userapp/Backend/orderBackend.dart';
 import 'package:foodorder_userapp/Backend/paymentrzrpay.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:foodorder_userapp/LocationService/Location.dart';
+import 'package:foodorder_userapp/Screens/Couponpage.dart';
 import 'package:foodorder_userapp/Screens/cartpage.dart';
 import 'package:foodorder_userapp/Screens/firstpage.dart';
 import 'package:foodorder_userapp/Screens/LoginorRegister.dart';
@@ -37,18 +39,22 @@ class _MyHomePageState extends State<MyHomePage> {
   var obtainedIsuser;
   int currentIndex = 0;
 
-  Stream getifUser() async* {
+  Future getifUser() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     var data = sharedPreferences.getBool('isUser');
-    yield* Stream.periodic(Duration(seconds: 1), (_) {
-      if (data == null) {
-        sharedPreferences.setBool('isUser', false);
-      }
-      //print('$data is lick');
-      return data;
-      //return cart.getCart(sharedPreferences.getString('Account Details'));
-    });
+    if(data==null){
+       sharedPreferences.setBool('isUser', false);
+    }
+    return data;
+    // yield* Stream.periodic(Duration(seconds: 1), (_) {
+    //   if (data == null) {
+    //     sharedPreferences.setBool('isUser', false);
+    //   }
+    //   //print('$data is lick');
+    //   return data;
+    //   //return cart.getCart(sharedPreferences.getString('Account Details'));
+    // });
   }
 
   Future getToken() async {
@@ -122,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: CartPage(
             latlng: LatLng(widget.lat, widget.lon),
           )),
-      StreamBuilder(
+      FutureBuilder(
         builder: (con, snap) {
           // print(snap.data);
           // print(snap.connectionState);
@@ -135,12 +141,22 @@ class _MyHomePageState extends State<MyHomePage> {
             ChangeNotifierProvider(create: (BuildContext context) {
               return RegisterUser();
             }),
-            ChangeNotifierProvider(create: (BuildContext context) {
-              return AllRestaurent();
-            })
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (BuildContext context) {
+                return AllRestaurent();
+              }),
+              ChangeNotifierProvider(create: (BuildContext context) {
+                return Location();
+              }),
+              ],
+              // child: ChangeNotifierProvider(create: (BuildContext context) {
+              //   return AllRestaurent();
+              // }),
+            )
           ], child: AccountPage());
         },
-        stream: getifUser(),
+        future: getifUser(),
       )
     ];
     // print('hloo from home ${widget.address}');
@@ -282,10 +298,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                 ),
-                Container(
-                            height: 40,
-                            width: 30,
-                            child: Image.asset('images/discount.png'))
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return ChangeNotifierProvider(create: (BuildContext context) { return CouponBackend(); },
+                      child: CouponPage());
+                    }));
+                  },
+                  child: Container(
+                              height: 40,
+                              width: 30,
+                              child: Image.asset('images/discount.png')),
+                )
               ],
             ),
             elevation: 0,

@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
 import 'package:foodorder_userapp/Backend/getallRestaurents.dart';
@@ -260,6 +259,47 @@ class _FirstPageState extends State<FirstPage> {
                                                               const EdgeInsets
                                                                   .all(5.0),
                                                           child: Container(
+                                                            child: Stack(
+                                                              children: [
+                                                                Positioned(
+                                                                  bottom: 1,
+                                                                  right: 1,
+                                                                  child:  snapshot.data[index]
+                                                                                  [
+                                                                                  'rating'].fold(0,(avg,ele)=>avg+ele/snapshot.data[index]
+                                                                                  [
+                                                                                  'rating'].length)==0?
+                                                                                  Container(
+                                                                                    padding: EdgeInsets.only(left:2,right: 2),
+                                                                                    height: 15,
+                                                                                    width: 35,
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(5),
+                                                                                      color: Colors.green,
+                                                                                    ),
+                                                                                    
+                                                                                    //: 150,
+                                                                                    child: AutoSizeText('New',style: GoogleFonts.poppins(color:Colors.white,fontSize: 15,fontWeight: FontWeight.w500),)):
+                                                                                  Container(
+                                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),color: Colors.green,),
+                                                                                   //padding: EdgeInsets.all(5),
+                                                                                    height: 15,
+                                                                                    width: 35,
+                                                                                    
+                                                                                    child: Center(
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Icon(Icons.star,size: 13,color: Colors.white,),
+                                                                                          AutoSizeText('${snapshot.data[index]
+                                                                                  [
+                                                                                  'rating'].fold(0,(avg,ele)=>avg+ele/snapshot.data[index]
+                                                                                  [
+                                                                                  'rating'].length)}',style: GoogleFonts.poppins(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 10),),
+                                                                                        ],
+                                                                                      ),
+                                                                                    )) )
+                                                              ],
+                                                            ),
                                                             // padding: EdgeInsets.all(15),
                                                             decoration:
                                                                 BoxDecoration(
@@ -312,18 +352,7 @@ class _FirstPageState extends State<FirstPage> {
                                                                                   semiBigTextstyle),
                                                                         ),
                                                                       
-                                                                        snapshot.data[index]
-                                                                                  [
-                                                                                  'rating']==null?
-                                                                                  Container(
-                                                                                    decoration: BoxDecoration(
-                                                                                      borderRadius: BorderRadius.circular(8),
-                                                                                      color: Colors.green,
-                                                                                    ),
-                                                                                    
-                                                                                    height: 150,
-                                                                                    child: Text('New',style: GoogleFonts.poppins(color:Colors.white,fontSize: 15,fontWeight: FontWeight.w500),)):
-                                                                                  Card(child: Text('Not new'))
+                                                                      
                                                                        
                                                                       ]),
                                                                 ),

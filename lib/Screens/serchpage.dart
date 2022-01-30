@@ -82,8 +82,8 @@ class _SerchpageState extends State<Serchpage> {
                   child: ListView.builder(
                       itemCount: snap.data!.length,
                       itemBuilder: (con, ind) {
-                        print(snap.data);
-                        print(snap.data.length);
+                        // print(snap.data);
+                        // print(snap.data.length);
                        
                         return Container(
                           height: 155,
@@ -143,13 +143,11 @@ class _SerchpageState extends State<Serchpage> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Row(
                                           children: [
-                                            Positioned.fill(
-                                              child: Text('₹',
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.green)),
-                                            ),
+                                            Text('₹',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.green)),
                                             Text(
                                               snap.data[ind]['restro']['items']
                                                       ['price']

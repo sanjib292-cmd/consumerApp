@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,35 +12,51 @@ class AllRestaurent extends ChangeNotifier {
   var cusineTypes;
   var searchResult;
 
-  String firsturl = 'http://192.168.0.103:5000';
+  String firsturl = 'https://mealtime7399.herokuapp.com';
 
   Future getRestrobyId(id)async{
  try {
       var url = Uri.parse("$firsturl/registerRestro/$id");
+       await EasyLoading.show(
+                        status: 'loading...',
+                        //maskType: EasyLoadingMaskType.black,
+                      );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
+       await EasyLoading.dismiss();
         return jsonDecode(res.body);
       }
       print('not');
+     await EasyLoading.dismiss();
+      return null;
     } on Exception catch (e) {
+    EasyLoading.dismiss();
       print('ishh $e');
+        return e;
     }
   }
   Future getAllrestaurent(BuildContext context) async {
     try {
       var url = Uri.parse("$firsturl/registerRestro");
+       await EasyLoading.show(
+                        status: 'loading...',
+                        //maskType: EasyLoadingMaskType.black,
+                      );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
+       await EasyLoading.dismiss();
         restaurents = jsonDecode(res.body);
         notifyListeners();
         return restaurents;
       }
+      await EasyLoading.dismiss();
       print('not');
     } on Exception catch (e) {
+      await EasyLoading.dismiss();
        snackBar(e.toString(), context);
     }
   }
@@ -60,6 +77,26 @@ class AllRestaurent extends ChangeNotifier {
     } on Exception catch (e) {
        snackBar(e.toString(), context);
     }
+  }
+
+  Future rateRestro(token,rate,orderid,restroId)async{
+    try{
+   var url = Uri.parse("$firsturl/registerRestro/rate/$restroId/$rate/$orderid");
+   var res = await http.post(url, headers: <String, String>{
+            HttpHeaders.contentTypeHeader: 'application/json',
+            'x-auth-token': token
+          },
+      );
+      if(res.statusCode==200){
+        return res.body;
+      }
+      //snackBar('${res.body}', context);
+      return res.body;
+    }catch(e){
+//snackBar('$e', context);
+return null;
+    }
+
   }
 
   Future serchProduct(String search,BuildContext context)async{

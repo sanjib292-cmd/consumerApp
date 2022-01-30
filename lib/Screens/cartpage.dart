@@ -1,13 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
+import 'package:foodorder_userapp/Backend/couponBackend.dart';
 import 'package:foodorder_userapp/Backend/getallRestaurents.dart';
 import 'package:foodorder_userapp/Backend/orderBackend.dart';
 import 'package:foodorder_userapp/Backend/paymentrzrpay.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/cartemptyorNull.dart';
 import 'package:foodorder_userapp/Design&Ui/addedcartSnackbar.dart';
 import 'package:foodorder_userapp/LocationService/Location.dart';
+import 'package:foodorder_userapp/Screens/Couponpage.dart';
+import 'package:foodorder_userapp/Screens/OrderConfermationspalsh.dart';
 import 'package:foodorder_userapp/Screens/firstpage.dart';
 import 'package:foodorder_userapp/Screens/onOrderplacemap.dart';
 import 'package:geolocator/geolocator.dart';
@@ -37,21 +41,21 @@ class _CartPageState extends State<CartPage> {
   var destloc;
   var postedOrder;
   var desc, contact, email;
-  var paymentId;
+  var paymentId, delBoycharge;
   Razorpay _razorpay = Razorpay();
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     var postOrder = Provider.of<OrderBackend>(context, listen: false);
     await postOrder
         .postOrder(tOken, restronam, orderItm, user, true,
-            widget.latlng.latitude, widget.latlng.longitude, paymentId)
+            widget.latlng.latitude, widget.latlng.longitude, paymentId, sum,delBoycharge)
         .then((value) => Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (con) {
               return ChangeNotifierProvider(
                   create: (BuildContext context) {
                     return AllRestaurent();
                   },
-                  child: OnorderPlace(
+                  child: OrderConfirmd(
                     sourceloc: widget.latlng,
                     destloc: destloc,
                     orderDetails: value,
@@ -121,6 +125,7 @@ class _CartPageState extends State<CartPage> {
     //getUserid();
     var cart = Provider.of<Cart>(context, listen: false);
     var createPayment = Provider.of<Paymentrzrpay>(context, listen: false);
+    var postOrder = Provider.of<OrderBackend>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey.shade100,
@@ -139,6 +144,38 @@ class _CartPageState extends State<CartPage> {
                         paymentId = createPayment.msg;
                       });
                       startPayment(createPayment.msg);
+                    }, () async {
+                      await postOrder
+                          .postOrder(
+                              tOken,
+                              restronam,
+                              orderItm,
+                              user,
+                              false,
+                              widget.latlng.latitude,
+                              widget.latlng.longitude,
+                              null,
+                              sum,
+                              delBoycharge)
+                          .then((value) {
+                        print(value);
+                        try {
+                          return Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (con) {
+                            return ChangeNotifierProvider(
+                                create: (BuildContext context) {
+                                  return AllRestaurent();
+                                },
+                                child: OrderConfirmd(
+                                  sourceloc: widget.latlng,
+                                  destloc: destloc,
+                                  orderDetails: value,
+                                ));
+                          }));
+                        } catch (e) {
+                          print('$e +shit');
+                        }
+                      });
                     }),
                   ],
                 )
@@ -175,7 +212,7 @@ class _CartPageState extends State<CartPage> {
   //   );
   // }
 
-  createSubTitleandCartlist(getcart, checkoutonpress) {
+  createSubTitleandCartlist(getcart, checkoutonpress, cod) {
     return FutureBuilder(
         future: Future.delayed(Duration(seconds: 2), () => getcart),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -306,33 +343,70 @@ class _CartPageState extends State<CartPage> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        child: Container(
-                            color: Colors.white,
-                            child: Row(
-                              //mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Container(
-                                    height: 40,
-                                    width: 30,
-                                    child: Image.asset('images/discount.png')),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'APPLY COUPON',
-                                  style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                              ],
-                            ),
-                            height: MediaQuery.of(context).size.height / 12,
-                            width: MediaQuery.of(context).size.width),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ChangeNotifierProvider(
+                                  create: (BuildContext context) {
+                                    return CouponBackend();
+                                  },
+                                  child: CouponPage(
+                                    fromcartpage: 'xyz',
+                                    toke: tOken,
+                                  ));
+                            }));
+                          },
+                          child: Container(
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    //mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Container(
+                                          height: 40,
+                                          width: 30,
+                                          child: Image.asset(
+                                              'images/discount.png')),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        'APPLY COUPON',
+                                        style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                    ],
+                                  ),
+                                  snapshot.data['couPonapplied'] == true
+                                      ? Row(
+                                          children: [
+                                            Icon(
+                                              FontAwesomeIcons.checkCircle,
+                                              color: Colors.green,
+                                              size: 20,
+                                            ),
+                                            Text(
+                                              ' Applied',
+                                              style: GoogleFonts.poppins(),
+                                            ),
+                                          ],
+                                        )
+                                      : Container()
+                                ],
+                              ),
+                              height: MediaQuery.of(context).size.height / 12,
+                              width: MediaQuery.of(context).size.width),
+                        ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -340,29 +414,19 @@ class _CartPageState extends State<CartPage> {
                           Container(
                             padding: EdgeInsets.all(8),
                             color: Colors.white,
-                            height: MediaQuery.of(context).size.height/3,//*MediaQuery.of(context).devicePixelRatio,
+                            height: MediaQuery.of(context).size.height /
+                                3, //*MediaQuery.of(context).devicePixelRatio,
                             width: MediaQuery.of(context).size.width,
 
                             //margin: EdgeInsets.only(left: 30),
                             child: FutureBuilder(
                                 future: getcart,
                                 builder: (context, AsyncSnapshot snap) {
-                                  if(snap.data==null){
+                                  if (snap.data == null) {
                                     return CircularProgressIndicator();
                                   }
                                   return Column(
                                     children: [
-                                      // Text(
-                                      //           (Geolocator.distanceBetween(
-                                      //                          snap.data['cord']['lat'],
-                                      //                 snap.data['cord']['lon'],
-                                      //                          widget.latlng.latitude, widget.latlng.longitude) /
-                                      //                       1000)
-                                      //                   .toStringAsFixed(2) +
-                                      //               ' KM away..',
-                                      //           style: GoogleFonts.poppins(
-                                      //               color: Colors.black),
-                                      //         ),
                                       AutoSizeText(
                                         "Bill Details",
                                         style: GoogleFonts.poppins(),
@@ -371,8 +435,8 @@ class _CartPageState extends State<CartPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          AutoSizeText('Item Total:', style: GoogleFonts.poppins(
-                                                )),
+                                          AutoSizeText('Item Total:',
+                                              style: GoogleFonts.poppins()),
                                           AutoSizeText(
                                               '₹${'${snapshot.data['total']}'}')
                                         ],
@@ -384,11 +448,11 @@ class _CartPageState extends State<CartPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          AutoSizeText('Delivery Charge:', style: GoogleFonts.poppins(
-                                                )),
+                                          AutoSizeText('Delivery Charge:',
+                                              style: GoogleFonts.poppins()),
                                           //Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7==null?
                                           AutoSizeText(
-                                              '${(Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7).toStringAsFixed(1)}')
+                                              '₹${(Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7).toStringAsFixed(1)}')
                                         ],
                                       ),
                                       SizedBox(
@@ -398,8 +462,8 @@ class _CartPageState extends State<CartPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          AutoSizeText('Restraunt GST:', style: GoogleFonts.poppins(
-                                                )),
+                                          AutoSizeText('Restraunt GST:',
+                                              style: GoogleFonts.poppins()),
                                           AutoSizeText(
                                               '₹${(snapshot.data['total'] * 0.05).toStringAsFixed(1)}')
                                         ],
@@ -411,9 +475,10 @@ class _CartPageState extends State<CartPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          AutoSizeText('Restraunt Packing:', style: GoogleFonts.poppins(
-                                                )),
-                                          AutoSizeText('₹25')
+                                          AutoSizeText('Restraunt Packing:',
+                                              style: GoogleFonts.poppins()),
+                                          AutoSizeText(
+                                              '₹${snapshot.data['products'].length * 10}')
                                         ],
                                       ),
                                       SizedBox(
@@ -423,9 +488,10 @@ class _CartPageState extends State<CartPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          AutoSizeText('Discount:', style: GoogleFonts.poppins(
-                                                )),
-                                          AutoSizeText('₹0.0')
+                                          AutoSizeText('Discount:',
+                                              style: GoogleFonts.poppins()),
+                                          AutoSizeText(
+                                              '₹${snapshot.data['discountValue'].toStringAsFixed(1)}')
                                         ],
                                       ),
                                       Expanded(
@@ -436,14 +502,36 @@ class _CartPageState extends State<CartPage> {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           AutoSizeText(
                                             'To Pay',
                                             style: GoogleFonts.poppins(
                                                 fontWeight: FontWeight.w700),
                                           ),
-                                          AutoSizeText('₹25')
+                                          AutoSizeText('₹' +
+                                              (snapshot.data['total'] +
+                                                      (Geolocator.distanceBetween(
+                                                              snap.data['cord']
+                                                                  ['lat'],
+                                                              snap.data['cord']
+                                                                  ['lon'],
+                                                              widget.latlng
+                                                                  .latitude,
+                                                              widget.latlng
+                                                                  .longitude) /
+                                                          1000 *
+                                                          7) +
+                                                      (snapshot.data['total'] *
+                                                          0.05) +
+                                                      (snapshot.data['products']
+                                                              .length *
+                                                          10) -
+                                                      snapshot.data[
+                                                          'discountValue'])
+                                                  .round()
+                                                  .toString())
                                         ],
                                       ),
                                     ],
@@ -463,7 +551,8 @@ class _CartPageState extends State<CartPage> {
                                 children: [
                                   Align(
                                       alignment: Alignment.topLeft,
-                                      child: AutoSizeText('Order will deliver here..')),
+                                      child: AutoSizeText(
+                                          'Order will deliver here..')),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -504,7 +593,8 @@ class _CartPageState extends State<CartPage> {
                             padding: EdgeInsets.all(5),
                             color: Colors.white,
                             width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 4,//*MediaQuery.of(context).devicePixelRatio,
+                            height: MediaQuery.of(context).size.height /
+                                4, //*MediaQuery.of(context).devicePixelRatio,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -535,53 +625,213 @@ class _CartPageState extends State<CartPage> {
                                   // sum = snapshot.data['products'].fold(
                                   //     0, (prev, next) => prev + next['price']);
 
-                                  return Container(
-                                    margin: EdgeInsets.only(right: 30),
-                                    child: Column(
-                                      children: [
-                                        // Text(
-                                        //   '${snapshot.data['total']}',
-                                        //   style: GoogleFonts.poppins(),
-                                        // ),
-                                        SizedBox(height: 8),
-                                        RaisedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              destloc = LatLng(
-                                                  snapshot.data['cord']['lat'],
-                                                  snapshot.data['cord']['lon']);
-                                              ////destloc.latitude=snapshot.data['cord']['lat'];
-                                              restronam =
-                                                  snapshot.data['restroId'];
-                                              orderItm =
-                                                  snapshot.data['products'];
-                                              user = snapshot.data['userId'];
-                                              contact = snapshot.data['userId']
-                                                  ['phoneNumber'];
-                                              email = snapshot.data['userId']
-                                                  ['email'];
-                                              desc = snapshot.data['products']
-                                                  [0]['item']['itemName'];
-                                            });
+                                  return Column(
+                                    children: [
+                                      // Text(
+                                      //   '${snapshot.data['total']}',
+                                      //   style: GoogleFonts.poppins(),
+                                      // ),
+                                      SizedBox(height: 8),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 4.0, right: 4.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            RaisedButton(
+                                              onPressed: () {
+                                                print(snapshot.data['total'] +
+                                                    (Geolocator.distanceBetween(
+                                                            snapshot.data['cord']
+                                                                ['lat'],
+                                                            snapshot.data[
+                                                                'cord']['lon'],
+                                                            widget.latlng
+                                                                .latitude,
+                                                            widget.latlng
+                                                                .longitude) /
+                                                        1000 *
+                                                        7) +
+                                                    (snapshot
+                                                            .data['total'] *
+                                                        0.05) +
+                                                    (snapshot.data['products']
+                                                            .length *
+                                                        10) -
+                                                    snapshot
+                                                        .data['discountValue']
+                                                        .round());
+                                                setState(() {
+                                                  delBoycharge = (Geolocator
+                                                              .distanceBetween(
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lat'],
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lon'],
+                                                                  widget.latlng
+                                                                      .latitude,
+                                                                  widget.latlng
+                                                                      .longitude) /
+                                                          1000 *
+                                                          7)
+                                                      .round();
+                                                  sum = (snapshot.data['total'] +
+                                                          (Geolocator.distanceBetween(
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lat'],
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lon'],
+                                                                  widget.latlng
+                                                                      .latitude,
+                                                                  widget.latlng
+                                                                      .longitude) /
+                                                              1000 *
+                                                              7) +
+                                                          (snapshot.data['total'] *
+                                                              0.05) +
+                                                          (snapshot
+                                                                  .data[
+                                                                      'products']
+                                                                  .length *
+                                                              10) -
+                                                          snapshot.data[
+                                                              'discountValue'])
+                                                      .round();
+                                                  destloc = LatLng(
+                                                      snapshot.data['cord']
+                                                          ['lat'],
+                                                      snapshot.data['cord']
+                                                          ['lon']);
+                                                  ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                  restronam =
+                                                      snapshot.data['restroId'];
+                                                  orderItm =
+                                                      snapshot.data['products'];
+                                                  user =
+                                                      snapshot.data['userId'];
+                                                  contact =
+                                                      snapshot.data['userId']
+                                                          ['phoneNumber'];
+                                                  email = snapshot
+                                                      .data['userId']['email'];
+                                                  desc = snapshot
+                                                          .data['products'][0]
+                                                      ['item']['itemName'];
+                                                });
+                                                print(sum);
 
-                                            checkoutonpress();
-                                          },
-                                          color: Colors.green,
-                                          padding: EdgeInsets.only(
-                                              top: 12,
-                                              left: 60,
-                                              right: 60,
-                                              bottom: 12),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(24))),
-                                          child: Text(
-                                            "Checkout",
-                                            style: GoogleFonts.poppins(),
-                                          ),
+                                                checkoutonpress();
+                                              },
+                                              color: Colors.green,
+                                              padding: EdgeInsets.only(
+                                                  top: 12,
+                                                  left: 30,
+                                                  right: 30,
+                                                  bottom: 12),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(24))),
+                                              child: Text(
+                                                "PAY ONLINE",
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            RaisedButton(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  delBoycharge = (Geolocator
+                                                              .distanceBetween(
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lat'],
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lon'],
+                                                                  widget.latlng
+                                                                      .latitude,
+                                                                  widget.latlng
+                                                                      .longitude) /
+                                                          1000 *
+                                                          7)
+                                                      .round();
+
+                                                  sum = (snapshot.data['total'] +
+                                                          (Geolocator.distanceBetween(
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lat'],
+                                                                  snapshot.data[
+                                                                          'cord']
+                                                                      ['lon'],
+                                                                  widget.latlng
+                                                                      .latitude,
+                                                                  widget.latlng
+                                                                      .longitude) /
+                                                              1000 *
+                                                              7) +
+                                                          (snapshot.data['total'] *
+                                                              0.05) +
+                                                          (snapshot
+                                                                  .data[
+                                                                      'products']
+                                                                  .length *
+                                                              10) -
+                                                          snapshot.data[
+                                                              'discountValue'])
+                                                      .round();
+                                                  destloc = LatLng(
+                                                      snapshot.data['cord']
+                                                          ['lat'],
+                                                      snapshot.data['cord']
+                                                          ['lon']);
+                                                  ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                  restronam =
+                                                      snapshot.data['restroId'];
+                                                  orderItm =
+                                                      snapshot.data['products'];
+                                                  user =
+                                                      snapshot.data['userId'];
+                                                  contact =
+                                                      snapshot.data['userId']
+                                                          ['phoneNumber'];
+                                                  email = snapshot
+                                                      .data['userId']['email'];
+                                                  desc = snapshot
+                                                          .data['products'][0]
+                                                      ['item']['itemName'];
+                                                });
+
+                                                cod();
+                                              },
+                                              color: Colors.green,
+                                              padding: EdgeInsets.only(
+                                                  top: 12,
+                                                  left: 32,
+                                                  right: 32,
+                                                  bottom: 12),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(24))),
+                                              child: Text(
+                                                "PAY COD",
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   );
                                 }
                                 return Container();

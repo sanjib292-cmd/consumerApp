@@ -8,7 +8,7 @@ import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterUser extends ChangeNotifier {
-  String firsturl = 'http://192.168.0.103:5000';
+  String firsturl = 'https://mealtime7399.herokuapp.com';
   var msg;
   var errorMsg;
   bool verifynumMsg = false;
@@ -137,13 +137,13 @@ class RegisterUser extends ChangeNotifier {
         return verifynumMsg;
       }
       if (res.statusCode == 400) {
-        EasyLoading.dismiss();
+       await EasyLoading.dismiss();
         verifynumerrorMsg = true;
         verifynumMsg = false;
         notifyListeners();
         return verifynumMsg;
       }
-      EasyLoading.dismiss();
+    await  EasyLoading.dismiss();
       return snackBar('there is some problem..', context);
     }on SocketException catch (e){
      await EasyLoading.dismiss();
@@ -161,6 +161,10 @@ class RegisterUser extends ChangeNotifier {
   sendLoginoTp(number) async {
     try {
       var url = Uri.parse("$firsturl/login");
+       await EasyLoading.show(
+                        status: 'loading...',
+                        //maskType: EasyLoadingMaskType.black,
+                      );
       await http.post(url,
           headers: <String, String>{
             HttpHeaders.contentTypeHeader: 'application/json',
@@ -199,19 +203,20 @@ class RegisterUser extends ChangeNotifier {
       // }
       print(res.statusCode);
       if (res.statusCode == 200) {
-        EasyLoading.dismiss();
+        await EasyLoading.dismiss();
         userDetails = res.body;
         otpVeryfied = true;
         notifyListeners();
         print('from fail:${res.body}');
         return res.body;
       } else {
-        EasyLoading.dismiss();
+      await  EasyLoading.dismiss();
         otpVeryfied = false;
         notifyListeners();
         return null;
       }
     } catch (ex) {
+     await EasyLoading.dismiss();
       return snackBar(ex.toString(), context);
     }
   }

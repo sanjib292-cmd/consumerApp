@@ -9,7 +9,7 @@ class Cart extends ChangeNotifier {
   var noItm;
   var sucessFullyaded;
   var notAdded;
-  String firsturl = 'http://192.168.0.103:5000';
+  String firsturl = 'https://mealtime7399.herokuapp.com';
   getCart(token) async {
     var url = Uri.parse("$firsturl/cart");
     var res = await http.get(url, headers: <String, String>{

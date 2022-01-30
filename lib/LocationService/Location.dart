@@ -52,7 +52,6 @@ class Location extends ChangeNotifier {
         var decodedData = jsonDecode(data);
         placeaddress=decodedData["results"][0]["formatted_address"];
         notifyListeners();
-        print(decodedData);
         return decodedData;
       }
       return "404 ERROR";

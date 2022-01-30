@@ -65,19 +65,20 @@ class Otp extends StatefulWidget {
   final number;
   final email;
   final name;
-  var lat,lon;
+  var lat, lon;
 
-  Otp({this.number, this.email, this.name,this.lat,this.lon});
+  Otp({this.number, this.email, this.name, this.lat, this.lon});
 
   @override
   _OtpState createState() => _OtpState();
 }
 
 class _OtpState extends State<Otp> {
-    veryFynummsg()async{
-    var veryfyNum=Provider.of<RegisterUser>(context,listen: false);
-   await  veryfyNum.verifyNumber(widget.number,context);
+  veryFynummsg() async {
+    var veryfyNum = Provider.of<RegisterUser>(context, listen: false);
+    await veryfyNum.verifyNumber(widget.number, context);
   }
+
   TextEditingController textEditingController = TextEditingController();
   // ..text = "123456";
 
@@ -114,7 +115,7 @@ class _OtpState extends State<Otp> {
 
   @override
   Widget build(BuildContext context) {
-        final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     var verifyotp = Provider.of<RegisterUser>(context, listen: false);
     print('${widget.lat} yo tp');
@@ -277,9 +278,14 @@ class _OtpState extends State<Otp> {
                       print('from otp page ${verifyotp.verifynumMsg}');
                       verifyotp.verifynumMsg == false
                           ? await verifyotp.veriFylogin(
-                              widget.number, currentText,token,context)
-                          : await verifyotp.veriFyregister(widget.number,
-                              currentText, widget.email, widget.name,token,context);
+                              widget.number, currentText, token, context)
+                          : await verifyotp.veriFyregister(
+                              widget.number,
+                              currentText,
+                              widget.email,
+                              widget.name,
+                              token,
+                              context);
                       print(verifyotp.otpVeryfied);
                       // conditions for validating
                       if (verifyotp.otpVeryfied == false) {
@@ -299,18 +305,17 @@ class _OtpState extends State<Otp> {
                           snackBar("OTP Verified!!");
                           // int count = 0;
                           // var nav=Navigator.of(context);
-Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-  return MultiProvider(providers: [
-   // ChangeNotifierProvider(create: (BuildContext context) { return Cart(); },),
-    ChangeNotifierProvider(create: (BuildContext context) {return Location();  },)
-  ],
-  child: FetchLoc());
-}));
-                          // Navigator.of(context).pushAndRemoveUntil(
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //             AccountPage(user: verifyotp.userDetails)),
-                          //     (Route<dynamic> route) => false);
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return MultiProvider(providers: [
+                              // ChangeNotifierProvider(create: (BuildContext context) { return Cart(); },),
+                              ChangeNotifierProvider(
+                                create: (BuildContext context) {
+                                  return Location();
+                                },
+                              )
+                            ], child: FetchLoc());
+                          }));
                         });
                       }
                     },

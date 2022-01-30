@@ -96,7 +96,7 @@ class _RestroMenuState extends State<RestroMenu> {
               height: 25,
               color: Colors.grey[300],
             ),
-            Expanded(
+            Expanded( 
               child: SingleChildScrollView(
                   child: ListView.builder(
                       itemCount: widget.restroDetails['cusineType'].length,
@@ -198,17 +198,15 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                   .all(8.0),
                                                           child: Row(
                                                             children: [
-                                                              Positioned.fill(
-                                                                child: Text('₹',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            16,
-                                                                        color: Colors
-                                                                            .green)),
-                                                              ),
+                                                              Text('₹',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: Colors
+                                                                          .green)),
                                                               Text(
                                                                 widget
                                                                     .restroDetails[
@@ -230,7 +228,7 @@ class _RestroMenuState extends State<RestroMenu> {
                                                         ),
                                                       ],
                                                     ),
-
+                                          
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(

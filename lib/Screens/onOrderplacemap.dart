@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
 import 'package:foodorder_userapp/Backend/getallRestaurents.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
+import 'package:foodorder_userapp/LocationService/Location.dart';
+import 'package:foodorder_userapp/Screens/fetchLocfirstpage.dart';
 import 'package:foodorder_userapp/Screens/homepage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,6 +27,7 @@ class OnorderPlace extends StatefulWidget {
 }
 
 class _OnorderPlaceState extends State<OnorderPlace> {
+ // GoogleMapController controller;
   getRestrobyId() async {
     var restro = Provider.of<AllRestaurent>(context, listen: false);
     var orderedrestro =
@@ -33,6 +37,7 @@ class _OnorderPlaceState extends State<OnorderPlace> {
 
   var orderRestro;
   Completer<GoogleMapController> _controller = Completer();
+  
   Set<Marker> _markers = {};
   var sourceIcon;
   var destinationIcon;
@@ -51,6 +56,9 @@ class _OnorderPlaceState extends State<OnorderPlace> {
 
   void onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+    getJsonmap('images/retromap.json').then((value) => controller.setMapStyle(value));
+    controller.showMarkerInfoWindow(MarkerId('destPin') );
+    //controller.setMapStyle()
     setMapPins();
     setPolylines();
   }
@@ -103,12 +111,24 @@ class _OnorderPlaceState extends State<OnorderPlace> {
     });
   }
 
+    void setMapstyle(String mapStyle,GoogleMapController controller){
+
+  _controller.complete(controller);
+  }
+
   @override
   void initState() {
     getRestrobyId();
     setSourceAndDestinationIcons();
     super.initState();
   }
+
+
+  Future<String> getJsonmap(String path)async{
+    return await rootBundle.loadString(path);
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +138,13 @@ class _OnorderPlaceState extends State<OnorderPlace> {
     // print('hlo ${widget.destloc}  ${widget.sourceloc}');
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
           actions: <Widget>[
            new IconButton(
              icon: new Icon(Icons.close,color: Colors.black,),
             onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-              return ChangeNotifierProvider(create: (BuildContext context) { return Cart(); },
-              child: MyHomePage(lat: widget.sourceloc.latitude,lon: widget.sourceloc.longitude,));
+              return ChangeNotifierProvider(create: (BuildContext context) { return Location(); },
+              child: FetchLoc());
             })),
            ),
          ],
@@ -132,7 +153,7 @@ class _OnorderPlaceState extends State<OnorderPlace> {
               // widget.orderDetails['dateOrderd']
               Text(
                 widget.orderDetails != null
-                    ? 'ORDER ${widget.orderDetails['_id']}'
+                    ? 'ORDER ${widget.orderDetails['shortOrderid']}'
                     : 'null',
                 style: GoogleFonts.poppins(
                   color: Colors.black,
@@ -229,7 +250,7 @@ class _OnorderPlaceState extends State<OnorderPlace> {
           polylines: _polylines,
           initialCameraPosition: CameraPosition(
             target: widget.sourceloc,
-            zoom: 11,
+            zoom: 12,
           )),
     );
   }
