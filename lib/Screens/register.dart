@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
+import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:foodorder_userapp/Design&Ui/konst.dart';
 import 'package:provider/provider.dart';
 
@@ -127,7 +128,8 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
                   try {
                     await registerUser.registerUser(email, name, widget.number,context);
                   } on Exception catch (e) {
-                    print(e);
+                    snackBar(e.toString(), context);
+                    return;
                   }
                    Navigator.pushReplacement(
                                   context,

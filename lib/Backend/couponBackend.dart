@@ -21,7 +21,6 @@ class CouponBackend extends ChangeNotifier{
     });
     if (res.statusCode == 200) {
       await EasyLoading.dismiss();
-      print(res.body);
       return jsonDecode(res.body);
     }
    await EasyLoading.dismiss();

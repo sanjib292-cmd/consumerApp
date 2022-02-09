@@ -1,62 +1,12 @@
-// import 'package:flutter/material.dart';
-// import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
-// import 'package:foodorder_userapp/Screens/register.dart';
-// import 'package:otp_screen/otp_screen.dart';
-// import 'package:provider/provider.dart';
 
-// class Otp extends StatefulWidget {
-//   var number;
-//   Otp({this.number});
-
-//   @override
-//   _OtpState createState() => _OtpState();
-// }
-
-// class _OtpState extends State<Otp> {
-//   //  Future<String> validateOtp(String otp) async {
-//   //   await Future.delayed(Duration(milliseconds: 2000));
-//   //   if (otp == "123456") {
-//   //     return null;
-//   //   } else {
-//   //     return "The entered Otp is wrong";
-//   //   }
-//   // }
-//   @override
-//   Widget build(BuildContext context) {
-//     var verifyotp = Provider.of<RegisterUser>(context, listen: false);
-//     return MaterialApp(
-//         debugShowCheckedModeBanner: false,
-//         home: OtpScreen.withGradientBackground(
-//           topColor: Color(0xFFcc2b5e),
-//           bottomColor: Color(0xFF753a88),
-//           otpLength: 6,
-//           validateOtp: (code) async{
-//              return await verifyotp.veriFylogin(widget.number, code);
-
-//           },
-//           //routeCallback: moveToNextScreen,
-//           themeColor: Colors.white,
-//           titleColor: Colors.white,
-//           title: "Phone Number Verification",
-//           subTitle: "Enter the code sent to \n ${widget.number}",
-//           icon: Image.asset(
-//             'images/foodie.png',
-//             fit: BoxFit.fill,
-//           ), routeCallback: (BuildContext ctx) { Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>RegisterUserScreen())); },
-//         ));
-//   }
-// }
 
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
-import 'package:foodorder_userapp/Backend/cartbacknd.dart';
 import 'package:foodorder_userapp/LocationService/Location.dart';
-import 'package:foodorder_userapp/Screens/AccountPage.dart';
 import 'package:foodorder_userapp/Screens/fetchLocfirstpage.dart';
-import 'package:foodorder_userapp/Screens/homepage.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,7 +68,7 @@ class _OtpState extends State<Otp> {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     var verifyotp = Provider.of<RegisterUser>(context, listen: false);
-    print('${widget.lat} yo tp');
+   // print('${widget.lat} yo tp');
     return Scaffold(
       backgroundColor: Colors.white,
       body: GestureDetector(
@@ -129,12 +79,10 @@ class _OtpState extends State<Otp> {
           child: ListView(
             children: <Widget>[
               SizedBox(height: 30),
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset("images/LOGO.png"),
-                ),
+              CircleAvatar(
+                radius: 150,
+                //borderRadius: BorderRadius.circular(30),
+                backgroundImage: AssetImage("images/LOGO.png"),
               ),
               SizedBox(height: 8),
               Padding(
@@ -213,19 +161,19 @@ class _OtpState extends State<Otp> {
                         )
                       ],
                       onCompleted: (v) {
-                        print("Completed");
+                        //("Completed");
                       },
                       // onTap: () {
                       //   print("Pressed");
                       // },
                       onChanged: (value) {
-                        print(value);
+                        //print(value);
                         setState(() {
                           currentText = value;
                         });
                       },
                       beforeTextPaste: (text) {
-                        print("Allowing to paste $text");
+                       // print("Allowing to paste $text");
                         //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
                         //but you can show anything you want here, like your pop up saying wrong paste format or etc
                         return true;
@@ -275,7 +223,7 @@ class _OtpState extends State<Otp> {
                     onPressed: () async {
                       String? token = await _firebaseMessaging.getToken();
                       await veryFynummsg();
-                      print('from otp page ${verifyotp.verifynumMsg}');
+                      //print('from otp page ${verifyotp.verifynumMsg}');
                       verifyotp.verifynumMsg == false
                           ? await verifyotp.veriFylogin(
                               widget.number, currentText, token, context)
@@ -286,7 +234,7 @@ class _OtpState extends State<Otp> {
                               widget.name,
                               token,
                               context);
-                      print(verifyotp.otpVeryfied);
+                      //print(verifyotp.otpVeryfied);
                       // conditions for validating
                       if (verifyotp.otpVeryfied == false) {
                         errorController!.add(ErrorAnimationType

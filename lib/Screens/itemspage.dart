@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemsPage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _ItemsPageState extends State<ItemsPage> {
 
   Future items() async {
     var res = await widget.product;
-    print(res);
+    //print(res);
     return res;
   }
 
@@ -46,17 +47,18 @@ class _ItemsPageState extends State<ItemsPage> {
     try {
       await res.determinePosition();
     } catch (e) {
-      print(e);
+      return e;
+      //print(e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var res = Provider.of<Location>(context, listen: false);
+    //var res = Provider.of<Location>(context, listen: false);
     var cart = Provider.of<Cart>(context, listen: false);
-    print('${res.adrs} lol');
+    //print('${res.adrs} lol');
     final Size size = MediaQuery.of(context).size;
-    final double categoryHeight = size.height * 0.30;
+    final double categoryHeight = size.height * 0.20;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -76,107 +78,109 @@ class _ItemsPageState extends State<ItemsPage> {
               const SizedBox(
                 height: 10,
               ),
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: closeTopContainer ? 0 : 1,
-                child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: size.width,
-                    alignment: Alignment.topCenter,
-                    height: closeTopContainer ? 0 : categoryHeight,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 20),
-                      child: FutureBuilder(
-                        future: items(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.data == null) {
-                            return CircularProgressIndicator();
-                          }
-                          print('not null');
+              Container(
+                margin: const EdgeInsets.symmetric(
+                    vertical: 20, horizontal: 20),
+                child: FutureBuilder(
+                  future: items(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.data == null) {
+                      return CircularProgressIndicator();
+                    }
+                    //print('${snapshot.data[0]['restroNam']} lolololo');
 
-                          return Container(
-                            height: MediaQuery.of(context).size.width / 3,
-                            width: MediaQuery.of(context).size.width,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    //print('this fuvking ${snapshot.data[index]}');
-                                    setState(() {
-                                      indexofRestro = index;
-                                      cl = Colors.blue;
-                                    });
-                                    print(indexofRestro);
-                                  },
-                                  child: Container(
-                                    width: 150,
-                                    margin: EdgeInsets.only(right: 20),
-                                    height: categoryHeight,
-                                    decoration: BoxDecoration(
-                                        color: cl,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            "${snapshot.data[index]['restroNam']['name']}",
-                                            style: TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            (Geolocator.distanceBetween(
-                                                            snapshot.data[index]
-                                                                    [
-                                                                    'restroNam']
-                                                                ['cord']['lat'],
-                                                            snapshot.data[index]
-                                                                    [
-                                                                    'restroNam']
-                                                                ['cord']['lon'],
-                                                            widget.lat,
-                                                            widget.lon) /
-                                                        1000)
-                                                    .toStringAsFixed(2) +
-                                                ' KM away..',
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.white),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            "${snapshot.data[index]['items'].length} Items",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                    return Container(
+                      height: MediaQuery.of(context).size.width / 3,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              //print('this fuvking ${snapshot.data[index]}');
+                              setState(() {
+                                indexofRestro = index;
+                                cl = Colors.blue;
+                              });
+                             // print(indexofRestro);
+                            },
+                            child: Container(
+                              width: 200,
+                              margin: EdgeInsets.only(right: 20),
+                              height: 300,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        '${snapshot.data[index]['restroNam']['imgurl']}'),
+                                    fit: BoxFit.fill,
+                                    colorFilter: new ColorFilter.mode(
+                                        Colors.black.withOpacity(0.6),
+                                        BlendMode.dstATop),
                                   ),
-                                );
-                              },
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(20.0))),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "${snapshot.data[index]['restroNam']['name']}",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      (Geolocator.distanceBetween(
+                                                      snapshot.data[index]
+                                                              [
+                                                              'restroNam']
+                                                          ['cord']['lat'],
+                                                      snapshot.data[index]
+                                                              [
+                                                              'restroNam']
+                                                          ['cord']['lon'],
+                                                      widget.lat,
+                                                      widget.lon) /
+                                                  1000)
+                                              .toStringAsFixed(2) +
+                                          ' KM away..',
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "${snapshot.data[index]['items'].length} Items",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           );
                         },
                       ),
-                    )),
+                    );
+                  },
+                ),
               ),
               Expanded(
                   child: ListView.builder(
                       itemCount: widget.product[indexofRestro]['items'].length,
                       itemBuilder: (con, ind) {
+                        print(widget.product);
                         return Container(
                           height: 155,
                           margin: const EdgeInsets.symmetric(
@@ -239,14 +243,17 @@ class _ItemsPageState extends State<ItemsPage> {
                                             Text('₹',
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.green)),
+                                                    fontSize: 18,
+                                                    color: Colors.green,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                             Text(
                                               widget.product[indexofRestro]
                                                       ['items'][ind]['price']
                                                   .toString(),
                                               style: GoogleFonts.poppins(
-                                                  fontSize: 16),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500),
                                             ),
                                           ],
                                         ),
@@ -291,67 +298,152 @@ class _ItemsPageState extends State<ItemsPage> {
                                         ),
                                         Container(
                                             width: 90,
-                                            child: widget.product[indexofRestro]
-                                                    ['items'][ind]["inStock"]
-                                                ? MaterialButton(
-                                                    color: Colors.green,
-                                                    onPressed: () async {
-                                                      final SharedPreferences
-                                                          sp =
-                                                          await SharedPreferences
-                                                              .getInstance();
-                                                      var userId = sp.getString(
-                                                          'Account Details');
-                                                      if (userId == null) {
-                                                        return snackBar(
-                                                            'Please login to add this to cart',
-                                                            context);
-                                                      }
-                                                      Map<String, dynamic>
-                                                          payload =
-                                                          Jwt.parseJwt(userId);
-                                                      // print(widget.restroDetails['cord']['lon']);
-                                                      await cart.addToCart(
-                                                          id:payload['id'],
-                                                          item: widget.product[indexofRestro]
-                                                              ['items'][ind],
-                                                          quantity: 1,
-                                                          price: widget.product[indexofRestro]
-                                                                  ['items'][ind]
-                                                              ['price'],
-                                                          token: userId,
-                                                          restroId: widget.product[indexofRestro]
-                                                                  ['items'][ind]
-                                                              ['restroId'],
-                                                          itmid: widget.product[
-                                                                  indexofRestro]
-                                                              ['items'][ind]['_id'],
-                                                          lat: widget.lat,
-                                                          lon: widget.lon);
-                                                      cart.sucessFullyaded !=
-                                                              null
-                                                          ? snackBar(
-                                                              '${cart.sucessFullyaded}',
-                                                              context)
-                                                          : snackBar(
-                                                              '${cart.notAdded}',
-                                                              context);
-                                                    },
-                                                    child: Text(
-                                                      'ADD',
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
-                                                    ))
-                                                : Text(
-                                                    'Currently not in stock',
-                                                    style: GoogleFonts.poppins(
-                                                        color: Colors.red),
-                                                  ))
+                                            child:
+                                                widget.product[indexofRestro]
+                                                            ['items'][ind]
+                                                        ["inStock"]
+                                                    ? MaterialButton(
+                                                        color: Colors.green,
+                                                        onPressed: () async {
+                                                          final SharedPreferences
+                                                              sp =
+                                                              await SharedPreferences
+                                                                  .getInstance();
+                                                          var userId = sp.getString(
+                                                              'Account Details');
+                                                          if (userId == null) {
+                                                            return snackBar(
+                                                                'Please login to add this to cart',
+                                                                context);
+                                                          }
+                                                          Map<String, dynamic>
+                                                              payload =
+                                                              Jwt.parseJwt(
+                                                                  userId);
+                                                          // print(widget.restroDetails['cord']['lon']);
+                                                          await cart.addToCart(
+                                                              id: payload['id'],
+                                                              item: widget.product[indexofRestro]
+                                                                      ['items']
+                                                                  [ind],
+                                                              quantity: 1,
+                                                              price: widget.product[indexofRestro]
+                                                                      ['items'][ind]
+                                                                  ['price'],
+                                                              token: userId,
+                                                              restroId: widget.product[indexofRestro]
+                                                                          ['items']
+                                                                      [ind]
+                                                                  ['restroId'],
+                                                              itmid: widget.product[indexofRestro]
+                                                                      ['items']
+                                                                  [ind]['_id'],
+                                                              lat: widget.product[indexofRestro]
+                                                                      ['restroNam']
+                                                                  ['cord']['lat'],
+                                                              lon: widget.product[indexofRestro]['restroNam']['cord']['lon']);
+                                                          cart.sucessFullyaded !=
+                                                                  null
+                                                              ? snackBar(
+                                                                  '${cart.sucessFullyaded}',
+                                                                  context)
+                                                              : Alert(
+                                                                  context:
+                                                                      context,
+                                                                  type: AlertType
+                                                                      .warning,
+                                                                  title: "Cart",
+                                                                  desc:
+                                                                      "${cart.notAdded}",
+                                                                  buttons: [
+                                                                    DialogButton(
+                                                                      child:
+                                                                          Text(
+                                                                        "Replace",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontSize: 20),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        await cart
+                                                                            .deletCart(userId);
+                                                                        await cart.addToCart(
+                                                                            id: payload[
+                                                                                'id'],
+                                                                            item: widget.product[indexofRestro]['items'][
+                                                                                ind],
+                                                                            quantity:
+                                                                                1,
+                                                                            price: widget.product[indexofRestro]['items'][ind][
+                                                                                'price'],
+                                                                            token:
+                                                                                userId,
+                                                                            restroId:
+                                                                                widget.product[indexofRestro]['items'][ind]['restroId'],
+                                                                            itmid: widget.product[indexofRestro]['items'][ind]['_id'],
+                                                                            lat: widget.product[indexofRestro]['restroNam']['cord']['lat'],
+                                                                            lon: widget.product[indexofRestro]['restroNam']['cord']['lon']);
+                                                                        snackBar(
+                                                                            '${cart.sucessFullyaded}',
+                                                                            context);
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      color: Color.fromRGBO(
+                                                                          0,
+                                                                          179,
+                                                                          134,
+                                                                          1.0),
+                                                                    ),
+                                                                    DialogButton(
+                                                                      child:
+                                                                          Text(
+                                                                        "Cancel",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontSize: 20),
+                                                                      ),
+                                                                      onPressed:
+                                                                          () =>
+                                                                              Navigator.pop(context),
+                                                                      gradient:
+                                                                          LinearGradient(
+                                                                              colors: [
+                                                                            Color.fromRGBO(
+                                                                                116,
+                                                                                116,
+                                                                                191,
+                                                                                1.0),
+                                                                            Color.fromRGBO(
+                                                                                52,
+                                                                                138,
+                                                                                199,
+                                                                                1.0)
+                                                                          ]),
+                                                                    )
+                                                                  ],
+                                                                ).show();
+                                                        },
+                                                        child: Text(
+                                                          'ADD',
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                        ))
+                                                    : Text(
+                                                        'Currently not in stock',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color:
+                                                                    Colors.red),
+                                                      ))
                                       ],
                                     ),
                                   ),

@@ -31,7 +31,6 @@ class _CouponPageState extends State<CouponPage> {
             if(snap.data==null){
               return Text('No Coupon..');
             }
-            print(snap.data);
             return Container(
               height: MediaQuery.of(context).size.height/2,
               child: ListView.builder(

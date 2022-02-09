@@ -219,7 +219,7 @@ class _FirstPageState extends State<FirstPage> {
                                    itemCount: snapshot.data.length,
                                   itemBuilder: (
                                     (context, index) {
-                                      print(snapshot.data[index]['rating']);
+                                     // print(snapshot.data[index]['rating']);
                                     return Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Container(
@@ -309,6 +309,8 @@ class _FirstPageState extends State<FirstPage> {
                                                                                 8),
                                                                     image:
                                                                         DecorationImage(
+                                                                          // invertColors: snapshot.data[
+                                                                          //       index]['isOpen'],
                                                                       image:
                                                                           NetworkImage(
                                                                         snapshot.data[
@@ -318,6 +320,16 @@ class _FirstPageState extends State<FirstPage> {
                                                                       ),
                                                                       fit: BoxFit
                                                                           .cover,
+                                                                          colorFilter:
+                                                                           snapshot.data[
+                                                                                index]['isOpen']?null:
+
+                                                                        ColorFilter.matrix(<double>[
+ 0.2126,0.7152,0.0722,0,0,
+ 0.2126,0.7152,0.0722,0,0,
+ 0.2126,0.7152,0.0722,0,0,
+ 0,0,0,1,0,
+])
                                                                     )),
                                                           ),
                                                         )),

@@ -94,7 +94,8 @@ class _MyAppState extends State<MyApp> {
     final InitializationSettings initializationSettings =
         InitializationSettings(android: initializSettingAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
+        //onSelectNotification: onSelectNotification
+        );
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       RemoteNotification? _notification=event.notification;
       AndroidNotification? android=event.notification?.android;
@@ -111,12 +112,11 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       fcmtoken = token!;
     });
-    print(fcmtoken);
   }
 
-  onSelectNotification(payload) async {
-    print("onselect: " + payload);
-  }
+  // onSelectNotification(payload) async {
+  //   //print("onselect: " + payload);
+  // }
   
   @override
   Widget build(BuildContext context) {

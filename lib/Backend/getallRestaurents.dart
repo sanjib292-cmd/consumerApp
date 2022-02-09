@@ -28,12 +28,10 @@ class AllRestaurent extends ChangeNotifier {
        await EasyLoading.dismiss();
         return jsonDecode(res.body);
       }
-      print('not');
      await EasyLoading.dismiss();
       return null;
     } on Exception catch (e) {
     EasyLoading.dismiss();
-      print('ishh $e');
         return e;
     }
   }
@@ -54,7 +52,6 @@ class AllRestaurent extends ChangeNotifier {
         return restaurents;
       }
       await EasyLoading.dismiss();
-      print('not');
     } on Exception catch (e) {
       await EasyLoading.dismiss();
        snackBar(e.toString(), context);
@@ -69,7 +66,6 @@ class AllRestaurent extends ChangeNotifier {
       });
       if (res.statusCode == 200) {
         cusineTypes = jsonDecode(res.body);
-        //print(cusineTypes);
         notifyListeners();
         return cusineTypes;
       }
@@ -107,13 +103,11 @@ return null;
       });
       if (res.statusCode == 200) {
         searchResult = jsonDecode(res.body);
-        //print(cusineTypes);
         notifyListeners();
         return searchResult;
       }
       return jsonDecode(res.body);
     } on Exception catch (e) {
-      print(e.toString());
        snackBar(e.toString(), context);
     }
 

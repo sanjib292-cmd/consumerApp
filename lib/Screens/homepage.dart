@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
@@ -64,26 +65,26 @@ class _MyHomePageState extends State<MyHomePage> {
     //});
   }
 
-  checkIftokenExp() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    print(JwtDecoder.getExpirationDate(
-        sharedPreferences.getString('Account Details').toString()));
-    if (JwtDecoder.isExpired(
-        sharedPreferences.getString('Account Details').toString())) {
-      print('exp');
-      //final pref = await SharedPreferences.getInstance();
-      await sharedPreferences.remove('Account Details');
-      await sharedPreferences.setBool('isUser', false);
-      snackBar('You are logedout', context);
-    }
-  }
+  // checkIftokenExp() async {
+  //   final SharedPreferences sharedPreferences =
+  //       await SharedPreferences.getInstance();
+  //   print(JwtDecoder.getExpirationDate(
+  //       sharedPreferences.getString('Account Details').toString()));
+  //   if (JwtDecoder.isExpired(
+  //       sharedPreferences.getString('Account Details').toString())) {
+  //     print('exp');
+  //     //final pref = await SharedPreferences.getInstance();
+  //     await sharedPreferences.remove('Account Details');
+  //     await sharedPreferences.setBool('isUser', false);
+  //     snackBar('You are logedout', context);
+  //   }
+  // }
 
   @override
   void initState() {
     getToken();
     // getIfuserLogedin();
-    checkIftokenExp();
+    //checkIftokenExp();
     super.initState();
   }
 
@@ -91,16 +92,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var loc= Provider.of<Location>(context,listen: false);
     getToken();
-    checkIftokenExp();
+    //checkIftokenExp();
    
     var cart = Provider.of<Cart>(context, listen: false);
-    Stream getcartNumber() async* {
+    Future getcartNumber() async {
       final SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
-      yield* Stream.periodic(Duration(seconds: 2), (_) {
+      // yield* Stream.periodic(Duration(seconds: 2), (_) {
         return cart.getCart(sharedPreferences.getString('Account Details'));
-      }).asyncMap((event) async => await event);
+     // }).asyncMap((event) async => await event);
     }
+   // getcartNumber();
 
     final List<Widget> _children = [
       ChangeNotifierProvider(
@@ -115,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Serchpage()),
       MultiProvider(
           providers: [
+            ChangeNotifierProvider(create: (BuildContext context) { return AllRestaurent(); },),
             ChangeNotifierProvider(create: (BuildContext context) => Cart()),
             ChangeNotifierProvider(
                 create: (BuildContext con) => Paymentrzrpay()),
@@ -160,163 +163,173 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     ];
     // print('hloo from home ${widget.address}');
-    return Scaffold(
-        extendBodyBehindAppBar: false,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          onTap: (int indx) {
-            setState(() {
-              currentIndex = indx;
-            });
-          },
-          currentIndex: currentIndex,
-          items: [
-            bottomappbarItms(FontAwesomeIcons.utensils, 'Home'),
-            bottomappbarItms(FontAwesomeIcons.search, 'Explore'),
-            BottomNavigationBarItem(
-                icon: Badge(
-                  badgeContent: StreamBuilder(
-                    stream: getcartNumber(),
-                    builder: (context, AsyncSnapshot snp) {
-                      return Text(snp.data == null
-                          ? ''
-                          : snp.data['products'].length.toString());
-                    },
+    return WillPopScope(
+      onWillPop: () async{
+        if(currentIndex==0){
+          return true;
+        }
+        setState(() {
+        currentIndex=0;
+      }); 
+      return false; },
+      child: Scaffold(
+          extendBodyBehindAppBar: false,
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            onTap: (int indx) {
+              setState(() {
+                currentIndex = indx;
+              });
+            },
+            currentIndex: currentIndex,
+            items: [
+              bottomappbarItms(FontAwesomeIcons.utensils, 'Home'),
+              bottomappbarItms(FontAwesomeIcons.search, 'Explore'),
+              BottomNavigationBarItem(
+                  icon: Badge(
+                    badgeContent: FutureBuilder(
+                      future: getcartNumber(),
+                      builder: (context, AsyncSnapshot snp) {
+                        return Text(snp.data == null
+                            ? ''
+                            : snp.data['products'].length.toString());
+                      },
+                    ),
+                    child: Icon(
+                      FontAwesomeIcons.pizzaSlice,
+                      size: 20,
+                    ),
                   ),
-                  child: Icon(
-                    FontAwesomeIcons.pizzaSlice,
-                    size: 20,
-                  ),
-                ),
-                title: Text('Cart')),
-            bottomappbarItms(FontAwesomeIcons.user, 'Account'),
-          ],
-        ),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.mapMarkerAlt,
-                              color: Colors.orange,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            FutureBuilder(
-                              future: loc.getAddress(widget.lat, widget.lon),
-                              builder: (context,AsyncSnapshot snap) {
-                                if(snap.data==null){
-                                return Shimmer.fromColors(
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.grey[200]!,
-                                      child: Card(
-                                       // elevation: 15,
-                                        child: ClipPath(
-                                          child: Container(
-                        height: 20,
-                        width:55,
-                        decoration: BoxDecoration(
-                          border: Border(
-                              right: BorderSide(color: Colors.grey, width: 4))),
-                                          ),
-                                          clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(3))),
-                                        )));
-                                 // return CircularProgressIndicator();
+                  title: Text('Cart')),
+              bottomappbarItms(FontAwesomeIcons.user, 'Account'),
+            ],
+          ),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(70.0),
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.mapMarkerAlt,
+                                color: Colors.orange,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              FutureBuilder(
+                                future: loc.getAddress(widget.lat, widget.lon),
+                                builder: (context,AsyncSnapshot snap) {
+                                  if(snap.data==null){
+                                  return Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[200]!,
+                                        child: Card(
+                                         // elevation: 15,
+                                          child: ClipPath(
+                                            child: Container(
+                          height: 20,
+                          width:55,
+                          decoration: BoxDecoration(
+                            border: Border(
+                                right: BorderSide(color: Colors.grey, width: 4))),
+                                            ),
+                                            clipper: ShapeBorderClipper(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3))),
+                                          )));
+                                   // return CircularProgressIndicator();
+                                  }
+                                  return Text(
+                                    '${snap.data['results'][0]['address_components'][1]['long_name']}',
+                                    style: TextStyle(color: Colors.black),
+                                  );
                                 }
-                                return Text(
-                                  '${snap.data['results'][0]['address_components'][1]['long_name']}',
-                                  style: TextStyle(color: Colors.black),
+                              ),
+                              
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 6.0),
+                            child: FutureBuilder(
+                              future: loc.getAddress(widget.lat, widget.lon),
+                              builder: (context,AsyncSnapshot snapshot) {
+                                if(snapshot.data==null){
+                                  return Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[200]!,
+                                        child: Card(
+                                         // elevation: 15,
+                                          child: ClipPath(
+                                            child: Container(
+                          height: 20,
+                          width:100,
+                          decoration: BoxDecoration(
+                            border: Border(
+                                right: BorderSide(color: Colors.grey, width: 4))),
+                                            ),
+                                            clipper: ShapeBorderClipper(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3))),
+                                          )));
+                                }
+                                return Container(
+                                  height: 20,
+                                  width: 250,
+                                  child: Text(
+                                    '${snapshot.data["results"][0]["formatted_address"]}'+ '..',
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(0.5), fontSize: 12),
+                                  ),
                                 );
                               }
                             ),
-                            
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
-                          child: FutureBuilder(
-                            future: loc.getAddress(widget.lat, widget.lon),
-                            builder: (context,AsyncSnapshot snapshot) {
-                              if(snapshot.data==null){
-                                return Shimmer.fromColors(
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.grey[200]!,
-                                      child: Card(
-                                       // elevation: 15,
-                                        child: ClipPath(
-                                          child: Container(
-                        height: 20,
-                        width:100,
-                        decoration: BoxDecoration(
-                          border: Border(
-                              right: BorderSide(color: Colors.grey, width: 4))),
-                                          ),
-                                          clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(3))),
-                                        )));
-                              }
-                              return Container(
-                                height: 20,
-                                width: 250,
-                                child: Text(
-                                  '${snapshot.data["results"][0]["formatted_address"]}'+ '..',
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.5), fontSize: 12),
-                                ),
-                              );
-                            }
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return ChangeNotifierProvider(create: (BuildContext context) { return CouponBackend(); },
-                      child: CouponPage());
-                    }));
-                  },
-                  child: Container(
-                              height: 40,
-                              width: 30,
-                              child: Image.asset('images/discount.png')),
-                )
-              ],
+                        ],
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return ChangeNotifierProvider(create: (BuildContext context) { return CouponBackend(); },
+                        child: CouponPage());
+                      }));
+                    },
+                    child: Container(
+                                height: 40,
+                                width: 30,
+                                child: Image.asset('images/discount.png')),
+                  )
+                ],
+              ),
+              elevation: 0,
+              backgroundColor: Colors.white,
             ),
-            elevation: 0,
-            backgroundColor: Colors.white,
           ),
-        ),
-        body: _children[currentIndex]);
+          body:  _children[currentIndex]),
+    );
   }
 
   BottomNavigationBarItem bottomappbarItms(IconData icn, String txt) {

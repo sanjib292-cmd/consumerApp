@@ -18,7 +18,6 @@ class OrderBackend extends ChangeNotifier {
       HttpHeaders.contentTypeHeader: 'application/json',
     });
     if (res.statusCode == 200) {
-      print(res.body);
       placedOrder = jsonDecode(res.body);
       notifyListeners();
       return placedOrder;
@@ -61,7 +60,7 @@ class OrderBackend extends ChangeNotifier {
       }
     } on Exception catch (e) {
      await EasyLoading.dismiss();
-      print('wtf excption $e');
+     return  e;
     }
   }
 }

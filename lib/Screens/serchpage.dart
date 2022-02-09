@@ -15,13 +15,6 @@ class Serchpage extends StatefulWidget {
 
 class _SerchpageState extends State<Serchpage> {
   //TextEditingController textController = TextEditingController();
-  static const historyLength = 5;
-  List<String> _searchHistory = [
-    'fuchsia',
-    'flutter',
-    'widgets',
-    'resocoder',
-  ];
   var searchTxt;
   @override
   Widget build(BuildContext context) {
@@ -77,7 +70,7 @@ class _SerchpageState extends State<Serchpage> {
                           );
                         }
 
-                print('tok ${snap.data.length}');
+                //print('tok ${snap.data.length}');
                 return Expanded(
                   child: ListView.builder(
                       itemCount: snap.data!.length,

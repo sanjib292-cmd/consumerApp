@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
+import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:foodorder_userapp/LocationService/Location.dart';
 import 'package:foodorder_userapp/Screens/otp.dart';
 import 'package:foodorder_userapp/Screens/register.dart';
@@ -82,7 +83,6 @@ class _ShowBottomsheetState extends State<ShowBottomsheet> {
                     color: Colors.orange,
                     onPressed: number.length == 10
                         ? () async {
-                            print('hello');
                             try{
                             await verifynum.verifyNumber(number,context);
 
@@ -114,7 +114,8 @@ class _ShowBottomsheetState extends State<ShowBottomsheet> {
                                           },
                                           child: Otp(number: number))));
                             }}catch(e){
-                              print(e);
+                              snackBar(e.toString(), context);
+                              return;
                             }
                           }
                         : null,

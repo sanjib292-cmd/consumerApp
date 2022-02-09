@@ -1,4 +1,6 @@
+
 import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -45,11 +47,11 @@ class _CartPageState extends State<CartPage> {
   Razorpay _razorpay = Razorpay();
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    var postOrder = Provider.of<OrderBackend>(context, listen: false);
+    var postOrder = Provider.of<OrderBackend>(this.context, listen: false);
     await postOrder
         .postOrder(tOken, restronam, orderItm, user, true,
             widget.latlng.latitude, widget.latlng.longitude, paymentId, sum,delBoycharge)
-        .then((value) => Navigator.pushReplacement(context,
+        .then((value) => Navigator.pushReplacement(this.context,
                 MaterialPageRoute(builder: (con) {
               return ChangeNotifierProvider(
                   create: (BuildContext context) {
@@ -88,11 +90,11 @@ class _CartPageState extends State<CartPage> {
     };
     try {
       if (orderid == null) {
-        return snackBar('ordrid null', context);
+        return snackBar('ordrid null', this.context);
       }
       _razorpay.open(options);
     } on Exception catch (e) {
-      snackBar(e.toString(), context);
+      snackBar(e.toString(), this.context);
     }
   }
 
@@ -214,8 +216,8 @@ class _CartPageState extends State<CartPage> {
 
   createSubTitleandCartlist(getcart, checkoutonpress, cod) {
     return FutureBuilder(
-        future: Future.delayed(Duration(seconds: 2), () => getcart),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        future: getcart,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -244,9 +246,10 @@ class _CartPageState extends State<CartPage> {
               }));
             });
           } else {
-            print(snapshot.data);
+            //print(snapshot.data);
             var cart = Provider.of<Cart>(context, listen: false);
             var location = Provider.of<Location>(context, listen: false);
+            var restrobyid=Provider.of<AllRestaurent>(context,listen: false);
 
             // Map<String, dynamic> payload = Jwt.parseJwt(tOken);
             // print('$tOken mfs');
@@ -332,6 +335,39 @@ class _CartPageState extends State<CartPage> {
                           snackBar('${cart.notAdded}', context);
                         }
                       },
+                      //snapshot.data['products'][position]['quantity']['item']['isveg'],
+                      snapshot.data['products'][position]['item']['isveg'],
+                                
+                      ()async{
+                        final SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        var token =
+                            sharedPreferences.getString('Account Details');
+                        Map<String, dynamic> payloads = Jwt.parseJwt(token!);
+                        print(token);
+                        await cart.removeItem(
+                            snapshot.data['products'][position]['item']['_id'],
+                            snapshot.data['products'][position]['_id'],
+                            snapshot.data['products'][position]['item']
+                                ['price'],
+                            token,
+                            snapshot.data['products'][position]['quantity'],
+                            // snapshot.data['products'][position]['item']
+                            //     ['restroId'],
+                            // payloads['id'],
+                            // snapshot.data['products'][position]['item'],
+                            // 0,
+                           );
+                        if (cart.sucessFullyaded != null) {
+                          setState(() {
+                            finitemcount =
+                                snapshot.data['products'][position]['quantity'];
+                          });
+                          snackBar('${cart.sucessFullyaded}', context);
+                        } else {
+                          snackBar('${cart.notAdded}', context);
+                        }
+                      }
                     );
                   },
                   itemCount: snapshot.data['products'].length,
@@ -422,6 +458,7 @@ class _CartPageState extends State<CartPage> {
                             child: FutureBuilder(
                                 future: getcart,
                                 builder: (context, AsyncSnapshot snap) {
+                                 // print((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7).toStringAsFixed(1));
                                   if (snap.data == null) {
                                     return CircularProgressIndicator();
                                   }
@@ -452,7 +489,7 @@ class _CartPageState extends State<CartPage> {
                                               style: GoogleFonts.poppins()),
                                           //Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7==null?
                                           AutoSizeText(
-                                              '₹${(Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7).toStringAsFixed(1)}')
+                                              '₹${((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6)+25).toStringAsFixed(1)}')
                                         ],
                                       ),
                                       SizedBox(
@@ -522,7 +559,7 @@ class _CartPageState extends State<CartPage> {
                                                               widget.latlng
                                                                   .longitude) /
                                                           1000 *
-                                                          7) +
+                                                          7) +25+
                                                       (snapshot.data['total'] *
                                                           0.05) +
                                                       (snapshot.data['products']
@@ -635,201 +672,199 @@ class _CartPageState extends State<CartPage> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 4.0, right: 4.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            RaisedButton(
-                                              onPressed: () {
-                                                print(snapshot.data['total'] +
-                                                    (Geolocator.distanceBetween(
-                                                            snapshot.data['cord']
-                                                                ['lat'],
-                                                            snapshot.data[
-                                                                'cord']['lon'],
-                                                            widget.latlng
-                                                                .latitude,
-                                                            widget.latlng
-                                                                .longitude) /
-                                                        1000 *
-                                                        7) +
-                                                    (snapshot
-                                                            .data['total'] *
-                                                        0.05) +
-                                                    (snapshot.data['products']
-                                                            .length *
-                                                        10) -
-                                                    snapshot
-                                                        .data['discountValue']
-                                                        .round());
-                                                setState(() {
-                                                  delBoycharge = (Geolocator
-                                                              .distanceBetween(
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lat'],
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lon'],
-                                                                  widget.latlng
-                                                                      .latitude,
-                                                                  widget.latlng
-                                                                      .longitude) /
-                                                          1000 *
-                                                          7)
-                                                      .round();
-                                                  sum = (snapshot.data['total'] +
-                                                          (Geolocator.distanceBetween(
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lat'],
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lon'],
-                                                                  widget.latlng
-                                                                      .latitude,
-                                                                  widget.latlng
-                                                                      .longitude) /
+                                        child:
+                                        
+                                         FutureBuilder(
+                                           future: restrobyid.getRestrobyId(snapshot.data['restroId']),
+                                           builder: (context,AsyncSnapshot snip) {
+                                             if(snip.data==null){
+                                               return CircularProgressIndicator();
+                                             }
+                                             else if(snip.data['isOpen']==false){
+                                               return Container(
+                                                 padding: EdgeInsets.all(8),
+                                                 decoration: BoxDecoration(
+                                                   color: Colors.white,
+                                                   borderRadius: BorderRadius.circular(8)),
+                                                 child: Text('Restraunt is currently not opened'),);
+                                             }
+                                             return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                RaisedButton(
+                                                  onPressed: () {
+                                                   
+                                                    setState(() {
+                                                      delBoycharge = (Geolocator
+                                                                  .distanceBetween(
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lat'],
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lon'],
+                                                                      widget.latlng
+                                                                          .latitude,
+                                                                      widget.latlng
+                                                                          .longitude) /
                                                               1000 *
-                                                              7) +
-                                                          (snapshot.data['total'] *
-                                                              0.05) +
-                                                          (snapshot
-                                                                  .data[
-                                                                      'products']
-                                                                  .length *
-                                                              10) -
-                                                          snapshot.data[
-                                                              'discountValue'])
-                                                      .round();
-                                                  destloc = LatLng(
-                                                      snapshot.data['cord']
-                                                          ['lat'],
-                                                      snapshot.data['cord']
-                                                          ['lon']);
-                                                  ////destloc.latitude=snapshot.data['cord']['lat'];
-                                                  restronam =
-                                                      snapshot.data['restroId'];
-                                                  orderItm =
-                                                      snapshot.data['products'];
-                                                  user =
-                                                      snapshot.data['userId'];
-                                                  contact =
-                                                      snapshot.data['userId']
-                                                          ['phoneNumber'];
-                                                  email = snapshot
-                                                      .data['userId']['email'];
-                                                  desc = snapshot
-                                                          .data['products'][0]
-                                                      ['item']['itemName'];
-                                                });
-                                                print(sum);
+                                                              7)
+                                                          .round();
+                                                      sum = (snapshot.data['total'] +
+                                                              (Geolocator.distanceBetween(
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lat'],
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lon'],
+                                                                      widget.latlng
+                                                                          .latitude,
+                                                                      widget.latlng
+                                                                          .longitude) /
+                                                                  1000 *
+                                                                  7) +
+                                                              (snapshot.data['total'] *
+                                                                  0.05) +
+                                                              (snapshot
+                                                                      .data[
+                                                                          'products']
+                                                                      .length *
+                                                                  10) -
+                                                              snapshot.data[
+                                                                  'discountValue'])
+                                                          .round();
+                                                      destloc = LatLng(
+                                                          snapshot.data['cord']
+                                                              ['lat'],
+                                                          snapshot.data['cord']
+                                                              ['lon']);
+                                                      ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                      restronam =
+                                                          snapshot.data['restroId'];
+                                                      orderItm =
+                                                          snapshot.data['products'];
+                                                      user =
+                                                          snapshot.data['userId'];
+                                                      contact =
+                                                          snapshot.data['userId']
+                                                              ['phoneNumber'];
+                                                      email = snapshot
+                                                          .data['userId']['email'];
+                                                      desc = snapshot
+                                                              .data['products'][0]
+                                                          ['item']['itemName'];
+                                                    });
+                                                   // print(sum);
 
-                                                checkoutonpress();
-                                              },
-                                              color: Colors.green,
-                                              padding: EdgeInsets.only(
-                                                  top: 12,
-                                                  left: 30,
-                                                  right: 30,
-                                                  bottom: 12),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(24))),
-                                              child: Text(
-                                                "PAY ONLINE",
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            RaisedButton(
-                                              onPressed: () async {
-                                                setState(() {
-                                                  delBoycharge = (Geolocator
-                                                              .distanceBetween(
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lat'],
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lon'],
-                                                                  widget.latlng
-                                                                      .latitude,
-                                                                  widget.latlng
-                                                                      .longitude) /
-                                                          1000 *
-                                                          7)
-                                                      .round();
-
-                                                  sum = (snapshot.data['total'] +
-                                                          (Geolocator.distanceBetween(
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lat'],
-                                                                  snapshot.data[
-                                                                          'cord']
-                                                                      ['lon'],
-                                                                  widget.latlng
-                                                                      .latitude,
-                                                                  widget.latlng
-                                                                      .longitude) /
+                                                    checkoutonpress();
+                                                  },
+                                                  color: Colors.green,
+                                                  padding: EdgeInsets.only(
+                                                      top: 12,
+                                                      left: 30,
+                                                      right: 30,
+                                                      bottom: 12),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(24))),
+                                                  child: Text(
+                                                    "PAY ONLINE",
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                                RaisedButton(
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      delBoycharge = (Geolocator
+                                                                  .distanceBetween(
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lat'],
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lon'],
+                                                                      widget.latlng
+                                                                          .latitude,
+                                                                      widget.latlng
+                                                                          .longitude) /
                                                               1000 *
-                                                              7) +
-                                                          (snapshot.data['total'] *
-                                                              0.05) +
-                                                          (snapshot
-                                                                  .data[
-                                                                      'products']
-                                                                  .length *
-                                                              10) -
-                                                          snapshot.data[
-                                                              'discountValue'])
-                                                      .round();
-                                                  destloc = LatLng(
-                                                      snapshot.data['cord']
-                                                          ['lat'],
-                                                      snapshot.data['cord']
-                                                          ['lon']);
-                                                  ////destloc.latitude=snapshot.data['cord']['lat'];
-                                                  restronam =
-                                                      snapshot.data['restroId'];
-                                                  orderItm =
-                                                      snapshot.data['products'];
-                                                  user =
-                                                      snapshot.data['userId'];
-                                                  contact =
-                                                      snapshot.data['userId']
-                                                          ['phoneNumber'];
-                                                  email = snapshot
-                                                      .data['userId']['email'];
-                                                  desc = snapshot
-                                                          .data['products'][0]
-                                                      ['item']['itemName'];
-                                                });
+                                                              7)
+                                                          .round();
 
-                                                cod();
-                                              },
-                                              color: Colors.green,
-                                              padding: EdgeInsets.only(
-                                                  top: 12,
-                                                  left: 32,
-                                                  right: 32,
-                                                  bottom: 12),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(24))),
-                                              child: Text(
-                                                "PAY COD",
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                                      sum = (snapshot.data['total'] +
+                                                              (Geolocator.distanceBetween(
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lat'],
+                                                                      snapshot.data[
+                                                                              'cord']
+                                                                          ['lon'],
+                                                                      widget.latlng
+                                                                          .latitude,
+                                                                      widget.latlng
+                                                                          .longitude) /
+                                                                  1000 *
+                                                                  7) +
+                                                              (snapshot.data['total'] *
+                                                                  0.05) +
+                                                              (snapshot
+                                                                      .data[
+                                                                          'products']
+                                                                      .length *
+                                                                  10) -
+                                                              snapshot.data[
+                                                                  'discountValue'])
+                                                          .round();
+                                                      destloc = LatLng(
+                                                          snapshot.data['cord']
+                                                              ['lat'],
+                                                          snapshot.data['cord']
+                                                              ['lon']);
+                                                      ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                      restronam =
+                                                          snapshot.data['restroId'];
+                                                      orderItm =
+                                                          snapshot.data['products'];
+                                                      user =
+                                                          snapshot.data['userId'];
+                                                      contact =
+                                                          snapshot.data['userId']
+                                                              ['phoneNumber'];
+                                                      email = snapshot
+                                                          .data['userId']['email'];
+                                                      desc = snapshot
+                                                              .data['products'][0]
+                                                          ['item']['itemName'];
+                                                    });
+
+                                                    cod();
+                                                  },
+                                                  color: Colors.green,
+                                                  padding: EdgeInsets.only(
+                                                      top: 12,
+                                                      left: 32,
+                                                      right: 32,
+                                                      bottom: 12),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(24))),
+                                                  child: Text(
+                                                    "PAY COD",
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white),
+                                                  ),
+                                                )
+                                              ],
+                                        );
+                                           }
+                                         ),
                                       ),
                                     ],
                                   );
@@ -849,7 +884,7 @@ class _CartPageState extends State<CartPage> {
         });
   }
 
-  createCartListItem(name, price, img, addtocart, itemcount, removeCart) {
+  createCartListItem(name, price, img, addtocart, itemcount, removeCart,bool txt,removeproduct) {
     return Stack(
       children: <Widget>[
         Container(
@@ -866,7 +901,7 @@ class _CartPageState extends State<CartPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(14)),
                     color: Colors.blue.shade200,
-                    image: DecorationImage(image: NetworkImage("$img"))),
+                    image: DecorationImage(image: NetworkImage("$img"),fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Container(
@@ -885,10 +920,15 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       SizedBox(height: 6),
-                      Text(
-                        "Green M",
-                        style: GoogleFonts.poppins(),
-                      ),
+                      Container(
+                          height: 18,
+                          width: 18,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(txt
+                                    ? 'images/veg.png'
+                                    : 'images/non-veg.png')),
+                          )),
                       Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -917,7 +957,7 @@ class _CartPageState extends State<CartPage> {
                                         bottom: 2, right: 12, left: 12),
                                     child: Text(
                                       "$finitemcount",
-                                      style: GoogleFonts.poppins(),
+                                      style: GoogleFonts.poppins(fontWeight: FontWeight.w700,color: Colors.orange),
                                     ),
                                   ),
                                   GestureDetector(
@@ -942,21 +982,24 @@ class _CartPageState extends State<CartPage> {
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Container(
-            width: 24,
-            height: 24,
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(right: 10, top: 8),
-            child: Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 20,
+        GestureDetector(
+          onTap: removeproduct,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(right: 10, top: 8),
+              child: Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 20,
+              ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                  color: Colors.green),
             ),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-                color: Colors.green),
           ),
         )
       ],

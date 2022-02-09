@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentRazorpay extends StatefulWidget {
@@ -29,7 +30,9 @@ class _PaymentRazorpayState extends State<PaymentRazorpay> {
     try {
       _razorpay.open(options);
     } catch (e) {
-      print(e);
+      snackBar(e.toString(), context);
+      return;
+     // print(e);
     }
   }
 

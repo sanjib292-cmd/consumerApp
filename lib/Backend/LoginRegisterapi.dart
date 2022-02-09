@@ -29,7 +29,6 @@ class RegisterUser extends ChangeNotifier {
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       }
-      print(res.statusCode);
       return null;
     } on Exception catch (e) {
       return snackBar(e.toString(), context);
@@ -61,7 +60,6 @@ class RegisterUser extends ChangeNotifier {
        errorMsg = res.body;
       notifyListeners();
 
-      //print(res.body);
 
     } catch (ex) {
       return snackBar(ex.toString(), context);
@@ -93,13 +91,11 @@ class RegisterUser extends ChangeNotifier {
       //   print('from sucess:${res.body}');
       //   return null;
       // }
-      print(res.statusCode);
       if (res.statusCode == 200) {
        await EasyLoading.dismiss();
         userDetails = res.headers['x-auth-token'];
         otpVeryfied = true;
         notifyListeners();
-        print('from fail:$userDetails');
         return userDetails;
       } else {
        await EasyLoading.dismiss();
@@ -128,7 +124,6 @@ class RegisterUser extends ChangeNotifier {
             'phoneNumber': number,
           }));
          
-      print(res.body);
       if (res.statusCode == 200) {
         await EasyLoading.dismiss();
         verifynumMsg = true;
@@ -147,7 +142,6 @@ class RegisterUser extends ChangeNotifier {
       return snackBar('there is some problem..', context);
     }on SocketException catch (e){
      await EasyLoading.dismiss();
-      print('$e from veryfynum');
       Navigator.of(context).pop();
       //AlertDialog(title: Text(e.toString()),);
       return snackBar(e.toString(), context);
@@ -201,13 +195,11 @@ class RegisterUser extends ChangeNotifier {
       //   print('from sucess:${res.body}');
       //   return null;
       // }
-      print(res.statusCode);
       if (res.statusCode == 200) {
         await EasyLoading.dismiss();
         userDetails = res.body;
         otpVeryfied = true;
         notifyListeners();
-        print('from fail:${res.body}');
         return res.body;
       } else {
       await  EasyLoading.dismiss();

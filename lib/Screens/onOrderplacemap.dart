@@ -134,7 +134,7 @@ class _OnorderPlaceState extends State<OnorderPlace> {
   Widget build(BuildContext context) {
 
     //print(widget.destloc);
-    print('from map page ${(widget.orderDetails).runtimeType}');
+    //print('from map page ${(widget.orderDetails).runtimeType}');
     // print('hlo ${widget.destloc}  ${widget.sourceloc}');
     return Scaffold(
       appBar: AppBar(
@@ -176,7 +176,7 @@ class _OnorderPlaceState extends State<OnorderPlace> {
             future: getRestrobyId(),
             builder: (con, AsyncSnapshot snp) {
               if (snp.data != null) {
-                print(snp.data.runtimeType);
+                //print(snp.data.runtimeType);
                 return Column(
                   //mainAxisAlignment: MainAxisAlignment.start,
                   //crossAxisAlignment: CrossAxisAlignment.center,
@@ -208,14 +208,12 @@ class _OnorderPlaceState extends State<OnorderPlace> {
                           children: [
                             Align(
                                 alignment: Alignment.topLeft,
-                                child: Flexible(
-                                  child: Text(
-                                    '''${snp.data['name']} \n has received your order''',
-                                    style: GoogleFonts.poppins(),
-                                    maxLines: 2,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                  ),
+                                child: Text(
+                                  '''${snp.data['name']} \n has received your order''',
+                                  style: GoogleFonts.poppins(),
+                                  maxLines: 2,
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
                                 )),
                             SizedBox(
                               width: 20,
