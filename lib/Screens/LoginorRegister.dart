@@ -5,6 +5,7 @@ import 'package:foodorder_userapp/Design&Ui/bottomsheetlogin.dart';
 import 'package:foodorder_userapp/Design&Ui/konst.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginOrRegister extends StatefulWidget {
   var lat,lon;
@@ -25,6 +26,16 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
       isUser = obtainedIsuser!;
     });
   }
+    Future<void> launchsite(String url) async {
+    if (!await launch(
+      url,
+      forceSafariVC: true,
+      forceWebView: true,
+      enableJavaScript: true,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
   
 
   String num = '';
@@ -35,6 +46,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
   }
   @override
   Widget build(BuildContext context) {
+   
     print(widget.lat);
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -156,12 +168,16 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Text('About Us',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.4),
-                                        fontWeight: FontWeight.w600)),
+                              GestureDetector(
+                                onTap: (){                                            launchsite('https://www.chefoo.in/');
+},
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 2.0),
+                                  child: Text('About Us',
+                                      style: TextStyle(
+                                          color: Colors.black.withOpacity(0.4),
+                                          fontWeight: FontWeight.w600)),
+                                ),
                               ),
                             ],
                           ),

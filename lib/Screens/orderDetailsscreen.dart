@@ -88,7 +88,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ),
                 Divider(),
                 Container(
-                  height: MediaQuery.of(context).size.height/9,
+                  height: MediaQuery.of(context).size.height/8.5,
                   child: ListView.builder(
                       itemCount: snapshot.data['orderItems'].length,
                       itemBuilder: (context, index) {

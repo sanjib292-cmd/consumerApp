@@ -1,8 +1,6 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
 import 'package:foodorder_userapp/Backend/couponBackend.dart';
@@ -15,7 +13,6 @@ import 'package:foodorder_userapp/LocationService/Location.dart';
 import 'package:foodorder_userapp/Screens/Couponpage.dart';
 import 'package:foodorder_userapp/Screens/OrderConfermationspalsh.dart';
 import 'package:foodorder_userapp/Screens/firstpage.dart';
-import 'package:foodorder_userapp/Screens/onOrderplacemap.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
@@ -44,30 +41,64 @@ class _CartPageState extends State<CartPage> {
   var postedOrder;
   var desc, contact, email;
   var paymentId, delBoycharge;
+  bool paymentsucess=false;
+  bool paid=false;
   Razorpay _razorpay = Razorpay();
+   postOrder() async {
+     var postOrder = Provider.of<OrderBackend>(context, listen: false);
+     try {
+      print(postOrder.sucessFullyaded);
+      print('posting order');
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    var postOrder = Provider.of<OrderBackend>(this.context, listen: false);
-    await postOrder
-        .postOrder(tOken, restronam, orderItm, user, true,
-            widget.latlng.latitude, widget.latlng.longitude, paymentId, sum,delBoycharge)
-        .then((value) => Navigator.pushReplacement(this.context,
-                MaterialPageRoute(builder: (con) {
-              return ChangeNotifierProvider(
-                  create: (BuildContext context) {
-                    return AllRestaurent();
-                  },
-                  child: OrderConfirmd(
-                    sourceloc: widget.latlng,
-                    destloc: destloc,
-                    orderDetails: value,
-                  ));
-            })));
-
-    // Do something when payment succeeds
+     await postOrder
+          .postOrder(
+              tOken,
+              restronam,
+              orderItm,
+              user,
+              true,
+              widget.latlng.latitude,
+              widget.latlng.longitude,
+              paymentId,
+              sum,
+              delBoycharge)
+          .then((value) => Navigator.pushReplacement(this.context,
+                  MaterialPageRoute(builder: (con) {
+                return ChangeNotifierProvider(
+                    create: (BuildContext context) {
+                      return AllRestaurent();
+                    },
+                    child: OrderConfirmd(
+                      sourceloc: widget.latlng,
+                      destloc: destloc,
+                      orderDetails: value,
+                    ));
+              })));
+          // print(orderpost);
+          // return orderpost;
+    } on Exception catch (e) {
+      snackBar('this $e', context);
+      print('$e is lol');
+    }
+    
+  }
+  sums(){
+    print(2+2);
   }
 
+  Future _handlePaymentSuccess(PaymentSuccessResponse response)async{
+    setState(() {
+      paymentsucess=true;
+    });
+    
+    snackBar('Sucessfull', context);
+    sums();
+    await postOrder();
+    }
+
   void _handlePaymentError(PaymentFailureResponse response) {
+    print(response.message);
+    snackBar('${response.message}', context);
     // Do something when payment fails
   }
 
@@ -84,15 +115,20 @@ class _CartPageState extends State<CartPage> {
       'key': 'rzp_test_bSgdTgaBOb05KI',
       'amount': sum * 100,
       'order_id': orderid,
-      'name': 'Mealtime',
+      'name': 'Chefoo',
       'description': '$desc',
       'prefill': {'contact': '$contact', 'email': '$email'}
     };
     try {
       if (orderid == null) {
+        print('order id null');
         return snackBar('ordrid null', this.context);
       }
       _razorpay.open(options);
+      if(paymentsucess){
+        postOrder();
+      }
+      snackBar('Payment failed', context);
     } on Exception catch (e) {
       snackBar(e.toString(), this.context);
     }
@@ -145,8 +181,9 @@ class _CartPageState extends State<CartPage> {
                       setState(() {
                         paymentId = createPayment.msg;
                       });
-                      startPayment(createPayment.msg);
-                    }, () async {
+                     await startPayment(createPayment.msg);
+                    }, 
+                    () async {
                       await postOrder
                           .postOrder(
                               tOken,
@@ -160,7 +197,7 @@ class _CartPageState extends State<CartPage> {
                               sum,
                               delBoycharge)
                           .then((value) {
-                        print(value);
+                        //print(value);
                         try {
                           return Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (con) {
@@ -249,7 +286,7 @@ class _CartPageState extends State<CartPage> {
             //print(snapshot.data);
             var cart = Provider.of<Cart>(context, listen: false);
             var location = Provider.of<Location>(context, listen: false);
-            var restrobyid=Provider.of<AllRestaurent>(context,listen: false);
+            var restrobyid = Provider.of<AllRestaurent>(context, listen: false);
 
             // Map<String, dynamic> payload = Jwt.parseJwt(tOken);
             // print('$tOken mfs');
@@ -271,81 +308,81 @@ class _CartPageState extends State<CartPage> {
                     finitemcount =
                         snapshot.data['products'][position]['quantity'];
                     return createCartListItem(
-                      snapshot.data['products'][position]['item']['itemName'],
-                      snapshot.data['products'][position]['price'],
-                      snapshot.data['products'][position]['item']['itmImg'],
-                      () async {
-                        final SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        var token =
-                            sharedPreferences.getString('Account Details');
-                        Map<String, dynamic> payloads = Jwt.parseJwt(token!);
+                        snapshot.data['products'][position]['item']['itemName'],
+                        snapshot.data['products'][position]['price'],
+                        snapshot.data['products'][position]['item']['itmImg'],
+                        () async {
+                          final SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          var token =
+                              sharedPreferences.getString('Account Details');
+                          Map<String, dynamic> payloads = Jwt.parseJwt(token!);
 
-                        await cart.addToCart(
-                            id: payloads['id'],
-                            item: snapshot.data['products'][position]['item'],
-                            quantity: snapshot.data['products'][position]
-                                ['quantity'],
-                            price: snapshot.data['products'][position]['item']
-                                ['price'],
-                            token: token,
-                            restroId: snapshot.data['products'][position]
-                                ['item']['restroId'],
-                            itmid: snapshot.data['products'][position]['item']
-                                ['_id'],
-                            lat: snapshot.data['cord']['lat'],
-                            lon: snapshot.data['cord']['lon']);
-                        if (cart.sucessFullyaded != null) {
-                          setState(() {
-                            finitemcount =
-                                snapshot.data['products'][position]['quantity'];
-                          });
-                          snackBar('${cart.sucessFullyaded}', context);
-                        } else {
-                          snackBar('${cart.notAdded}', context);
-                        }
-                      },
-                      finitemcount,
-                      () async {
-                        //print(token);
-                        final SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        var token =
-                            sharedPreferences.getString('Account Details');
-                        Map<String, dynamic> payloads = Jwt.parseJwt(token!);
-                        print(token);
-                        await cart.removequentity(
-                            snapshot.data['products'][position]['item']['_id'],
-                            snapshot.data['products'][position]['item']
-                                ['price'],
-                            token,
-                            snapshot.data['products'][position]['item']
-                                ['restroId'],
-                            payloads['id'],
-                            snapshot.data['products'][position]['item'],
-                            snapshot.data['products'][position]['quantity'],
-                            snapshot.data['products'][position]['_id']);
-                        if (cart.sucessFullyaded != null) {
-                          setState(() {
-                            finitemcount =
-                                snapshot.data['products'][position]['quantity'];
-                          });
-                          snackBar('${cart.sucessFullyaded}', context);
-                        } else {
-                          snackBar('${cart.notAdded}', context);
-                        }
-                      },
-                      //snapshot.data['products'][position]['quantity']['item']['isveg'],
-                      snapshot.data['products'][position]['item']['isveg'],
-                                
-                      ()async{
-                        final SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        var token =
-                            sharedPreferences.getString('Account Details');
-                        Map<String, dynamic> payloads = Jwt.parseJwt(token!);
-                        print(token);
-                        await cart.removeItem(
+                          await cart.addToCart(
+                              id: payloads['id'],
+                              item: snapshot.data['products'][position]['item'],
+                              quantity: snapshot.data['products'][position]
+                                  ['quantity'],
+                              price: snapshot.data['products'][position]['item']
+                                  ['price'],
+                              token: token,
+                              restroId: snapshot.data['products'][position]
+                                  ['item']['restroId'],
+                              itmid: snapshot.data['products'][position]['item']
+                                  ['_id'],
+                              lat: snapshot.data['cord']['lat'],
+                              lon: snapshot.data['cord']['lon']);
+                          if (cart.sucessFullyaded != null) {
+                            setState(() {
+                              finitemcount = snapshot.data['products'][position]
+                                  ['quantity'];
+                            });
+                            snackBar('${cart.sucessFullyaded}', context);
+                          } else {
+                            snackBar('${cart.notAdded}', context);
+                          }
+                        },
+                        finitemcount,
+                        () async {
+                          //print(token);
+                          final SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          var token =
+                              sharedPreferences.getString('Account Details');
+                          Map<String, dynamic> payloads = Jwt.parseJwt(token!);
+                          print(token);
+                          await cart.removequentity(
+                              snapshot.data['products'][position]['item']
+                                  ['_id'],
+                              snapshot.data['products'][position]['item']
+                                  ['price'],
+                              token,
+                              snapshot.data['products'][position]['item']
+                                  ['restroId'],
+                              payloads['id'],
+                              snapshot.data['products'][position]['item'],
+                              snapshot.data['products'][position]['quantity'],
+                              snapshot.data['products'][position]['_id']);
+                          if (cart.sucessFullyaded != null) {
+                            setState(() {
+                              finitemcount = snapshot.data['products'][position]
+                                  ['quantity'];
+                            });
+                            snackBar('${cart.sucessFullyaded}', context);
+                          } else {
+                            snackBar('${cart.notAdded}', context);
+                          }
+                        },
+                        //snapshot.data['products'][position]['quantity']['item']['isveg'],
+                        snapshot.data['products'][position]['item']['isveg'],
+                        () async {
+                          final SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          var token =
+                              sharedPreferences.getString('Account Details');
+                          Map<String, dynamic> payloads = Jwt.parseJwt(token!);
+                          print(token);
+                          await cart.removeItem(
                             snapshot.data['products'][position]['item']['_id'],
                             snapshot.data['products'][position]['_id'],
                             snapshot.data['products'][position]['item']
@@ -357,18 +394,17 @@ class _CartPageState extends State<CartPage> {
                             // payloads['id'],
                             // snapshot.data['products'][position]['item'],
                             // 0,
-                           );
-                        if (cart.sucessFullyaded != null) {
-                          setState(() {
-                            finitemcount =
-                                snapshot.data['products'][position]['quantity'];
-                          });
-                          snackBar('${cart.sucessFullyaded}', context);
-                        } else {
-                          snackBar('${cart.notAdded}', context);
-                        }
-                      }
-                    );
+                          );
+                          if (cart.sucessFullyaded != null) {
+                            setState(() {
+                              finitemcount = snapshot.data['products'][position]
+                                  ['quantity'];
+                            });
+                            snackBar('${cart.sucessFullyaded}', context);
+                          } else {
+                            snackBar('${cart.notAdded}', context);
+                          }
+                        });
                   },
                   itemCount: snapshot.data['products'].length,
                 ),
@@ -458,7 +494,7 @@ class _CartPageState extends State<CartPage> {
                             child: FutureBuilder(
                                 future: getcart,
                                 builder: (context, AsyncSnapshot snap) {
-                                 // print((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7).toStringAsFixed(1));
+                                  // print((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7).toStringAsFixed(1));
                                   if (snap.data == null) {
                                     return CircularProgressIndicator();
                                   }
@@ -489,7 +525,7 @@ class _CartPageState extends State<CartPage> {
                                               style: GoogleFonts.poppins()),
                                           //Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7==null?
                                           AutoSizeText(
-                                              '₹${((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6)+25).toStringAsFixed(1)}')
+                                              '₹${((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6) + 25).toStringAsFixed(1)}')
                                         ],
                                       ),
                                       SizedBox(
@@ -559,7 +595,7 @@ class _CartPageState extends State<CartPage> {
                                                               widget.latlng
                                                                   .longitude) /
                                                           1000 *
-                                                          7) +25+
+                                                          7) +
                                                       (snapshot.data['total'] *
                                                           0.05) +
                                                       (snapshot.data['products']
@@ -672,199 +708,222 @@ class _CartPageState extends State<CartPage> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 4.0, right: 4.0),
-                                        child:
-                                        
-                                         FutureBuilder(
-                                           future: restrobyid.getRestrobyId(snapshot.data['restroId']),
-                                           builder: (context,AsyncSnapshot snip) {
-                                             if(snip.data==null){
-                                               return CircularProgressIndicator();
-                                             }
-                                             else if(snip.data['isOpen']==false){
-                                               return Container(
-                                                 padding: EdgeInsets.all(8),
-                                                 decoration: BoxDecoration(
-                                                   color: Colors.white,
-                                                   borderRadius: BorderRadius.circular(8)),
-                                                 child: Text('Restraunt is currently not opened'),);
-                                             }
-                                             return Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                RaisedButton(
-                                                  onPressed: () {
-                                                   
-                                                    setState(() {
-                                                      delBoycharge = (Geolocator
-                                                                  .distanceBetween(
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lat'],
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lon'],
-                                                                      widget.latlng
-                                                                          .latitude,
-                                                                      widget.latlng
-                                                                          .longitude) /
-                                                              1000 *
-                                                              7)
-                                                          .round();
-                                                      sum = (snapshot.data['total'] +
-                                                              (Geolocator.distanceBetween(
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lat'],
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lon'],
-                                                                      widget.latlng
-                                                                          .latitude,
-                                                                      widget.latlng
-                                                                          .longitude) /
-                                                                  1000 *
-                                                                  7) +
-                                                              (snapshot.data['total'] *
-                                                                  0.05) +
-                                                              (snapshot
-                                                                      .data[
-                                                                          'products']
-                                                                      .length *
-                                                                  10) -
-                                                              snapshot.data[
-                                                                  'discountValue'])
-                                                          .round();
-                                                      destloc = LatLng(
-                                                          snapshot.data['cord']
-                                                              ['lat'],
-                                                          snapshot.data['cord']
-                                                              ['lon']);
-                                                      ////destloc.latitude=snapshot.data['cord']['lat'];
-                                                      restronam =
-                                                          snapshot.data['restroId'];
-                                                      orderItm =
-                                                          snapshot.data['products'];
-                                                      user =
-                                                          snapshot.data['userId'];
-                                                      contact =
-                                                          snapshot.data['userId']
-                                                              ['phoneNumber'];
-                                                      email = snapshot
-                                                          .data['userId']['email'];
-                                                      desc = snapshot
-                                                              .data['products'][0]
-                                                          ['item']['itemName'];
-                                                    });
-                                                   // print(sum);
-
-                                                    checkoutonpress();
-                                                  },
-                                                  color: Colors.green,
-                                                  padding: EdgeInsets.only(
-                                                      top: 12,
-                                                      left: 30,
-                                                      right: 30,
-                                                      bottom: 12),
-                                                  shape: RoundedRectangleBorder(
+                                        child: FutureBuilder(
+                                            future: restrobyid.getRestrobyId(
+                                                snapshot.data['restroId']),
+                                            builder:
+                                                (context, AsyncSnapshot snip) {
+                                              if (snip.data == null) {
+                                                return CircularProgressIndicator();
+                                              } else if (snip.data['isOpen'] ==
+                                                  false) {
+                                                return Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
                                                       borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(24))),
+                                                          BorderRadius.circular(
+                                                              8)),
                                                   child: Text(
-                                                    "PAY ONLINE",
-                                                    style: GoogleFonts.poppins(
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                RaisedButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      delBoycharge = (Geolocator
-                                                                  .distanceBetween(
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lat'],
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lon'],
-                                                                      widget.latlng
-                                                                          .latitude,
-                                                                      widget.latlng
-                                                                          .longitude) /
-                                                              1000 *
-                                                              7)
-                                                          .round();
+                                                      'Restraunt is currently not opened'),
+                                                );
+                                              }
+                                              return Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  RaisedButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        delBoycharge = (Geolocator.distanceBetween(
+                                                                    snapshot.data[
+                                                                            'cord']
+                                                                        ['lat'],
+                                                                    snapshot.data[
+                                                                            'cord']
+                                                                        ['lon'],
+                                                                    widget
+                                                                        .latlng
+                                                                        .latitude,
+                                                                    widget
+                                                                        .latlng
+                                                                        .longitude) /
+                                                                1000 *
+                                                                7)
+                                                            .round();
+                                                        sum = (snapshot.data['total'] +
+                                                                (Geolocator.distanceBetween(
+                                                                        snapshot.data['cord'][
+                                                                            'lat'],
+                                                                        snapshot.data['cord']
+                                                                            [
+                                                                            'lon'],
+                                                                        widget
+                                                                            .latlng
+                                                                            .latitude,
+                                                                        widget
+                                                                            .latlng
+                                                                            .longitude) /
+                                                                    1000 *
+                                                                    7) +
+                                                                (snapshot.data[
+                                                                        'total'] *
+                                                                    0.05) +
+                                                                (snapshot
+                                                                        .data[
+                                                                            'products']
+                                                                        .length *
+                                                                    10) -
+                                                                snapshot.data[
+                                                                    'discountValue'])
+                                                            .round();
+                                                        destloc = LatLng(
+                                                            snapshot.data[
+                                                                'cord']['lat'],
+                                                            snapshot.data[
+                                                                'cord']['lon']);
+                                                        ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                        restronam = snapshot
+                                                            .data['restroId'];
+                                                        orderItm = snapshot
+                                                            .data['products'];
+                                                        user = snapshot
+                                                            .data['userId'];
+                                                        contact = snapshot
+                                                                .data['userId']
+                                                            ['phoneNumber'];
+                                                        email = snapshot
+                                                                .data['userId']
+                                                            ['email'];
+                                                        desc = snapshot.data[
+                                                                    'products']
+                                                                [0]['item']
+                                                            ['itemName'];
+                                                      });
+                                                      // print(sum);
 
-                                                      sum = (snapshot.data['total'] +
-                                                              (Geolocator.distanceBetween(
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lat'],
-                                                                      snapshot.data[
-                                                                              'cord']
-                                                                          ['lon'],
-                                                                      widget.latlng
-                                                                          .latitude,
-                                                                      widget.latlng
-                                                                          .longitude) /
-                                                                  1000 *
-                                                                  7) +
-                                                              (snapshot.data['total'] *
-                                                                  0.05) +
-                                                              (snapshot
-                                                                      .data[
-                                                                          'products']
-                                                                      .length *
-                                                                  10) -
-                                                              snapshot.data[
-                                                                  'discountValue'])
-                                                          .round();
-                                                      destloc = LatLng(
-                                                          snapshot.data['cord']
-                                                              ['lat'],
-                                                          snapshot.data['cord']
-                                                              ['lon']);
-                                                      ////destloc.latitude=snapshot.data['cord']['lat'];
-                                                      restronam =
-                                                          snapshot.data['restroId'];
-                                                      orderItm =
-                                                          snapshot.data['products'];
-                                                      user =
-                                                          snapshot.data['userId'];
-                                                      contact =
-                                                          snapshot.data['userId']
-                                                              ['phoneNumber'];
-                                                      email = snapshot
-                                                          .data['userId']['email'];
-                                                      desc = snapshot
-                                                              .data['products'][0]
-                                                          ['item']['itemName'];
-                                                    });
-
-                                                    cod();
-                                                  },
-                                                  color: Colors.green,
-                                                  padding: EdgeInsets.only(
-                                                      top: 12,
-                                                      left: 32,
-                                                      right: 32,
-                                                      bottom: 12),
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(24))),
-                                                  child: Text(
-                                                    "PAY COD",
-                                                    style: GoogleFonts.poppins(
-                                                        fontWeight: FontWeight.bold,
-                                                        color: Colors.white),
+                                                      checkoutonpress();
+                                                    },
+                                                    color: Colors.green,
+                                                    padding: EdgeInsets.only(
+                                                        top: 12,
+                                                        left: 30,
+                                                        right: 30,
+                                                        bottom: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    24))),
+                                                    child: Text(
+                                                      "PAY ONLINE",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
                                                   ),
-                                                )
-                                              ],
-                                        );
-                                           }
-                                         ),
+                                                  RaisedButton(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        delBoycharge = (Geolocator.distanceBetween(
+                                                                    snapshot.data[
+                                                                            'cord']
+                                                                        ['lat'],
+                                                                    snapshot.data[
+                                                                            'cord']
+                                                                        ['lon'],
+                                                                    widget
+                                                                        .latlng
+                                                                        .latitude,
+                                                                    widget
+                                                                        .latlng
+                                                                        .longitude) /
+                                                                1000 *
+                                                                7)
+                                                            .round();
+
+                                                        sum = (snapshot.data['total'] +
+                                                                (Geolocator.distanceBetween(
+                                                                        snapshot.data['cord'][
+                                                                            'lat'],
+                                                                        snapshot.data['cord']
+                                                                            [
+                                                                            'lon'],
+                                                                        widget
+                                                                            .latlng
+                                                                            .latitude,
+                                                                        widget
+                                                                            .latlng
+                                                                            .longitude) /
+                                                                    1000 *
+                                                                    7) +
+                                                                (snapshot.data[
+                                                                        'total'] *
+                                                                    0.05) +
+                                                                (snapshot
+                                                                        .data[
+                                                                            'products']
+                                                                        .length *
+                                                                    10) -
+                                                                snapshot.data[
+                                                                    'discountValue'])
+                                                            .round();
+                                                        destloc = LatLng(
+                                                            snapshot.data[
+                                                                'cord']['lat'],
+                                                            snapshot.data[
+                                                                'cord']['lon']);
+                                                        ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                        restronam = snapshot
+                                                            .data['restroId'];
+                                                        orderItm = snapshot
+                                                            .data['products'];
+                                                        user = snapshot
+                                                            .data['userId'];
+                                                        contact = snapshot
+                                                                .data['userId']
+                                                            ['phoneNumber'];
+                                                        email = snapshot
+                                                                .data['userId']
+                                                            ['email'];
+                                                        desc = snapshot.data[
+                                                                    'products']
+                                                                [0]['item']
+                                                            ['itemName'];
+                                                      });
+
+                                                      cod();
+                                                    },
+                                                    color: Colors.green,
+                                                    padding: EdgeInsets.only(
+                                                        top: 12,
+                                                        left: 32,
+                                                        right: 32,
+                                                        bottom: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    24))),
+                                                    child: Text(
+                                                      "PAY COD",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }),
                                       ),
                                     ],
                                   );
@@ -884,7 +943,8 @@ class _CartPageState extends State<CartPage> {
         });
   }
 
-  createCartListItem(name, price, img, addtocart, itemcount, removeCart,bool txt,removeproduct) {
+  createCartListItem(name, price, img, addtocart, itemcount, removeCart,
+      bool txt, removeproduct) {
     return Stack(
       children: <Widget>[
         Container(
@@ -901,7 +961,8 @@ class _CartPageState extends State<CartPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(14)),
                     color: Colors.blue.shade200,
-                    image: DecorationImage(image: NetworkImage("$img"),fit: BoxFit.cover)),
+                    image: DecorationImage(
+                        image: NetworkImage("$img"), fit: BoxFit.cover)),
               ),
               Expanded(
                 child: Container(
@@ -957,7 +1018,9 @@ class _CartPageState extends State<CartPage> {
                                         bottom: 2, right: 12, left: 12),
                                     child: Text(
                                       "$finitemcount",
-                                      style: GoogleFonts.poppins(fontWeight: FontWeight.w700,color: Colors.orange),
+                                      style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.orange),
                                     ),
                                   ),
                                   GestureDetector(

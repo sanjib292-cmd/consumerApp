@@ -78,19 +78,20 @@ class _RestroMenuState extends State<RestroMenu> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Container(
-                  decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.6),borderRadius: BorderRadius.circular(8)),
                   height: 30,
                   width: 80,
                   //color: Colors.grey[200],
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(2, 5, 5, 5),
+                    padding: const EdgeInsets.fromLTRB(4, 5, 3, 5),
                     child: Row(
                       children: [
                         Icon(
-                          FontAwesomeIcons.stopwatch,
-                          size: 20,
+                          FontAwesomeIcons.clock,
+                          size: 19,
                           color: Colors.orange,
                         ),
+                        SizedBox(width: 2,),
                         Align(
                             alignment: Alignment.center,
                             child: AutoSizeText(
