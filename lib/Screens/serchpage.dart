@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/getallRestaurents.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +19,7 @@ class _SerchpageState extends State<Serchpage> {
     var serch = Provider.of<AllRestaurent>(context, listen: false);
     Stream search(txt) async* {
       //print(searchTxt);
-      yield* Stream.periodic(Duration(seconds: 1), (_) {
+      yield* Stream.periodic(Duration(milliseconds: 100), (_) {
         return txt.length >= 3 ? serch.serchProduct('$txt', context) : null;
       }).asyncMap((event) async => await event);
     }

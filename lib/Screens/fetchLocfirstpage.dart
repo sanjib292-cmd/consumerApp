@@ -31,13 +31,6 @@ class _FetchLocState extends State<FetchLoc> {
    if(check==false){
      openLocationSetting();
    }
-  //  if (check==false){
-  //     final AndroidIntent intent = new AndroidIntent(
-  //     action: 'android.settings.LOCATION_SOURCE_SETTINGS',
-  //   );
-  //   return await intent.launch();
-  //  }
-  // return check;
   }
   Timer? _timer;
   var permision;
@@ -58,27 +51,51 @@ class _FetchLocState extends State<FetchLoc> {
      final AndroidIntent intent = new AndroidIntent(
       action: 'android.settings.LOCATION_SOURCE_SETTINGS',
     );
-     Alert(
-      context: context,
-      type: AlertType.error,
-      title: "Location is off",
-      desc: "Turn on location",
-      buttons: [
-        DialogButton(
-          child: Text(
-            "Settings",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () async{
-           
-            await intent.launch().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+    // snackBar('Turn on location',context).then((value) async{
+    //  Alert(
+    //   // useRootNavigator: ,
+    //   context: context,
+    //   type: AlertType.error,
+    //   title: "RFLUTTER ALERT",
+    //   desc: "Flutter is more awesome with RFlutter Alert.",
+    //   // buttons: [
+    //   //   DialogButton(
+    //   //     child: Text(
+    //   //       "COOL",
+    //   //       style: TextStyle(color: Colors.white, fontSize: 20),
+    //   //     ),
+    //   //     onPressed:null,
+    //   //     width: 120,
+    //   //   )
+    //   // ],
+    // ).show().whenComplete(() async{
+        await intent.launch().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
               return MyApp();
             })));
-            },
-          width: 120,
-        )
-      ],
-    ).show();
+      //} );
+      
+   // });
+    //  Alert(
+    //   context: context,
+    //   type: AlertType.error,
+    //   title: "Location is off",
+    //   desc: "Turn on location",
+    //   buttons: [
+    //     DialogButton(
+    //       child: Text(
+    //         "Settings",
+    //         style: TextStyle(color: Colors.white, fontSize: 20),
+    //       ),
+    //       onPressed: () async{
+           
+    //         await intent.launch().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+    //           return MyApp();
+    //         })));
+    //         },
+    //       width: 120,
+    //     )
+    //   ],
+    // ).show();
    
     
   }
@@ -129,6 +146,7 @@ class _FetchLocState extends State<FetchLoc> {
 
   @override
    build(BuildContext context)  {
+     
     final locService = Provider.of<Location>(context);
     return Scaffold(
       backgroundColor:Color(0xffffffff),

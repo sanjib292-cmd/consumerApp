@@ -63,7 +63,7 @@ class _AccountPageState extends State<AccountPage> {
     return payload;
   }
 
-   Future<void> launchsite(String url) async {
+  Future<void> launchsite(String url) async {
     if (!await launch(
       url,
       forceSafariVC: true,
@@ -91,7 +91,6 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    var rate = Provider.of<AllRestaurent>(context, listen: false);
     DateFormat dateFormat = DateFormat.yMMMMd('en_US').add_jm();
     // var location = Provider.of<Location>(context, listen: false);
     return Scaffold(
@@ -122,7 +121,8 @@ class _AccountPageState extends State<AccountPage> {
                       Expanded(
                         flex: 5,
                         child: Padding(
-                          padding: const EdgeInsets.only(left:10.0,top: 10,right: 10),
+                          padding: const EdgeInsets.only(
+                              left: 10.0, top: 10, right: 10),
                           child: Container(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -130,22 +130,28 @@ class _AccountPageState extends State<AccountPage> {
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: Row(
-                                    mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       AutoSizeText(
                                         '${snp.data['name']}'.toUpperCase(),
                                         style: semiBigTextstyle,
                                       ),
-                                       GestureDetector(
-                                          onTap: (){
-                                             Navigator.push(context, MaterialPageRoute(builder: (context){
-                                              return HelpnSupport();
-                                            }));
-                                          },
-                                          child: Align(
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return HelpnSupport();
+                                          }));
+                                        },
+                                        child: Align(
                                             alignment: Alignment.topLeft,
-                                            child: Text('Help',style: GoogleFonts.poppins(fontWeight: FontWeight.w600,color: Colors.orange))),
-                                        ),
+                                            child: Text('Help',
+                                                style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.orange))),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -180,7 +186,7 @@ class _AccountPageState extends State<AccountPage> {
                                     ],
                                   ),
                                 ),
-                               
+
                                 Container(
                                   color: Colors.black,
                                   height: 2,
@@ -207,44 +213,62 @@ class _AccountPageState extends State<AccountPage> {
                                       //childrenPadding: ,
                                       children: [
                                         GestureDetector(
-                                          onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
                                               return Privicypolicy();
                                             }));
                                           },
                                           child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text('Privacy policy',style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
+                                              alignment: Alignment.topLeft,
+                                              child: Text('Privacy policy',
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w600))),
                                         ),
-                                          Divider(thickness: 1,),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
                                         GestureDetector(
-                                          onTap: (){
-                                             Navigator.push(context, MaterialPageRoute(builder: (context){
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
                                               return Termscondition();
                                             }));
                                           },
                                           child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text('Terms & Conditions',style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
+                                              alignment: Alignment.topLeft,
+                                              child: Text('Terms & Conditions',
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w600))),
                                         ),
-                                          Divider(thickness: 1,),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
                                         GestureDetector(
-                                          onTap: (){
-                                            launchsite('https://www.chefoo.in/');
+                                          onTap: () {
+                                            launchsite(
+                                                'https://www.chefoo.in/');
                                           },
                                           child: Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Text('About us',style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
+                                              alignment: Alignment.topLeft,
+                                              child: Text('About us',
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w600))),
                                         )
-
-                                        
                                       ],
                                       title: Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text('Explore',style: GoogleFonts.poppins(fontWeight: FontWeight.w800),)),
-                                      ),
-                                       
-
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            'Explore',
+                                            style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w800),
+                                          )),
+                                    ),
                                   ],
                                 ),
                                 //SizedBox(height: 2,),
@@ -312,34 +336,51 @@ class _AccountPageState extends State<AccountPage> {
                                 //height: MediaQuery.of(context).size.height,
                                 child: ListView.builder(
                                     shrinkWrap: true,
+                                    reverse: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     itemCount: snp.data['activeOrders'].length,
                                     itemBuilder: (con, ind) {
-                                      if (snp.data['activeOrders'].length == 0) {
+                                      if (snp.data['activeOrders'].length ==
+                                          0) {
                                         return Text('No past orders..');
                                       }
                                       //print(snp.data['activeOrders'][0]['shortOrderid']);
-                                      final List activeOrder = snp.data['activeOrders'];
-                                      activeOrder.sort((a, b) => dateFormat
-                                          .format(DateTime.parse(b['dateOrderd']))
-                                          .compareTo(dateFormat.format(
-                                              DateTime.parse(a['dateOrderd']))));
+                                      final List activeOrder =
+                                          snp.data['activeOrders'];
+                                      // activeOrder.sort((a, b) => dateFormat
+                                      //     .format(DateTime.parse(b['dateOrderd']))
+                                      //     .compareTo(dateFormat.format(
+                                      //         DateTime.parse(a['dateOrderd']))));
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: GestureDetector(
-                                          onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(builder: (context){
-                                              return ChangeNotifierProvider(create: (BuildContext context) {return OrderBackend();  },
-                                              child: OrderDetails(id: activeOrder[ind]['_id'],));
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return ChangeNotifierProvider(
+                                                  create:
+                                                      (BuildContext context) {
+                                                    return OrderBackend();
+                                                  },
+                                                  child: OrderDetails(
+                                                    id: activeOrder[ind]['_id'],
+                                                  ));
                                             }));
                                           },
                                           child: Container(
-                                            height:
-                                                MediaQuery.of(context).size.height / 5,
-                                            width: MediaQuery.of(context).size.width / 2,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                5,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2,
                                             decoration: BoxDecoration(
                                               border: Border.all(width: 1),
-                                              borderRadius: BorderRadius.circular(5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                               //color: Colors.orange[100],
                                             ),
                                             child: Column(
@@ -353,17 +394,22 @@ class _AccountPageState extends State<AccountPage> {
                                                         children: [
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsets.only(
-                                                                    top: 4.0, left: 4.0),
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    top: 4.0,
+                                                                    left: 4.0),
                                                             child: Container(
                                                               height: 50,
                                                               width: 50,
-                                                              decoration: BoxDecoration(
+                                                              decoration:
+                                                                  BoxDecoration(
                                                                 borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        6),
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            6),
                                                                 image: DecorationImage(
-                                                                    fit: BoxFit.fill,
+                                                                    fit: BoxFit
+                                                                        .fill,
                                                                     image: NetworkImage(
                                                                         '${activeOrder[ind]['restroName']['imgurl']}')),
                                                               ),
@@ -374,9 +420,11 @@ class _AccountPageState extends State<AccountPage> {
                                                           ),
                                                           Column(
                                                             mainAxisAlignment:
-                                                                MainAxisAlignment.start,
+                                                                MainAxisAlignment
+                                                                    .start,
                                                             crossAxisAlignment:
-                                                                CrossAxisAlignment.start,
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               Row(
                                                                 mainAxisAlignment:
@@ -385,34 +433,29 @@ class _AccountPageState extends State<AccountPage> {
                                                                 children: [
                                                                   AutoSizeText(
                                                                     '${activeOrder[ind]['restroName']['name']}',
-                                                                    style: GoogleFonts
-                                                                        .poppins(
-                                                                            fontWeight:
-                                                                                FontWeight
-                                                                                    .bold),
+                                                                    style: GoogleFonts.poppins(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
                                                                   ),
                                                                   SizedBox(
                                                                     width: 50,
                                                                   ),
                                                                   AutoSizeText(
                                                                     '${activeOrder[ind]['shortOrderid']}',
-                                                                    style: GoogleFonts
-                                                                        .poppins(
-                                                                            fontWeight:
-                                                                                FontWeight
-                                                                                    .w500),
+                                                                    style: GoogleFonts.poppins(
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
                                                                   )
                                                                 ],
                                                               ),
                                                               AutoSizeText(
                                                                 '${activeOrder[ind]['orderStatus']}',
-                                                                style:
-                                                                    GoogleFonts.poppins(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color:
-                                                                            Colors.green),
+                                                                style: GoogleFonts.poppins(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .green),
                                                               ),
                                                             ],
                                                           ),
@@ -426,57 +469,54 @@ class _AccountPageState extends State<AccountPage> {
                                                 Expanded(
                                                     //flex: 5,
                                                     child: Container(
-                                                      child: Column(
-                                                        children: [
-                                                          Expanded(
-                                                            child: Container(
-                                                              child: ListView.builder(
-                                                                shrinkWrap: true,
-                                                                physics: activeOrder[
-                                                                              ind]
-                                                                          ['orderItems']
-                                                                      .length>1?null:
-                                                                NeverScrollableScrollPhysics(),
+                                                  child: Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Container(
+                                                          child:
+                                                              ListView.builder(
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  physics: activeOrder[ind]['orderItems']
+                                                                              .length >
+                                                                          1
+                                                                      ? null
+                                                                      : NeverScrollableScrollPhysics(),
                                                                   // scrollDirection:
                                                                   //     Axis.vertical,
                                                                   itemCount: activeOrder[
                                                                               ind]
-                                                                          ['orderItems']
+                                                                          [
+                                                                          'orderItems']
                                                                       .length,
                                                                   itemBuilder:
-                                                                      (con, indx) {
+                                                                      (con,
+                                                                          indx) {
                                                                     return Padding(
                                                                       padding:
                                                                           EdgeInsets.all(
                                                                               4),
-                                                                      child: Column(
+                                                                      child:
+                                                                          Column(
                                                                         children: [
                                                                           Row(
                                                                             children: [
                                                                               Container(
                                                                                 height: 15,
                                                                                 width: 15,
-                                                                                decoration: BoxDecoration(
-                                                                                    image: DecorationImage(
-                                                                                        image: AssetImage(activeOrder[ind]['orderItems'][indx]['item']['isveg']
-                                                                                            ? 'images/veg.png'
-                                                                                            : 'images/non-veg.png'))),
+                                                                                decoration: BoxDecoration(image: DecorationImage(image: AssetImage(activeOrder[ind]['orderItems'][indx]['item']['isveg'] ? 'images/veg.png' : 'images/non-veg.png'))),
                                                                               ),
                                                                               SizedBox(
                                                                                 width: 5,
                                                                               ),
                                                                               AutoSizeText(
                                                                                 '${activeOrder[ind]['orderItems'][indx]['quantity'].toString()}x ',
-                                                                                style: GoogleFonts
-                                                                                    .poppins(),
-                                                                                textAlign:
-                                                                                    TextAlign
-                                                                                        .start,
+                                                                                style: GoogleFonts.poppins(),
+                                                                                textAlign: TextAlign.start,
                                                                               ),
                                                                               AutoSizeText(
                                                                                 '${activeOrder[ind]['orderItems'][indx]['item']['itemName']}',
-                                                                                style: GoogleFonts
-                                                                                    .poppins(),
+                                                                                style: GoogleFonts.poppins(),
                                                                               ),
                                                                             ],
                                                                           ),
@@ -484,134 +524,125 @@ class _AccountPageState extends State<AccountPage> {
                                                                       ),
                                                                     );
                                                                   }),
-                                                            ),
-                                                          ),
-                                                          Divider(
-                                                            thickness: 0.5,
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets.only(
-                                                                    left: 6.0,
-                                                                    right: 6.0),
-                                                            child: Column(
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        thickness: 0.5,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 6.0,
+                                                                right: 6.0),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
                                                               children: [
+                                                                AutoSizeText(
+                                                                  '${dateFormat.format(DateTime.parse(activeOrder[ind]['dateOrderd']).toLocal())}',
+                                                                  style: GoogleFonts.poppins(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color: Colors
+                                                                          .black
+                                                                          .withOpacity(
+                                                                              0.6)),
+                                                                ),
                                                                 Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
                                                                   children: [
-                                                                    AutoSizeText(
-                                                                      '${dateFormat.format(DateTime.parse(activeOrder[ind]['dateOrderd']).toLocal())}',
-                                                                      style: GoogleFonts.poppins(
-                                                                          fontSize: 12,
-                                                                          color: Colors
-                                                                              .black
-                                                                              .withOpacity(
-                                                                                  0.6)),
+                                                                    activeOrder[ind]['paymentId'] ==
+                                                                            null
+                                                                        ? AutoSizeText(
+                                                                            'COD',
+                                                                            style:
+                                                                                GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.red),
+                                                                          )
+                                                                        : AutoSizeText(
+                                                                            'PAID',
+                                                                            style:
+                                                                                GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.green),
+                                                                          ),
+                                                                    SizedBox(
+                                                                      width: 5,
                                                                     ),
-                                                                    Row(
-                                                                      children: [
-                                                                        activeOrder[ind][
-                                                                                    'paymentId'] ==
-                                                                                null
-                                                                            ? AutoSizeText(
-                                                                                'COD',
-                                                                                style: GoogleFonts.poppins(
-                                                                                    fontWeight: FontWeight
-                                                                                        .w600,
-                                                                                    color:
-                                                                                        Colors.red),
-                                                                              )
-                                                                            : AutoSizeText(
-                                                                                'PAID',
-                                                                                style: GoogleFonts.poppins(
-                                                                                    fontWeight: FontWeight
-                                                                                        .w600,
-                                                                                    color:
-                                                                                        Colors.green),
-                                                                              ),
-                                                                        SizedBox(
-                                                                          width: 5,
-                                                                        ),
-                                                                        AutoSizeText(
-                                                                          '₹${activeOrder[ind]['orderTotal']}',
-                                                                          style: GoogleFonts.poppins(
-                                                                              fontWeight:
-                                                                                  FontWeight
-                                                                                      .w600,
-                                                                              color: Colors
-                                                                                  .green),
-                                                                        ),
-                                                                      ],
+                                                                    AutoSizeText(
+                                                                      '₹${activeOrder[ind]['orderTotal']}',
+                                                                      style: GoogleFonts.poppins(
+                                                                          fontWeight: FontWeight
+                                                                              .w600,
+                                                                          color:
+                                                                              Colors.green),
                                                                     ),
                                                                   ],
                                                                 ),
-                                                                activeOrder[ind][
-                                                                            'orderStatus'] ==
-                                                                        "Delivered"
-                                                                    ? activeOrder[ind]
-                                                                            ['isRated']
-                                                                        ? Container()
-                                                                        : Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment
-                                                                                    .spaceBetween,
-                                                                            children: [
-                                                                              Text(
-                                                                                'Rate Order',
-                                                                                style: GoogleFonts.poppins(
-                                                                                    fontSize:
-                                                                                        12,
-                                                                                    color: Colors
-                                                                                        .black
-                                                                                        .withOpacity(0.6)),
-                                                                              ),
-                                                                              RatingBar
-                                                                                  .builder(
-                                                                                itemSize:
-                                                                                    20,
-                                                                                initialRating:
-                                                                                    0,
-                                                                                minRating:
-                                                                                    1,
-                                                                                direction:
-                                                                                    Axis.horizontal,
-                                                                                allowHalfRating:
-                                                                                    true,
-                                                                                itemCount:
-                                                                                    5,
-                                                                                itemPadding:
-                                                                                    EdgeInsets.symmetric(
-                                                                                        horizontal: 0.0),
-                                                                                itemBuilder:
-                                                                                    (context, _) =>
-                                                                                        Icon(
-                                                                                  Icons
-                                                                                      .star,
-                                                                                  color: Colors
-                                                                                      .amber,
-                                                                                ),
-                                                                                onRatingUpdate:
-                                                                                    (rating) async {
-                                                                                  await rate.rateRestro(
-                                                                                      userDetails,
-                                                                                      rating,
-                                                                                      activeOrder[ind]['_id'],
-                                                                                      activeOrder[ind]['restroName']['_id']);
-                                                                                  // print(rating);
-                                                                                },
-                                                                              )
-                                                                            ],
-                                                                          )
-                                                                    : Container()
                                                               ],
                                                             ),
-                                                          ),
-                                                        ],
+                                                            activeOrder[ind][
+                                                                        'orderStatus'] ==
+                                                                    "Delivered"
+                                                                ? activeOrder[ind]
+                                                                            [
+                                                                            'isRated'] ==
+                                                                        true
+                                                                    ? Container()
+                                                                    : Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: [
+                                                                          Text(
+                                                                            'Rate Order',
+                                                                            style:
+                                                                                GoogleFonts.poppins(fontSize: 12, color: Colors.black.withOpacity(0.6)),
+                                                                          ),
+                                                                          RatingBar
+                                                                              .builder(
+                                                                              
+                                                                            itemSize:
+                                                                                20,
+                                                                            initialRating:
+                                                                                0,
+                                                                            minRating:
+                                                                                1,
+                                                                            direction:
+                                                                                Axis.horizontal,
+                                                                            allowHalfRating:
+                                                                                false,
+                                                                            itemCount:
+                                                                                5,
+                                                                            itemPadding:
+                                                                                EdgeInsets.symmetric(horizontal: 0.0),
+                                                                            itemBuilder: (context, _) =>
+                                                                                Icon(
+                                                                              Icons.star,
+                                                                              color: Colors.amber,
+                                                                            ),
+                                                                            onRatingUpdate:
+                                                                                (rating) async {
+                                                                              final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                                                              var userdetails = sharedPreferences.getString('Account Details');
+                                                                              print(
+                                                                                '$userdetails,$rating,${activeOrder[ind]['_id']},${activeOrder[ind]['restroName']['_id']}',
+                                                                              );
+                                                                              var rate = Provider.of<AllRestaurent>(context, listen: false);
+                                                                              await rate.rateRestro(userdetails, rating, activeOrder[ind]['_id'], activeOrder[ind]['restroName']['_id'],context);
+                                                                              setState(() {});
+                                                                              // print(rating);
+                                                                            },
+                                                                          )
+                                                                        ],
+                                                                      )
+                                                                : Container()
+                                                          ],
+                                                        ),
                                                       ),
-                                                    )),
-                                        
+                                                    ],
+                                                  ),
+                                                )),
+
                                                 // Padding(
                                                 //   padding: const EdgeInsets.all(8.0),
                                                 //   child: Column(
@@ -720,7 +751,7 @@ class _AccountPageState extends State<AccountPage> {
                                       //     Text('${snp.data['activeOrders'][ind]['orderItems'][0]['item']['itemName']}')
                                       //   ],
                                       // )
-                              
+
                                       //);
                                     }),
                               ),
@@ -737,8 +768,8 @@ class _AccountPageState extends State<AccountPage> {
                                         color: Colors.orange,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  borderSide:
-                                      BorderSide(color: Colors.orange, width: 2),
+                                  borderSide: BorderSide(
+                                      color: Colors.orange, width: 2),
                                   onPressed: () async {
                                     final SharedPreferences _sp =
                                         await SharedPreferences.getInstance();

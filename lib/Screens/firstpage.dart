@@ -294,7 +294,7 @@ class _FirstPageState extends State<FirstPage> {
                                                                                   [
                                                                                   'rating'].fold(0,(avg,ele)=>avg+ele/snapshot.data[index]
                                                                                   [
-                                                                                  'rating'].length)}',style: GoogleFonts.poppins(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 10),),
+                                                                                  'rating'].length).toStringAsFixed(1)}',style: GoogleFonts.poppins(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 10),),
                                                                                         ],
                                                                                       ),
                                                                                     )) )

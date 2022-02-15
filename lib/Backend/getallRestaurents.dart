@@ -75,20 +75,30 @@ class AllRestaurent extends ChangeNotifier {
     }
   }
 
-  Future rateRestro(token,rate,orderid,restroId)async{
+  Future rateRestro(token,rate,orderid,restroId,context)async{
+    print('Rating');
     try{
    var url = Uri.parse("$firsturl/registerRestro/rate/$restroId/$rate/$orderid");
+   await EasyLoading.show(
+                        status: 'loading...',
+                        //maskType: EasyLoadingMaskType.black,
+                      );
    var res = await http.post(url, headers: <String, String>{
             HttpHeaders.contentTypeHeader: 'application/json',
             'x-auth-token': token
           },
       );
       if(res.statusCode==200){
+        EasyLoading.dismiss();
+        snackBar('${res.body}', context);
         return res.body;
       }
+      EasyLoading.dismiss();
       //snackBar('${res.body}', context);
       return res.body;
     }catch(e){
+      EasyLoading.dismiss();
+      print(e);
 //snackBar('$e', context);
 return null;
     }

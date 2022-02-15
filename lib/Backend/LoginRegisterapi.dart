@@ -144,7 +144,7 @@ class RegisterUser extends ChangeNotifier {
      await EasyLoading.dismiss();
       Navigator.of(context).pop();
       //AlertDialog(title: Text(e.toString()),);
-      return snackBar(e.toString(), context);
+      return snackBar('No internet connection', context);
       
     }
      catch (e) {

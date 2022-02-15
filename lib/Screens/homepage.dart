@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +18,7 @@ import 'package:foodorder_userapp/Screens/LoginorRegister.dart';
 import 'package:badges/badges.dart';
 import 'package:foodorder_userapp/Screens/serchpage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +38,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  checkInernetonnection()async{
+  //final bool isConnected = await InternetConnectionChecker().hasConnection;
+  final StreamSubscription<InternetConnectionStatus> listener =
+      InternetConnectionChecker().onStatusChange.listen(
+    (InternetConnectionStatus status) {
+      switch (status) {
+        case InternetConnectionStatus.connected:
+          break;
+        case InternetConnectionStatus.disconnected:
+          return snackBar('Internet not connected', context);
+
+      }
+    },
+  );
+
+  // close listener after 30 seconds, so the program doesn't run forever
+  await Future<void>.delayed(const Duration(seconds: 30));
+  await listener.cancel();
+  }
   bool isUser = false;
   var token;
   var obtainedIsuser;
@@ -90,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    checkInernetonnection();
     var loc= Provider.of<Location>(context,listen: false);
     getToken();
     //checkIftokenExp();
@@ -209,6 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
             preferredSize: Size.fromHeight(70.0),
             child: AppBar(
               automaticallyImplyLeading: false,
+              //backwardsCompatibility: false,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

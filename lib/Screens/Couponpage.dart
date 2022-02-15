@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:foodorder_userapp/Backend/couponBackend.dart';
 import 'package:foodorder_userapp/Design&Ui/addedcartSnackbar.dart';
+import 'package:foodorder_userapp/Design&Ui/loadingShimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CouponPage extends StatefulWidget {
   var fromcartpage;
@@ -28,7 +30,31 @@ class _CouponPageState extends State<CouponPage> {
         child: FutureBuilder(
           future: coupon.getCoupon(),
           builder: (context,AsyncSnapshot snap) {
-            if(snap.data==null){
+            if(snap.connectionState==ConnectionState.waiting){
+             return   Align(
+          alignment: Alignment.topLeft,
+          child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[200]!,
+              child: Card(
+               // elevation: 15,
+                child: ClipPath(
+                  child: Container(
+                    height: 20,
+                    width:180,
+                    decoration: BoxDecoration(
+                        border: Border(
+                            right: BorderSide(color: Colors.grey, width: 4))),
+                  ),
+                  clipper: ShapeBorderClipper(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3))),
+                ),
+              ),
+            ),
+        );
+            }
+            if(snap.connectionState==ConnectionState.none){
               return Text('No Coupon..');
             }
             return Container(

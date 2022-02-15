@@ -60,6 +60,7 @@ dependencies:
   permission_handler: ^8.3.0
   android_intent_plus: ^3.1.0
   double_back_to_close_app: ^2.1.0
+  internet_connection_checker: ^0.0.1+3
 
   
 
