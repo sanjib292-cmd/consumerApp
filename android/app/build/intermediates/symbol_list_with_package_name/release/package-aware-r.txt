@@ -1,5 +1,8 @@
 com.example.foodorder_userapp
+attr activityAction
+attr activityName
 attr alpha
+attr alwaysExpand
 attr ambientEnabled
 attr appTheme
 attr buttonSize
@@ -15,9 +18,12 @@ attr cameraTargetLng
 attr cameraTilt
 attr cameraZoom
 attr circleCrop
+attr clearTop
 attr colorScheme
 attr customThemeStyle
 attr environment
+attr finishPrimaryWithSecondary
+attr finishSecondaryWithPrimary
 attr font
 attr fontProviderAuthority
 attr fontProviderCerts
@@ -47,9 +53,17 @@ attr maskedWalletDetailsLogoImageType
 attr maskedWalletDetailsLogoTextColor
 attr maskedWalletDetailsTextAppearance
 attr nestedScrollViewStyle
+attr placeholderActivityName
+attr primaryActivityName
 attr queryPatterns
 attr scopeUris
+attr secondaryActivityAction
+attr secondaryActivityName
 attr shortcutMatchRequired
+attr splitLayoutDirection
+attr splitMinSmallestWidth
+attr splitMinWidth
+attr splitRatio
 attr toolbarTextColorStyle
 attr ttcIndex
 attr uiCompass
@@ -211,6 +225,7 @@ id android_pay
 id android_pay_dark
 id android_pay_light
 id android_pay_light_with_border
+id androidx_window_activity_scope
 id async
 id auto
 id blocking
@@ -245,7 +260,9 @@ id light
 id line1
 id line3
 id ll_loader
+id locale
 id logo_only
+id ltr
 id match_parent
 id material
 id media_actions
@@ -259,6 +276,7 @@ id production
 id progressBar
 id right_icon
 id right_side
+id rtl
 id rzp_innerbox
 id rzp_outerbox
 id rzp_securedpayments
@@ -363,6 +381,8 @@ style WalletFragmentDefaultDetailsTextAppearance
 style WalletFragmentDefaultStyle
 style Widget_Compat_NotificationActionContainer
 style Widget_Compat_NotificationActionText
+styleable ActivityFilter activityAction activityName
+styleable ActivityRule alwaysExpand
 styleable Capability queryPatterns shortcutMatchRequired
 styleable ColorStateListItem android_color android_alpha alpha
 styleable CustomWalletTheme customThemeStyle toolbarTextColorStyle windowTransitionStyle
@@ -373,5 +393,8 @@ styleable GradientColorItem android_color android_offset
 styleable LoadingImageView circleCrop imageAspectRatio imageAspectRatioAdjust
 styleable MapAttrs ambientEnabled cameraBearing cameraMaxZoomPreference cameraMinZoomPreference cameraTargetLat cameraTargetLng cameraTilt cameraZoom latLngBoundsNorthEastLatitude latLngBoundsNorthEastLongitude latLngBoundsSouthWestLatitude latLngBoundsSouthWestLongitude liteMode mapType uiCompass uiMapToolbar uiRotateGestures uiScrollGestures uiScrollGesturesDuringRotateOrZoom uiTiltGestures uiZoomControls uiZoomGestures useViewLifecycle zOrderOnTop
 styleable SignInButton buttonSize colorScheme scopeUris
+styleable SplitPairFilter primaryActivityName secondaryActivityAction secondaryActivityName
+styleable SplitPairRule clearTop finishPrimaryWithSecondary finishSecondaryWithPrimary splitLayoutDirection splitMinSmallestWidth splitMinWidth splitRatio
+styleable SplitPlaceholderRule placeholderActivityName splitLayoutDirection splitMinSmallestWidth splitMinWidth splitRatio
 styleable WalletFragmentOptions appTheme environment fragmentMode fragmentStyle
 styleable WalletFragmentStyle buyButtonAppearance buyButtonHeight buyButtonText buyButtonWidth maskedWalletDetailsBackground maskedWalletDetailsButtonBackground maskedWalletDetailsButtonTextAppearance maskedWalletDetailsHeaderTextAppearance maskedWalletDetailsLogoImageType maskedWalletDetailsLogoTextColor maskedWalletDetailsTextAppearance
