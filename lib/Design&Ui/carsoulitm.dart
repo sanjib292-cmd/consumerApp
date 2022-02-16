@@ -19,7 +19,7 @@ class CarouselItms extends StatelessWidget {
                 image: DecorationImage(
                   
                   fit: BoxFit.fill,
-                  image: AssetImage(
+                  image: NetworkImage(
                   img
                 )),
                 

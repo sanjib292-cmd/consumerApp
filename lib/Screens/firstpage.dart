@@ -111,15 +111,15 @@ class _FirstPageState extends State<FirstPage> {
                                                                         return Container(
                                                                           height: 120,
                                                                           width: 100,
-                                                                          child: Image.asset(
-                                                                              'images/FoodVector.jpg',
+                                                                          child: Image.network(
+                                                                              'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
                                                                               height: double
                                                                                   .infinity,
                                                                               fit: BoxFit
                                                                                   .cover),
                                                                         );
                                                                       },
-                                                              placeholder:AssetImage( 'images/FoodVector.jpg',),
+                                                              placeholder:NetworkImage( 'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',),
                                                                  image: snapshot.data[indx]['imgUrl']!=null?NetworkImage(snapshot.data[indx]['imgUrl']):NetworkImage(''),),
                                                         ),
                                           ),
@@ -161,18 +161,40 @@ class _FirstPageState extends State<FirstPage> {
                         Container(
                           height: MediaQuery.of(context).size.height / 5,
                           width: MediaQuery.of(context).size.width,
-                          child: CarouselSlider(
-                            items: [
-                              //CarouselItms(img:'images/PicsArt_10-03-10.53.04.jpg'),
-                              CarouselItms(
-                                  img: 'images/PicsArt_10-08-12.13.44.jpg'),
-                              CarouselItms(
-                                  img: 'images/PicsArt_10-08-12.19.34.jpg'),
-                            ],
-                            options: CarouselOptions(
-                              aspectRatio: 16 / 17,
-                              autoPlay: true,
-                            ),
+                          child: FutureBuilder(
+                            future: restroandMenu.addbanner(context),
+                            builder: (context,AsyncSnapshot snap) {
+                              if(snap.data==null){
+                                return CarouselSlider(
+                                items: [
+                                  //CarouselItms(img:'images/PicsArt_10-03-10.53.04.jpg'),
+                                  CarouselItms(
+                                      img: 'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2FPicsArt_10-08-12.13.44.jpg?alt=media&token=a94d832c-d3ba-469f-8d85-b86e27f8ca1c'),
+                                  CarouselItms(
+                                      img: 'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2FPicsArt_10-08-12.19.34.jpg?alt=media&token=5beedf5c-c534-4c76-9c99-788f18cae11a'),
+                                ],
+                                options: CarouselOptions(
+                                  aspectRatio: 16 / 17,
+                                  autoPlay: true,
+                                ),
+                              );
+
+                              }
+                              print(snap.data);
+                              return CarouselSlider(
+                                items: [
+                                  //CarouselItms(img:'images/PicsArt_10-03-10.53.04.jpg'),
+                                  CarouselItms(
+                                      img: snap.data['imageUrl1']),
+                                  CarouselItms(
+                                      img: snap.data['imageUrl2']),
+                                ],
+                                options: CarouselOptions(
+                                  aspectRatio: 16 / 17,
+                                  autoPlay: true,
+                                ),
+                              );
+                            }
                           ),
                         ),
                         SizedBox(height: 3,),

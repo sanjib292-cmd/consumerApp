@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">104838460930-l3em4vv6q1ggqg2o8tuolfhp2b6u821a.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">104838460930</string>
+    <string name="google_api_key" translatable="false">AIzaSyCbAmZzmjvlykLO71OPEbyx_j5Gi-ibzIo</string>
+    <string name="google_app_id" translatable="false">1:104838460930:android:021a574a3c0eab7a89991b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCbAmZzmjvlykLO71OPEbyx_j5Gi-ibzIo</string>
+    <string name="google_storage_bucket" translatable="false">mealtime-7fd6c.appspot.com</string>
+    <string name="project_id" translatable="false">mealtime-7fd6c</string>
+</resources>

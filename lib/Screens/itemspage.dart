@@ -282,8 +282,8 @@ class _ItemsPageState extends State<ItemsPage> {
                                                 return Container(
                                                   height: 120,
                                                   width: 100,
-                                                  child: Image.asset(
-                                                      'images/FoodVector.jpg',
+                                                  child: Image.network(
+                                                      'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
                                                       height: double.infinity,
                                                       fit: BoxFit.cover),
                                                 );
@@ -291,8 +291,8 @@ class _ItemsPageState extends State<ItemsPage> {
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
                                                   "${widget.product[indexofRestro]['items'][ind]['itmImg']}"),
-                                              placeholder: AssetImage(
-                                                  'images/FoodVector.jpg'),
+                                              placeholder: NetworkImage(
+                                                  'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
                                             ),
                                           ),
                                         ),

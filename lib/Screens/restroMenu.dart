@@ -277,8 +277,8 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                   return Container(
                                                                     height: 120,
                                                                     width: 100,
-                                                                    child: Image.asset(
-                                                                        'images/FoodVector.jpg',
+                                                                    child: Image.network(
+                                                                        'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
                                                                         height: double
                                                                             .infinity,
                                                                         fit: BoxFit
@@ -290,8 +290,8 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                 image: NetworkImage(
                                                                     "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}"),
                                                                 placeholder:
-                                                                    AssetImage(
-                                                                        'images/FoodVector.jpg'),
+                                                                    NetworkImage(
+                                                                        'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
                                                               ),
                                                             ),
                                                           ),

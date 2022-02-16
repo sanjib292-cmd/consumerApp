@@ -222,7 +222,7 @@ class _CartPageState extends State<CartPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Image.asset('images/taco.png'),
+                      child: Image.network('https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Ftaco.png?alt=media&token=780931bb-32e7-4f01-a1e7-e9c64766aecb'),
                     ),
                     Text(
                       'Login to view your cart items',

@@ -10,7 +10,7 @@ Center CartemptyOrnull(function) {
                           Padding(
                             padding: const EdgeInsets.only(right: 10.0),
                             child: Container(
-                              child: Image.asset('images/plate1.png'),
+                              child: Image.network('https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Fplate1.png?alt=media&token=0d61471d-4012-4f5c-8546-ab35f4dec16e'),
                             ),
                           ),
                           Text(

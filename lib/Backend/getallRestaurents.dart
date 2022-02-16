@@ -7,46 +7,47 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
 import 'package:http/http.dart' as http;
 
-class AllRestaurent extends ChangeNotifier { 
+class AllRestaurent extends ChangeNotifier {
   var restaurents;
   var cusineTypes;
   var searchResult;
 
   String firsturl = 'https://mealtime7399.herokuapp.com';
 
-  Future getRestrobyId(id)async{
- try {
+  Future getRestrobyId(id) async {
+    try {
       var url = Uri.parse("$firsturl/registerRestro/$id");
-       await EasyLoading.show(
-                        status: 'loading...',
-                        //maskType: EasyLoadingMaskType.black,
-                      );
+      await EasyLoading.show(
+        status: 'loading...',
+        //maskType: EasyLoadingMaskType.black,
+      );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
-       await EasyLoading.dismiss();
+        await EasyLoading.dismiss();
         return jsonDecode(res.body);
       }
-     await EasyLoading.dismiss();
+      await EasyLoading.dismiss();
       return null;
     } on Exception catch (e) {
-    EasyLoading.dismiss();
-        return e;
+      EasyLoading.dismiss();
+      return e;
     }
   }
+
   Future getAllrestaurent(BuildContext context) async {
     try {
       var url = Uri.parse("$firsturl/registerRestro");
-       await EasyLoading.show(
-                        status: 'loading...',
-                        //maskType: EasyLoadingMaskType.black,
-                      );
+      await EasyLoading.show(
+        status: 'loading...',
+        //maskType: EasyLoadingMaskType.black,
+      );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
-       await EasyLoading.dismiss();
+        await EasyLoading.dismiss();
         restaurents = jsonDecode(res.body);
         notifyListeners();
         return restaurents;
@@ -54,7 +55,7 @@ class AllRestaurent extends ChangeNotifier {
       await EasyLoading.dismiss();
     } on Exception catch (e) {
       await EasyLoading.dismiss();
-       snackBar(e.toString(), context);
+      snackBar(e.toString(), context);
     }
   }
 
@@ -71,24 +72,27 @@ class AllRestaurent extends ChangeNotifier {
       }
       return res.statusCode;
     } on Exception catch (e) {
-       snackBar(e.toString(), context);
+      snackBar(e.toString(), context);
     }
   }
 
-  Future rateRestro(token,rate,orderid,restroId,context)async{
+  Future rateRestro(token, rate, orderid, restroId, context) async {
     print('Rating');
-    try{
-   var url = Uri.parse("$firsturl/registerRestro/rate/$restroId/$rate/$orderid");
-   await EasyLoading.show(
-                        status: 'loading...',
-                        //maskType: EasyLoadingMaskType.black,
-                      );
-   var res = await http.post(url, headers: <String, String>{
-            HttpHeaders.contentTypeHeader: 'application/json',
-            'x-auth-token': token
-          },
+    try {
+      var url =
+          Uri.parse("$firsturl/registerRestro/rate/$restroId/$rate/$orderid");
+      await EasyLoading.show(
+        status: 'loading...',
+        //maskType: EasyLoadingMaskType.black,
       );
-      if(res.statusCode==200){
+      var res = await http.post(
+        url,
+        headers: <String, String>{
+          HttpHeaders.contentTypeHeader: 'application/json',
+          'x-auth-token': token
+        },
+      );
+      if (res.statusCode == 200) {
         EasyLoading.dismiss();
         snackBar('${res.body}', context);
         return res.body;
@@ -96,17 +100,16 @@ class AllRestaurent extends ChangeNotifier {
       EasyLoading.dismiss();
       //snackBar('${res.body}', context);
       return res.body;
-    }catch(e){
+    } catch (e) {
       EasyLoading.dismiss();
       print(e);
 //snackBar('$e', context);
-return null;
+      return null;
     }
-
   }
 
-  Future serchProduct(String search,BuildContext context)async{
-     try {
+  Future serchProduct(String search, BuildContext context) async {
+    try {
       var url = Uri.parse("$firsturl/product/$search");
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -118,8 +121,36 @@ return null;
       }
       return jsonDecode(res.body);
     } on Exception catch (e) {
-       snackBar(e.toString(), context);
+      snackBar(e.toString(), context);
     }
+  }
 
+  Future addbanner(BuildContext context) async {
+    try {
+      print('tryng');
+      var url = Uri.parse("$firsturl/ads");
+      EasyLoading.show(
+        status: 'loading...',
+      );
+      var res = await http.get(url, headers: <String, String>{
+        HttpHeaders.contentTypeHeader: 'application/json',
+      });
+      if (res.statusCode == 200) {
+        // print('lol');
+        // print(res.body);
+        EasyLoading.dismiss();
+        restaurents = jsonDecode(res.body);
+        notifyListeners();
+        return restaurents;
+      }
+      print('kol');
+      EasyLoading.dismiss();
+      return;
+      //print('not');
+    } on Exception catch (e) {
+      await EasyLoading.dismiss();
+      snackBar(e.toString(), context);
+      return;
+    }
   }
 }

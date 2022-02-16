@@ -60,7 +60,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('images/accountpage2.jpg'))),
+                            image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Faccountpage2.jpg?alt=media&token=616462dd-14f6-4340-8e34-4835e6a55af4'))),
                   ),
                   Align(
                       alignment: Alignment.bottomCenter,
@@ -80,7 +80,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                             radius: 56,
                             child: CircleAvatar(
                               radius: 54,
-                              backgroundImage: AssetImage('images/foodpic.jpg'),
+                              backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Ffoodpic.jpg?alt=media&token=0aa06805-cd83-4949-8528-b4363f6f27bb'),
                             ),
                           ),
                         ),

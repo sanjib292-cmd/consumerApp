@@ -224,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       size: 20,
                     ),
                   ),
-                  title: Text('Cart')),
+                  label: 'Cart'),
               bottomappbarItms(FontAwesomeIcons.user, 'Account'),
             ],
           ),
@@ -362,6 +362,6 @@ class _MyHomePageState extends State<MyHomePage> {
           icn,
           size: 20,
         ),
-        title: Text(txt));
+        label: txt);
   }
 }
