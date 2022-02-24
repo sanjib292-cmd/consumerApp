@@ -10,6 +10,7 @@ MERGED from [:firebase_core] /Users/sanjib292/Desktop/foodorderApp/Food Delivery
 MERGED from [:geolocator_android] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/geolocator_android/intermediates/library_manifest/release/AndroidManifest.xml:2:1-17:12
 MERGED from [:google_maps_flutter] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/google_maps_flutter/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_plugin_android_lifecycle] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
+MERGED from [:sqflite] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/sqflite/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_local_notifications] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/flutter_local_notifications/intermediates/library_manifest/release/AndroidManifest.xml:2:1-28:12
 MERGED from [:url_launcher_android] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/url_launcher_android/intermediates/library_manifest/release/AndroidManifest.xml:2:1-14:12
 MERGED from [:path_provider_android] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/path_provider_android/intermediates/library_manifest/release/AndroidManifest.xml:2:1-7:12
@@ -314,6 +315,8 @@ MERGED from [:google_maps_flutter] /Users/sanjib292/Desktop/foodorderApp/Food De
 MERGED from [:google_maps_flutter] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/google_maps_flutter/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/sqflite/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/sqflite/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_local_notifications] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/flutter_local_notifications/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_local_notifications] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/flutter_local_notifications/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44
 MERGED from [:url_launcher_android] /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/build/url_launcher_android/intermediates/library_manifest/release/AndroidManifest.xml:5:5-44

@@ -352,7 +352,9 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Colors.white,
             ),
           ),
-          body:  _children[currentIndex]),
+          body:  IndexedStack(
+            index: currentIndex,
+            children: _children)),
     );
   }
 

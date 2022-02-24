@@ -63,6 +63,9 @@ class _ItemsPageState extends State<ItemsPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+           iconTheme: IconThemeData(
+    color: Colors.black, //change your color here
+  ),
           centerTitle: true,
           title: Text(
             '${widget.appBartitle}',

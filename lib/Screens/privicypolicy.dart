@@ -27,10 +27,14 @@ class _PrivicypolicyState extends State<Privicypolicy> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Privacy policy ',style: GoogleFonts.poppins(color:Colors.black,fontWeight: FontWeight.w700)),backgroundColor: Colors.white,elevation: 0,centerTitle: true,),
+      appBar: AppBar(
+         iconTheme: IconThemeData(
+    color: Colors.black, //change your color here
+  ),
+        title: Text('Privacy policy ',style: GoogleFonts.poppins(color:Colors.black,fontWeight: FontWeight.w700)),backgroundColor: Colors.white,elevation: 0,centerTitle: true,),
       body: SingleChildScrollView(child: SafeArea(child: Padding(
         padding: const EdgeInsets.all(5.0),
-        child: Text(data,style: GoogleFonts.poppins(fontWeight:FontWeight.w600,fontSize: 20)),
+        child: Text(data,style: GoogleFonts.poppins(fontWeight:FontWeight.w500,fontSize: 14)),
       )))
       
     );

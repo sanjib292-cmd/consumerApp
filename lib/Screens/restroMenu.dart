@@ -23,6 +23,9 @@ class _RestroMenuState extends State<RestroMenu> {
     var cart = Provider.of<Cart>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
+         iconTheme: IconThemeData(
+    color: Colors.black, //change your color here
+  ),
         centerTitle: true,
         title: Text("${widget.restroDetails['name']}",
                     style: GoogleFonts.poppins(

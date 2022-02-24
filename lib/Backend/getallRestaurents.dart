@@ -17,21 +17,21 @@ class AllRestaurent extends ChangeNotifier {
   Future getRestrobyId(id) async {
     try {
       var url = Uri.parse("$firsturl/registerRestro/$id");
-      await EasyLoading.show(
-        status: 'loading...',
-        //maskType: EasyLoadingMaskType.black,
-      );
+      // await EasyLoading.show(
+      //   status: 'loading...',
+      //   //maskType: EasyLoadingMaskType.black,
+      // );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
-        await EasyLoading.dismiss();
+       // await EasyLoading.dismiss();
         return jsonDecode(res.body);
       }
-      await EasyLoading.dismiss();
+     // await EasyLoading.dismiss();
       return null;
     } on Exception catch (e) {
-      EasyLoading.dismiss();
+      //EasyLoading.dismiss();
       return e;
     }
   }
@@ -39,22 +39,22 @@ class AllRestaurent extends ChangeNotifier {
   Future getAllrestaurent(BuildContext context) async {
     try {
       var url = Uri.parse("$firsturl/registerRestro");
-      await EasyLoading.show(
-        status: 'loading...',
-        //maskType: EasyLoadingMaskType.black,
-      );
+      // await EasyLoading.show(
+      //   status: 'loading...',
+      //   //maskType: EasyLoadingMaskType.black,
+      // );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
-        await EasyLoading.dismiss();
+        //await EasyLoading.dismiss();
         restaurents = jsonDecode(res.body);
         notifyListeners();
         return restaurents;
       }
       await EasyLoading.dismiss();
     } on Exception catch (e) {
-      await EasyLoading.dismiss();
+      //await EasyLoading.dismiss();
       snackBar(e.toString(), context);
     }
   }
@@ -129,26 +129,26 @@ class AllRestaurent extends ChangeNotifier {
     try {
       print('tryng');
       var url = Uri.parse("$firsturl/ads");
-      EasyLoading.show(
-        status: 'loading...',
-      );
+      // EasyLoading.show(
+      //   status: 'loading...',
+      // );
       var res = await http.get(url, headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       });
       if (res.statusCode == 200) {
         // print('lol');
         // print(res.body);
-        EasyLoading.dismiss();
+        //EasyLoading.dismiss();
         restaurents = jsonDecode(res.body);
         notifyListeners();
         return restaurents;
       }
       print('kol');
-      EasyLoading.dismiss();
+      //EasyLoading.dismiss();
       return;
       //print('not');
     } on Exception catch (e) {
-      await EasyLoading.dismiss();
+      //await EasyLoading.dismiss();
       snackBar(e.toString(), context);
       return;
     }

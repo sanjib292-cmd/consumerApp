@@ -30,7 +30,7 @@ class _SerchpageState extends State<Serchpage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              autofocus: true,
+              //autofocus: true,
               onChanged: (val) {
                 setState(() {
                   searchTxt = val;
