@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodorder_userapp/Backend/getallRestaurents.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Design&Ui/Cartpage/addedcartSnackbar.dart';
 
 class Serchpage extends StatefulWidget {
   const Serchpage({Key? key}) : super(key: key);
@@ -17,11 +21,11 @@ class _SerchpageState extends State<Serchpage> {
   @override
   Widget build(BuildContext context) {
     var serch = Provider.of<AllRestaurent>(context, listen: false);
-    Stream search(txt) async* {
+    Future search(txt) async {
       //print(searchTxt);
-      yield* Stream.periodic(Duration(milliseconds: 100), (_) {
+      // yield* Stream.periodic(Duration(milliseconds: 50), (_) {
         return txt.length >= 3 ? serch.serchProduct('$txt', context) : null;
-      }).asyncMap((event) async => await event);
+      // }).asyncMap((event) async => await event);
     }
 
     return Scaffold(
@@ -51,8 +55,8 @@ class _SerchpageState extends State<Serchpage> {
                       borderSide: BorderSide(color: Colors.red, width: 5))),
             ),
           ),
-          StreamBuilder(
-              stream: search(searchTxt),
+          FutureBuilder(
+              future: search(searchTxt),
               builder: (con, AsyncSnapshot snap) {
                 if (snap.data == null) {
                   return Container();
@@ -67,7 +71,7 @@ class _SerchpageState extends State<Serchpage> {
                                 'https://assets6.lottiefiles.com/temp/lf20_USCruP.json',height: 120),
                           );
                         }
-
+print(snap.data);
                 //print('tok ${snap.data.length}');
                 return Expanded(
                   child: ListView.builder(
@@ -173,8 +177,8 @@ class _SerchpageState extends State<Serchpage> {
                                                 return Container(
                                                   height: 120,
                                                   width: 100,
-                                                  child: Image.asset(
-                                                      'images/FoodVector.jpg',
+                                                  child: Image.network(
+                                                      'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
                                                       height: double.infinity,
                                                       fit: BoxFit.cover),
                                                 );
@@ -182,8 +186,8 @@ class _SerchpageState extends State<Serchpage> {
                                               fit: BoxFit.cover,
                                               image: NetworkImage(
                                                   "${snap.data[ind]['restro']['items']['itmImg']}"),
-                                              placeholder: AssetImage(
-                                                  'images/FoodVector.jpg'),
+                                              placeholder: NetworkImage(
+                                                  'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
                                             ),
                                           ),
                                         ),
@@ -194,30 +198,31 @@ class _SerchpageState extends State<Serchpage> {
                                                 ? MaterialButton(
                                                     color: Colors.green,
                                                     onPressed: () async {
-                                                      // final SharedPreferences
-                                                      //     sp =
-                                                      //     await SharedPreferences.getInstance();
-                                                      // var userId =
-                                                      //     sp.getString('Account Details');
-                                                      // if (userId ==
-                                                      //     null) {
-                                                      //   return snackBar(
-                                                      //       'Please login to add this to cart',
-                                                      //       context);
-                                                      // }
-                                                      // Map<String,
-                                                      //         dynamic>
-                                                      //     payload =
-                                                      //     Jwt.parseJwt(userId);
+                                                      final SharedPreferences
+                                                          sp =
+                                                          await SharedPreferences.getInstance();
+                                                      var userId =
+                                                          sp.getString('Account Details');
+                                                      if (userId ==
+                                                          null) {
+                                                        return snackBar(
+                                                            'Please login to add this to cart',
+                                                            context);
+                                                      }
+                                                      Map<String,
+                                                              dynamic>
+                                                          payload =
+                                                          Jwt.parseJwt(userId);
                                                       //     print(widget.restroDetails['cord']['lon']);
                                                       // await cart.addToCart(
                                                       //     id:payload['id'],
-                                                      //     item:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx],
+                                                      //     item:snap.data[ind]['restro']['items'],
                                                       //     quantity:1,
-                                                      //     price:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['price'],
+                                                      //     price:snap.data[ind]['restro']['items']
+                                                      // ['price'],
                                                       //     token:userId,
-                                                      //     restroId:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'],
-                                                      //    itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'],
+                                                      //     restroId:snap.data[ind]['restro']['items']['restroId'],
+                                                      //    itmid: snap.data[ind]['restro']['items']['_id'],
                                                       //     lat:widget.restroDetails['cord']['lat'],
                                                       //     lon:widget.restroDetails['cord']['lon']);
                                                       // cart.sucessFullyaded !=
