@@ -212,4 +212,24 @@ class RegisterUser extends ChangeNotifier {
       return snackBar(ex.toString(), context);
     }
   }
+
+  updateUserLoc(lat,lon,token)async{
+    print('ran');
+    var url = Uri.parse("$firsturl/updateLoc/$lat/$lon");
+    try {
+      var res =await http.post(url, headers: <String, String>{
+            HttpHeaders.contentTypeHeader: 'application/json',
+            'x-auth-token': token
+          },);
+          if(res.statusCode==200){
+            print(res.body);
+            return;
+          }
+          print('er'+res.body);
+          return;
+    } on Exception catch (e) {
+      print(e);
+    }
+
+  }
 }

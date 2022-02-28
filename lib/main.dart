@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
 import 'package:foodorder_userapp/LocationService/Location.dart';
 import 'package:provider/provider.dart';
 
@@ -131,11 +132,19 @@ class _MyAppState extends State<MyApp> {
           //pageTransitionType: PageTransitionType.scale,
           backgroundColor: Colors.orange.shade100,
           duration: 3000,
-          nextScreen: ChangeNotifierProvider(
-              create: (BuildContext context) {
-                return Location();
-              },
-              child: FetchLoc()),
+          nextScreen: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (BuildContext context) {
+                  return Location();
+                },),
+                ChangeNotifierProvider(
+                create: (BuildContext context) {
+                  return RegisterUser();
+                },)
+            ],
+            child: FetchLoc(),
+          ),
           splash: CircleAvatar(
             radius: 400,
             child: ClipRRect(
