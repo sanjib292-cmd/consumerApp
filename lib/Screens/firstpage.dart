@@ -22,7 +22,7 @@ class FirstPage extends StatefulWidget {
   var lat;
   var lon;
   var tok;
-  FirstPage({this.lat, this.lon,this.tok});
+  FirstPage({this.lat, this.lon, this.tok});
 
   @override
   State<FirstPage> createState() => _FirstPageState();
@@ -47,7 +47,8 @@ class _FirstPageState extends State<FirstPage> {
         textStyle: TextStyle(
             fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.5)));
     var restroandMenu = Provider.of<AllRestaurent>(context, listen: false);
-    var user=RegisterUser();
+    var user = RegisterUser();
+    var pro=[];
     // print(restroandMenu.getCusinetypes());
 
     //restroandMenu.getCusinetypes(context);
@@ -63,6 +64,7 @@ class _FirstPageState extends State<FirstPage> {
                 builder: (con, AsyncSnapshot snapshot) {
                   //  print(snapshot.data());
                   if (snapshot.data != null) {
+                    print('cusine${snapshot.data}');
                     return SliverAppBar(
                       automaticallyImplyLeading: false,
                       backgroundColor: Colors.white,
@@ -83,6 +85,27 @@ class _FirstPageState extends State<FirstPage> {
                                         flex: 3,
                                         child: GestureDetector(
                                           onTap: () {
+                                            pro.clear();
+                                            snapshot.data[indx]['restro']
+                                                .forEach((e) {
+                                              if (Geolocator.distanceBetween(
+                                                          e['restroNam']['cord']
+                                                              [
+                                                              'coordinates'][1],
+                                                          e['restroNam']['cord']
+                                                              [
+                                                              'coordinates'][0],
+                                                          widget.lat,
+                                                          widget.lon) /
+                                                      1000 <
+                                                  1000) {
+                                                    pro.add(e);
+                                                print(
+                                                    'sd ${e['restroNam']['name']}');
+                                              }
+                                            });
+                                            // print(snapshot.data[indx]
+                                            //                 ['restro']);
                                             Navigator.push(context,
                                                 MaterialPageRoute(
                                                     builder: (ctx) {
@@ -102,8 +125,7 @@ class _FirstPageState extends State<FirstPage> {
                                                     lon: widget.lon,
                                                     appBartitle:
                                                         '${snapshot.data[indx]['cusineType']}',
-                                                    product: snapshot.data[indx]
-                                                        ['restro']),
+                                                    product: pro),
                                               );
                                             }));
                                           },
@@ -114,7 +136,7 @@ class _FirstPageState extends State<FirstPage> {
                                               minRadius: 25,
                                               maxRadius: 35,
                                               child: AspectRatio(
-                                                aspectRatio: 1/1,
+                                                aspectRatio: 1 / 1,
                                                 child: ClipOval(
                                                   // borderRadius: BorderRadius.circular(100.0),
                                                   child: FadeInImage(
@@ -144,8 +166,9 @@ class _FirstPageState extends State<FirstPage> {
                                                     image: snapshot.data[indx]
                                                                 ['imgUrl'] !=
                                                             null
-                                                        ? NetworkImage(snapshot
-                                                            .data[indx]['imgUrl'])
+                                                        ? NetworkImage(
+                                                            snapshot.data[indx]
+                                                                ['imgUrl'])
                                                         : NetworkImage(''),
                                                   ),
                                                 ),
@@ -176,352 +199,396 @@ class _FirstPageState extends State<FirstPage> {
                   return ShimmerCircleAvatar();
                 }),
             FutureBuilder(
-                future: restroandMenu.getAllrestaurent(context),
+                future: restroandMenu.getAllrestaurent(
+                    context, widget.lat, widget.lon),
                 builder: (ctx, AsyncSnapshot snapshot) {
                   if (snapshot.data == null) {
-                    return ShimmerContainer();
+                    print('no');
+                    return ShimmerGrid();
                   }
+                  // if(snapshot.data==null){
+                  //   print('none');
+                  //   return SliverToBoxAdapter(child: Text('No nearby restaurants',style: GoogleFonts.poppins(color:Colors.red),),);
+                  // }
+                  print(snapshot.data.length);
+                  if(snapshot.data.length==0){
+                    return SliverToBoxAdapter();
+                  }
+                  if(snapshot.data.length<3){
+                    return SliverToBoxAdapter();
+                  }
+                 // snapshot.data.length==0?
+
                   return SliverToBoxAdapter(
                       //delegate: SliverChildBuilderDelegate((con, inx) {
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      //mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              
-                              Icon(FontAwesomeIcons.fire,color: Colors.orange,),
-                              Text('Popular',style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600)),
-                            ],
-                          ),
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    //mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.fire,
+                              color: Colors.orange,
+                            ),
+                            Text('Popular',
+                                style: GoogleFonts.poppins(
+                                    fontSize: 18, fontWeight: FontWeight.w600)),
+                          ],
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 5,
-                          child: GridView.builder(
-                            
-                            scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              //physics: NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data.length,
-                              itemBuilder: ((context, index) {
-                                final List activeOrder=snapshot.data;
-                                var sorted= activeOrder.sort((a, b) => 
-                                b['completedOrders'].length
-                                          .compareTo(a['completedOrders'].length));
-                                // print(snapshot.data[index]['rating']);
-                                // print(sorted);
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                                      boxShadow: [
-                                          BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 0)
-                                        ],
-                                    ),
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          snapshot.data[index]['isOpen']
-                                              ? Navigator.push(context,
-                                                  MaterialPageRoute(builder: (con) {
-                                                  return ChangeNotifierProvider(
-                                                      create: (BuildContext context) {
-                                                        return Cart();
-                                                      },
-                                                      child: RestroMenu(
-                                                        restroDetails:
-                                                            snapshot.data[index],
-                                                      ));
-                                                }))
-                                              : snackBar(
-                                                  'Restraunt is currently closed',
-                                                  context);
-                                        },
-                                        child: Container(
-                                          //padding: EdgeInsets.all(15),
-                                          // decoration: BoxDecoration(
-                                          //     borderRadius: BorderRadius.circular(8)),
-                                          height:
-                                              MediaQuery.of(context).size.height / 3,
-                                          child: Container(
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                    flex: 4,
-                                                    child: Container(
-                                                      child: Stack(
-                                                        children: [
-                                                          Positioned.fill(
-                                                            child: ClipRRect(
-                                                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                topLeft: Radius.circular(8),
-                              ),
-                                                              // borderRadius:
-                                                              //     BorderRadius
-                                                              //         .circular(
-                                                              //             8.0),
-                                                              child: ColorFiltered(
-                                                                colorFilter: snapshot
-                                                                                .data[
-                                                                            index]
-                                                                        ['isOpen']
-                                                                    ? ColorFilter
-                                                                        .matrix(<
-                                                                            double>[
-                                                                        1,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        1,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        1,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        1,
-                                                                        0,
-                                                                      ])
-                                                                    : ColorFilter.mode(
-                                                                        Colors.grey,
-                                                                        BlendMode
-                                                                            .saturation),
-                                                                child: FadeInImage(
-                                                                  fit: BoxFit.fill,
-                          
-                                                                  //fit: BoxFit.cover,
-                                                                  imageErrorBuilder:
-                                                                      (con, obj,
-                                                                          stack) {
-                                                                    print('er');
-                                                                    return Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                              borderRadius: BorderRadius.all(Radius.circular(
-                                                                                  8)),
-                                                                              image:
-                                                                                  DecorationImage(
-                                                                                // invertColors: snapshot.data[
-                                                                                //       index]['isOpen'],
-                                                                                image:
-                                                                                    AssetImage('images/LOGO.png'),
-                                                                                fit:
-                                                                                    BoxFit.cover,
-                                                                              )),
-                                                                    );
-                                                                  },
-                                                                  placeholder:
-                                                                      AssetImage(
-                                                                    'images/LOGO.png',
-                                                                  ),
-                                                                  image: snapshot.data[
-                                                                                  index]
-                                                                              [
-                                                                              'imgurl'] !=
-                                                                          null
-                                                                      ? NetworkImage(
-                                                                          snapshot.data[
-                                                                                  index]
-                                                                              [
-                                                                              'imgurl'],
-                                                                        )
-                                                                      : NetworkImage(
-                                                                          ''),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            //fit: BoxFit.fill,
+                      ),
+                      Container(
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: GridView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          //physics: NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data.length,
+                          itemBuilder: ((context, index) {
+                            final List activeOrder = snapshot.data;
+                            var sorted = activeOrder.sort((a, b) =>
+                                b['completedOrders']
+                                    .length
+                                    .compareTo(a['completedOrders'].length));
+                            // print(snapshot.data[index]['rating']);
+                            // print(sorted);
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 5,
+                                        color: Colors.black,
+                                        spreadRadius: 0)
+                                  ],
+                                ),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      snapshot.data[index]['isOpen']
+                                          ? Navigator.push(context,
+                                              MaterialPageRoute(builder: (con) {
+                                              return ChangeNotifierProvider(
+                                                  create:
+                                                      (BuildContext context) {
+                                                    return Cart();
+                                                  },
+                                                  child: RestroMenu(
+                                                    restroDetails:
+                                                        snapshot.data[index],
+                                                  ));
+                                            }))
+                                          : snackBar(
+                                              'Restraunt is currently closed',
+                                              context);
+                                    },
+                                    child: Container(
+                                      //padding: EdgeInsets.all(15),
+                                      // decoration: BoxDecoration(
+                                      //     borderRadius: BorderRadius.circular(8)),
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              3,
+                                      child: Container(
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                                flex: 4,
+                                                child: Container(
+                                                  child: Stack(
+                                                    children: [
+                                                      Positioned.fill(
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    8),
                                                           ),
-                                                          Positioned(
-                                                              bottom: 1,
-                                                              right: 1,
-                                                              child: snapshot.data[index]['rating'].fold(
-                                                                          0,
-                                                                          (avg, ele) =>
-                                                                              avg +
-                                                                              ele /
-                                                                                  snapshot
-                                                                                      .data[index][
-                                                                                          'rating']
-                                                                                      .length) ==
-                                                                      0
-                                                                  ? Container(
-                                                                      padding: EdgeInsets
-                                                                          .only(
-                                                                              left:
-                                                                                  2,
-                                                                              right:
-                                                                                  2),
-                                                                      height: 15,
-                                                                      width: 35,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius
-                                                                                .circular(5),
-                                                                        color: Colors
-                                                                            .green,
-                                                                      ),
-                          
-                                                                      //: 150,
-                                                                      child:
-                                                                          AutoSizeText(
-                                                                        'New',
-                                                                        style: GoogleFonts.poppins(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.w500),
-                                                                      ))
-                                                                  : Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius
-                                                                                .circular(5),
-                                                                        color: Colors
-                                                                            .green,
-                                                                      ),
-                                                                      //padding: EdgeInsets.all(5),
-                                                                      height: 15,
-                                                                      width: 35,
-                                                                      child: Center(
-                                                                        child: Row(
-                                                                          children: [
-                                                                            Icon(
-                                                                              Icons
-                                                                                  .star,
-                                                                              size:
-                                                                                  13,
-                                                                              color:
-                                                                                  Colors.white,
-                                                                            ),
-                                                                            AutoSizeText(
-                                                                              '${snapshot.data[index]['rating'].fold(0, (avg, ele) => avg + ele / snapshot.data[index]['rating'].length).toStringAsFixed(1)}',
-                                                                              style: GoogleFonts.poppins(
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  color: Colors.white,
-                                                                                  fontSize: 10),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      )))
-                                                        ],
-                                                      ),
-                                                      // padding: EdgeInsets.all(15),
-                                                      // decoration: BoxDecoration(
-                                                      //     borderRadius:
-                                                      //         BorderRadius.all(
-                                                      //           Radius.circular(8)
-                                                      //             ),
-                                                      //     image: DecorationImage(
-                                                      //         // invertColors: snapshot.data[
-                                                      //         //       index]['isOpen'],
-                                                      //         image: NetworkImage(
-                                                      //           snapshot.data[index]
-                                                      //               ['imgurl'],
-                                                      //         ),
-                                                      //         fit: BoxFit.cover,
-                                                      //         colorFilter: snapshot
-                                                      //                         .data[
-                                                      //                     index]
-                                                      //                 ['isOpen']
-                                                      //             ? null
-                                                      //             : ColorFilter
-                                                      //                 .matrix(<
-                                                      //                     double>[
-                                                      //                 0.2126,
-                                                      //                 0.7152,
-                                                      //                 0.0722,
-                                                      //                 0,
-                                                      //                 0,
-                                                      //                 0.2126,
-                                                      //                 0.7152,
-                                                      //                 0.0722,
-                                                      //                 0,
-                                                      //                 0,
-                                                      //                 0.2126,
-                                                      //                 0.7152,
-                                                      //                 0.0722,
-                                                      //                 0,
-                                                      //                 0,
-                                                      //                 0,
-                                                      //                 0,
-                                                      //                 0,
-                                                      //                 1,
-                                                      //                 0,
-                                                      //               ])
-                                                      // )),
-                                                    )),
-                                                Expanded(
-                                                    flex: 2,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          left: 5.0, right: 5.0),
-                                                      child: Container(
-                                                        child: Column(
-                                                          //mainAxisAlignment: MainAxisAlignment.start,
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .topLeft,
-                                                                      child: AutoSizeText(
-                                                                          snapshot.data[
-                                                                                  index]
-                                                                              [
-                                                                              'name'],
-                                                                          style:
-                                                                              semiBigTextstyle),
-                                                                    ),
-                                                                  ]),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 1,
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment.topLeft,
-                                                                    child: AutoSizeText(snapshot.data[index]['completedOrders'].length<1?'No orders yet':'${snapshot.data[index]['completedOrders'].length}+ recent orders ',style: smallTextstyl,),
-                                                                
+                                                          // borderRadius:
+                                                          //     BorderRadius
+                                                          //         .circular(
+                                                          //             8.0),
+                                                          child: ColorFiltered(
+                                                            colorFilter: snapshot
+                                                                            .data[
+                                                                        index]
+                                                                    ['isOpen']
+                                                                ? ColorFilter
+                                                                    .matrix(<
+                                                                        double>[
+                                                                    1,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    1,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    1,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    0,
+                                                                    1,
+                                                                    0,
+                                                                  ])
+                                                                : ColorFilter.mode(
+                                                                    Colors.grey,
+                                                                    BlendMode
+                                                                        .saturation),
+                                                            child: FadeInImage(
+                                                              fit: BoxFit.fill,
+
+                                                              //fit: BoxFit.cover,
+                                                              imageErrorBuilder:
+                                                                  (con, obj,
+                                                                      stack) {
+                                                                print('er');
+                                                                return Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(
+                                                                              8)),
+                                                                          image:
+                                                                              DecorationImage(
+                                                                            // invertColors: snapshot.data[
+                                                                            //       index]['isOpen'],
+                                                                            image:
+                                                                                AssetImage('images/LOGO.png'),
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )),
+                                                                );
+                                                              },
+                                                              placeholder:
+                                                                  AssetImage(
+                                                                'images/LOGO.png',
                                                               ),
+                                                              image: snapshot.data[
+                                                                              index]
+                                                                          [
+                                                                          'imgurl'] !=
+                                                                      null
+                                                                  ? NetworkImage(
+                                                                      snapshot.data[
+                                                                              index]
+                                                                          [
+                                                                          'imgurl'],
+                                                                    )
+                                                                  : NetworkImage(
+                                                                      ''),
                                                             ),
-                                                            
-                                                          ],
+                                                          ),
                                                         ),
+                                                        //fit: BoxFit.fill,
                                                       ),
-                                                    ))
-                                              ],
-                                            ),
-                                          ),
-                                        )),
-                                  ),
-                                );
-                              }), gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),),
+                                                      Positioned(
+                                                          bottom: 1,
+                                                          right: 1,
+                                                          child: snapshot.data[index]['rating'].fold(
+                                                                      0,
+                                                                      (avg, ele) =>
+                                                                          avg +
+                                                                          ele /
+                                                                              snapshot
+                                                                                  .data[index][
+                                                                                      'rating']
+                                                                                  .length) ==
+                                                                  0
+                                                              ? Container(
+                                                                  padding: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              2,
+                                                                          right:
+                                                                              2),
+                                                                  height: 15,
+                                                                  width: 35,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                        .green,
+                                                                  ),
+
+                                                                  //: 150,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    'New',
+                                                                    style: GoogleFonts.poppins(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            15,
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
+                                                                  ))
+                                                              : Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(5),
+                                                                    color: Colors
+                                                                        .green,
+                                                                  ),
+                                                                  //padding: EdgeInsets.all(5),
+                                                                  height: 15,
+                                                                  width: 35,
+                                                                  child: Center(
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(
+                                                                          Icons
+                                                                              .star,
+                                                                          size:
+                                                                              13,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                        AutoSizeText(
+                                                                          '${snapshot.data[index]['rating'].fold(0, (avg, ele) => avg + ele / snapshot.data[index]['rating'].length).toStringAsFixed(1)}',
+                                                                          style: GoogleFonts.poppins(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              color: Colors.white,
+                                                                              fontSize: 10),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )))
+                                                    ],
+                                                  ),
+                                                  // padding: EdgeInsets.all(15),
+                                                  // decoration: BoxDecoration(
+                                                  //     borderRadius:
+                                                  //         BorderRadius.all(
+                                                  //           Radius.circular(8)
+                                                  //             ),
+                                                  //     image: DecorationImage(
+                                                  //         // invertColors: snapshot.data[
+                                                  //         //       index]['isOpen'],
+                                                  //         image: NetworkImage(
+                                                  //           snapshot.data[index]
+                                                  //               ['imgurl'],
+                                                  //         ),
+                                                  //         fit: BoxFit.cover,
+                                                  //         colorFilter: snapshot
+                                                  //                         .data[
+                                                  //                     index]
+                                                  //                 ['isOpen']
+                                                  //             ? null
+                                                  //             : ColorFilter
+                                                  //                 .matrix(<
+                                                  //                     double>[
+                                                  //                 0.2126,
+                                                  //                 0.7152,
+                                                  //                 0.0722,
+                                                  //                 0,
+                                                  //                 0,
+                                                  //                 0.2126,
+                                                  //                 0.7152,
+                                                  //                 0.0722,
+                                                  //                 0,
+                                                  //                 0,
+                                                  //                 0.2126,
+                                                  //                 0.7152,
+                                                  //                 0.0722,
+                                                  //                 0,
+                                                  //                 0,
+                                                  //                 0,
+                                                  //                 0,
+                                                  //                 0,
+                                                  //                 1,
+                                                  //                 0,
+                                                  //               ])
+                                                  // )),
+                                                )),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5.0,
+                                                          right: 5.0),
+                                                  child: Container(
+                                                    child: Column(
+                                                      //mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topLeft,
+                                                                  child: AutoSizeText(
+                                                                      snapshot.data[
+                                                                              index]
+                                                                          [
+                                                                          'name'],
+                                                                      style:
+                                                                          semiBigTextstyle),
+                                                                ),
+                                                              ]),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: AutoSizeText(
+                                                              snapshot
+                                                                          .data[
+                                                                              index]
+                                                                              [
+                                                                              'completedOrders']
+                                                                          .length <
+                                                                      1
+                                                                  ? 'No orders yet'
+                                                                  : '${snapshot.data[index]['completedOrders'].length}+ recent orders ',
+                                                              style:
+                                                                  smallTextstyl,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ))
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            );
+                          }),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1),
                         ),
-                      ],
-                    )
-                
-                  );
+                      ),
+                    ],
+                  ));
                 }),
             SliverAppBar(
                 automaticallyImplyLeading: false,
@@ -542,9 +609,13 @@ class _FirstPageState extends State<FirstPage> {
                                 if (snap.data == null) {
                                   return CarouselSlider(
                                     items: [
-                                      nulCarasoul(img: 'images/banner1.jpg',),
+                                      nulCarasoul(
+                                        img: 'images/banner1.jpg',
+                                      ),
                                       // img: 'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2FPicsArt_10-08-12.13.44.jpg?alt=media&token=a94d832c-d3ba-469f-8d85-b86e27f8ca1c'),
-                                      nulCarasoul(img: 'images/banner2.jpg',)
+                                      nulCarasoul(
+                                        img: 'images/banner2.jpg',
+                                      )
                                     ],
                                     options: CarouselOptions(
                                       aspectRatio: 16 / 9,
@@ -556,8 +627,14 @@ class _FirstPageState extends State<FirstPage> {
                                 return CarouselSlider(
                                   items: [
                                     //CarouselItms(img:'images/PicsArt_10-03-10.53.04.jpg'),
-                                    CarouselItms(img: snap.data['imageUrl1'],imgt: 'images/banner1.jpg',),
-                                    CarouselItms(img: snap.data['imageUrl2'],imgt: 'images/banner2.jpg',),
+                                    CarouselItms(
+                                      img: snap.data['imageUrl1'],
+                                      imgt: 'images/banner1.jpg',
+                                    ),
+                                    CarouselItms(
+                                      img: snap.data['imageUrl2'],
+                                      imgt: 'images/banner2.jpg',
+                                    ),
                                   ],
                                   options: CarouselOptions(
                                     aspectRatio: 16 / 17,
@@ -595,17 +672,23 @@ class _FirstPageState extends State<FirstPage> {
                     ],
                   ),
                 )),
-                // SliverAppBar( automaticallyImplyLeading: false,
-                // backgroundColor: Colors.white,
-                // expandedHeight: MediaQuery.of(context).size.height / 3.5,
+            // SliverAppBar( automaticallyImplyLeading: false,
+            // backgroundColor: Colors.white,
+            // expandedHeight: MediaQuery.of(context).size.height / 3.5,
 
-                // // flex: 6,
-                // flexibleSpace:FlexibleSpaceBar(background: Container(height: 100),)),
+            // // flex: 6,
+            // flexibleSpace:FlexibleSpaceBar(background: Container(height: 100),)),
             FutureBuilder(
-                future: restroandMenu.getAllrestaurent(context),
+                future: restroandMenu.getAllrestaurent(
+                    context, widget.lat, widget.lon),
                 builder: (ctx, AsyncSnapshot snapshot) {
                   if (snapshot.data == null) {
                     return ShimmerContainer();
+                  }
+                  if(snapshot.data.length==0){
+                    return SliverToBoxAdapter(
+                      child: Center(child: Text('No nearby restaurants',style: GoogleFonts.poppins(color:Colors.red),)),
+                    );
                   }
                   return SliverList(
                       delegate: SliverChildBuilderDelegate((con, inx) {
@@ -614,16 +697,20 @@ class _FirstPageState extends State<FirstPage> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data.length,
                         itemBuilder: ((context, index) {
-                          // print(snapshot.data[index]['rating']);
+                          //print(snapshot.data[index]['cord']['coordinates'][0]);
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
                                 boxShadow: [
-                  BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 0)
-                ],
+                                  BoxShadow(
+                                      blurRadius: 5,
+                                      color: Colors.black,
+                                      spreadRadius: 0)
+                                ],
                               ),
                               child: GestureDetector(
                                   onTap: () {
@@ -659,10 +746,15 @@ class _FirstPageState extends State<FirstPage> {
                                                   children: [
                                                     Positioned.fill(
                                                       child: ClipRRect(
-                                                        borderRadius: BorderRadius.only(
-        topRight: Radius.circular(8),
-        topLeft: Radius.circular(8),
-      ),
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                        ),
                                                         // borderRadius:
                                                         //     BorderRadius
                                                         //         .circular(
@@ -711,16 +803,17 @@ class _FirstPageState extends State<FirstPage> {
                                                               return Container(
                                                                 decoration:
                                                                     BoxDecoration(
-                                                                        borderRadius: BorderRadius.all(Radius.circular(
-                                                                            8)),
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(
+                                                                                8)),
                                                                         image:
                                                                             DecorationImage(
                                                                           // invertColors: snapshot.data[
                                                                           //       index]['isOpen'],
                                                                           image:
                                                                               AssetImage('images/LOGO.png'),
-                                                                          fit:
-                                                                              BoxFit.cover,
+                                                                          fit: BoxFit
+                                                                              .cover,
                                                                         )),
                                                               );
                                                             },
@@ -762,8 +855,7 @@ class _FirstPageState extends State<FirstPage> {
                                                             ? Container(
                                                                 padding: EdgeInsets
                                                                     .only(
-                                                                        left:
-                                                                            2,
+                                                                        left: 2,
                                                                         right:
                                                                             2),
                                                                 height: 15,
@@ -772,7 +864,8 @@ class _FirstPageState extends State<FirstPage> {
                                                                     BoxDecoration(
                                                                   borderRadius:
                                                                       BorderRadius
-                                                                          .circular(5),
+                                                                          .circular(
+                                                                              5),
                                                                   color: Colors
                                                                       .green,
                                                                 ),
@@ -787,14 +880,16 @@ class _FirstPageState extends State<FirstPage> {
                                                                       fontSize:
                                                                           15,
                                                                       fontWeight:
-                                                                          FontWeight.w500),
+                                                                          FontWeight
+                                                                              .w500),
                                                                 ))
                                                             : Container(
                                                                 decoration:
                                                                     BoxDecoration(
                                                                   borderRadius:
                                                                       BorderRadius
-                                                                          .circular(5),
+                                                                          .circular(
+                                                                              5),
                                                                   color: Colors
                                                                       .green,
                                                                 ),
@@ -809,13 +904,14 @@ class _FirstPageState extends State<FirstPage> {
                                                                             .star,
                                                                         size:
                                                                             13,
-                                                                        color:
-                                                                            Colors.white,
+                                                                        color: Colors
+                                                                            .white,
                                                                       ),
                                                                       AutoSizeText(
                                                                         '${snapshot.data[index]['rating'].fold(0, (avg, ele) => avg + ele / snapshot.data[index]['rating'].length).toStringAsFixed(1)}',
                                                                         style: GoogleFonts.poppins(
-                                                                            fontWeight: FontWeight.bold,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
                                                                             color: Colors.white,
                                                                             fontSize: 10),
                                                                       ),
@@ -824,7 +920,6 @@ class _FirstPageState extends State<FirstPage> {
                                                                 )))
                                                   ],
                                                 ),
-                                               
                                               )),
                                           Expanded(
                                               flex: 2,
@@ -862,7 +957,7 @@ class _FirstPageState extends State<FirstPage> {
                                                           alignment:
                                                               Alignment.topLeft,
                                                           child: Container(
-                                                            height: 20,
+                                                            height: 25,
                                                             width: 250,
                                                             child: ListView
                                                                 .builder(
@@ -896,7 +991,7 @@ class _FirstPageState extends State<FirstPage> {
                                                                         'cord'] !=
                                                                     null
                                                                 ? AutoSizeText(
-                                                                    (Geolocator.distanceBetween(snapshot.data[index]['cord']['lat'], snapshot.data[index]['cord']['lon'], widget.lat, widget.lon) /
+                                                                    (Geolocator.distanceBetween(snapshot.data[index]['cord']['coordinates'][1], snapshot.data[index]['cord']['coordinates'][0], widget.lat, widget.lon) /
                                                                                 1000)
                                                                             .toStringAsFixed(
                                                                                 2) +

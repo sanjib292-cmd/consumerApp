@@ -36,9 +36,9 @@ class AllRestaurent extends ChangeNotifier {
     }
   }
 
-  Future getAllrestaurent(BuildContext context) async {
+  Future getAllrestaurent(BuildContext context,lat,lon) async {
     try {
-      var url = Uri.parse("$firsturl/registerRestro");
+      var url = Uri.parse("$firsturl/registerRestro/$lat/$lon");
       // await EasyLoading.show(
       //   status: 'loading...',
       //   //maskType: EasyLoadingMaskType.black,
@@ -55,7 +55,8 @@ class AllRestaurent extends ChangeNotifier {
       await EasyLoading.dismiss();
     } on Exception catch (e) {
       //await EasyLoading.dismiss();
-      snackBar(e.toString(), context);
+      return;
+      //snackBar(e.toString(), context);
     }
   }
 
@@ -72,7 +73,8 @@ class AllRestaurent extends ChangeNotifier {
       }
       return res.statusCode;
     } on Exception catch (e) {
-      snackBar(e.toString(), context);
+      return;
+      //snackBar(e.toString(), context);
     }
   }
 

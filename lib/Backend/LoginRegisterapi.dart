@@ -215,7 +215,7 @@ class RegisterUser extends ChangeNotifier {
 
   updateUserLoc(lat,lon,token)async{
     print('ran');
-    var url = Uri.parse("$firsturl/updateLoc/$lat/$lon");
+    var url = Uri.parse("$firsturl/verifylogin/updateLoc/$lat/$lon");
     try {
       var res =await http.post(url, headers: <String, String>{
             HttpHeaders.contentTypeHeader: 'application/json',

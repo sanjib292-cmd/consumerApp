@@ -334,8 +334,8 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                             token:userId,
                                                                             restroId:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'],
                                                                            itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'],
-                                                                            lat:widget.restroDetails['cord']['lat'],
-                                                                            lon:widget.restroDetails['cord']['lon']);
+                                                                            lat:widget.restroDetails['cord']['coordinates'][1],
+                                                                            lon:widget.restroDetails['cord']['coordinates'][0]);
                                                                         // cart.sucessFullyaded !=
                                                                         //         null
                                                                         //     ? 
@@ -374,8 +374,8 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                             token:userId,
                                                                             restroId:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'],
                                                                            itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'],
-                                                                            lat:widget.restroDetails['cord']['lat'],
-                                                                            lon:widget.restroDetails['cord']['lon']);
+                                                                            lat:widget.restroDetails['cord']['coordinates'][1],
+                                                                            lon:widget.restroDetails['cord']['coordinates'][0]);
                                                                         snackBar(
                                                                             '${cart.sucessFullyaded}',
                                                                             context);

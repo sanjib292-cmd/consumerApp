@@ -439,7 +439,7 @@ class _CartPageState extends State<CartPage> {
                                     //mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        width: 5,
+                                        width: 10,
                                       ),
                                       Container(
                                           height: 40,
@@ -460,19 +460,22 @@ class _CartPageState extends State<CartPage> {
                                     ],
                                   ),
                                   snapshot.data['couPonapplied'] == true
-                                      ? Row(
-                                          children: [
-                                            Icon(
-                                              FontAwesomeIcons.checkCircle,
-                                              color: Colors.green,
-                                              size: 20,
-                                            ),
-                                            Text(
-                                              ' Applied',
-                                              style: GoogleFonts.poppins(),
-                                            ),
-                                          ],
-                                        )
+                                      ? Padding(
+                                        padding: const EdgeInsets.only(right:8.0),
+                                        child: Row(
+                                            children: [
+                                              Icon(
+                                                FontAwesomeIcons.checkCircle,
+                                                color: Colors.green,
+                                                size: 20,
+                                              ),
+                                              Text(
+                                                ' Applied',
+                                                style: GoogleFonts.poppins(),
+                                              ),
+                                            ],
+                                          ),
+                                      )
                                       : Container()
                                 ],
                               ),
@@ -486,10 +489,10 @@ class _CartPageState extends State<CartPage> {
                           Container(
                             padding: EdgeInsets.all(8),
                             color: Colors.white,
-                            height: MediaQuery.of(context).size.height /
-                                3, //*MediaQuery.of(context).devicePixelRatio,
+                            // height: MediaQuery.of(context).size.height /
+                            //     3.5, //*MediaQuery.of(context).devicePixelRatio,
                             width: MediaQuery.of(context).size.width,
-
+                          
                             //margin: EdgeInsets.only(left: 30),
                             child: FutureBuilder(
                                 future: getcart,
@@ -514,63 +517,74 @@ class _CartPageState extends State<CartPage> {
                                               '₹${'${snapshot.data['total']}'}')
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 10,
+                                      // SizedBox(
+                                      //   height: 10,
+                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top:8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            AutoSizeText('Delivery Charge:',
+                                                style: GoogleFonts.poppins()),
+                                            //Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7==null?
+                                            AutoSizeText(
+                                                '₹${((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6) + 25).toStringAsFixed(1)}')
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          AutoSizeText('Delivery Charge:',
-                                              style: GoogleFonts.poppins()),
-                                          //Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 7==null?
-                                          AutoSizeText(
-                                              '₹${((Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6) + 25).toStringAsFixed(1)}')
-                                        ],
+                                      // SizedBox(
+                                      //   height: 10,
+                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top:8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            AutoSizeText('Restaurant GST:',
+                                                style: GoogleFonts.poppins()),
+                                            AutoSizeText(
+                                                '₹${(snapshot.data['total'] * 0.05).toStringAsFixed(1)}')
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
+                                      // SizedBox(
+                                      //   height: 10,
+                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top:8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            AutoSizeText('Restaurant Packing:',
+                                                style: GoogleFonts.poppins()),
+                                            AutoSizeText(
+                                                '₹${snapshot.data['products'].length * 10}')
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          AutoSizeText('Restraunt GST:',
-                                              style: GoogleFonts.poppins()),
-                                          AutoSizeText(
-                                              '₹${(snapshot.data['total'] * 0.05).toStringAsFixed(1)}')
-                                        ],
+                                      // SizedBox(
+                                      //   height: 10,
+                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top:8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            AutoSizeText('Discount:',
+                                                style: GoogleFonts.poppins()),
+                                            AutoSizeText(
+                                                '₹${snapshot.data['discountValue'].toStringAsFixed(1)}')
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          AutoSizeText('Restraunt Packing:',
-                                              style: GoogleFonts.poppins()),
-                                          AutoSizeText(
-                                              '₹${snapshot.data['products'].length * 10}')
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          AutoSizeText('Discount:',
-                                              style: GoogleFonts.poppins()),
-                                          AutoSizeText(
-                                              '₹${snapshot.data['discountValue'].toStringAsFixed(1)}')
-                                        ],
-                                      ),
-                                      Expanded(
-                                          child: Divider(
+                                      Divider(
                                         thickness: 1.0,
-                                      )),
+                                      ),
                                       //SizedBox(height: 5,),
                                       Row(
                                         mainAxisAlignment:
@@ -612,20 +626,20 @@ class _CartPageState extends State<CartPage> {
                                 }),
                           ),
                           SizedBox(
-                            height: 5,
+                            height: 8,
                           ),
                           Container(
-                              padding: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(8),
                               color: Colors.white,
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height / 6,
+                              //height: MediaQuery.of(context).size.height / 7,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Align(
                                       alignment: Alignment.topLeft,
                                       child: AutoSizeText(
-                                          'Order will deliver here..')),
+                                          'Order will deliver here..',style: GoogleFonts.poppins(),)),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -644,7 +658,7 @@ class _CartPageState extends State<CartPage> {
                                               widget.latlng.longitude),
                                           builder: (con, AsyncSnapshot snap) {
                                             if (snap.data == null) {
-                                              return Text('Locating..');
+                                              return Text('Locating..',style: GoogleFonts.poppins());
                                             }
                                             return Container(
                                               height: 60,
@@ -663,11 +677,11 @@ class _CartPageState extends State<CartPage> {
                             height: 5,
                           ),
                           Container(
-                            padding: EdgeInsets.all(5),
+                            padding: EdgeInsets.all(6),
                             color: Colors.white,
                             width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height /
-                                4, //*MediaQuery.of(context).devicePixelRatio,
+                            // height: MediaQuery.of(context).size.height /
+                            //     5, //*MediaQuery.of(context).devicePixelRatio,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -718,14 +732,17 @@ class _CartPageState extends State<CartPage> {
                                               } else if (snip.data['isOpen'] ==
                                                   false) {
                                                 return Container(
+                                                  width: MediaQuery.of(context).size.width,
                                                   padding: EdgeInsets.all(8),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8)),
-                                                  child: Text(
-                                                      'Restraunt is currently not opened'),
+                                                  child: Center(
+                                                    child: Text(
+                                                        'Restaurant is closed for delivery',style: GoogleFonts.poppins(fontWeight: FontWeight.w600),),
+                                                  ),
                                                 );
                                               }
                                               return Row(

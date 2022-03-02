@@ -104,11 +104,11 @@ class _FetchLocState extends State<FetchLoc> {
 
   void onStart() async {
     var res = Provider.of<Location>(context, listen: false);
-    var locupdate = Provider.of<RegisterUser>(context, listen: false);
-    //Future getcartNumber() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-         print(sharedPreferences.getString('Account Details'));
+    // var locupdate = Provider.of<RegisterUser>(context, listen: false);
+    // //Future getcartNumber() async {
+    // final SharedPreferences sharedPreferences =
+    //     await SharedPreferences.getInstance();
+    //      print(sharedPreferences.getString('Account Details'));
 
     // yield* Stream.periodic(Duration(seconds: 2), (_) {
     // return cart.getCart(sharedPreferences.getString('Account Details'));
@@ -132,14 +132,14 @@ class _FetchLocState extends State<FetchLoc> {
     Future.delayed(Duration(seconds: 2), () async {
       try {
         if (er == null) {
-          if (sharedPreferences.getString('Account Details') != null) {
-            print('good');
-            await locupdate.updateUserLoc(res.lat, res.lon,
-                sharedPreferences.getString('Account Details'));
-          } else {
-            print('lul');
-          }
-          print(sharedPreferences.getString('Account Details'));
+          // if (sharedPreferences.getString('Account Details') != null) {
+          //   print('good');
+          //   await locupdate.updateUserLoc(res.lat, res.lon,
+          //       sharedPreferences.getString('Account Details'));
+          // } else {
+          //   print('lul');
+          // }
+          // print(sharedPreferences.getString('Account Details'));
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

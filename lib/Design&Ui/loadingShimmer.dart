@@ -113,6 +113,41 @@ class ShimmerContainer extends StatelessWidget {
   }
 }
 
+
+class ShimmerGrid extends StatelessWidget {
+  //const ShimmerGrid({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        height:150,
+        child: GridView.builder(
+          itemCount: 5,
+          scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+           gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1), itemBuilder: (con,ind){
+                                      return Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Shimmer.fromColors(
+                                           baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[200]!,
+                                          child: Card(
+                                            // height: 100,
+                                            // width: 100,
+                                          ),
+                                        ),
+                                      );
+
+          }),
+      ),
+      
+    );
+  }
+}
+
 class ShimmerCircleAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
