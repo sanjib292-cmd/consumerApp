@@ -98,7 +98,7 @@ class _FirstPageState extends State<FirstPage> {
                                                           widget.lat,
                                                           widget.lon) /
                                                       1000 <
-                                                  1000) {
+                                                  10000) {
                                                     pro.add(e);
                                                 print(
                                                     'sd ${e['restroNam']['name']}');
@@ -204,7 +204,7 @@ class _FirstPageState extends State<FirstPage> {
                 builder: (ctx, AsyncSnapshot snapshot) {
                   if (snapshot.data == null) {
                     print('no');
-                    return ShimmerGrid();
+                    return SliverToBoxAdapter();
                   }
                   // if(snapshot.data==null){
                   //   print('none');

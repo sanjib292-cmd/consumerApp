@@ -158,11 +158,12 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (con, snap) {
           // print(snap.data);
           // print(snap.connectionState);
-          if (snap.data == false) {
+          if (snap.data == false||snap.data==null) {
             return LoginOrRegister(lat: widget.lat,lon: widget.lon,);
-          } else if (snap.data == null) {
-            return Center(child: Lottie.asset('images/Accountpageanimation.json'));
-          }
+          } 
+          // else if (snap.data == null) {
+          //   return Center(child: Lottie.asset('images/Accountpageanimation.json'));
+          // }
           return MultiProvider(providers: [
             ChangeNotifierProvider(create: (BuildContext context) {
               return RegisterUser();

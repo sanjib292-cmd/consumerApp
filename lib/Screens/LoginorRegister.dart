@@ -80,7 +80,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                             radius: 56,
                             child: CircleAvatar(
                               radius: 54,
-                              backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Ffoodpic.jpg?alt=media&token=0aa06805-cd83-4949-8528-b4363f6f27bb'),
+                              backgroundImage: AssetImage('images/accountpg.jpg'),
                             ),
                           ),
                         ),

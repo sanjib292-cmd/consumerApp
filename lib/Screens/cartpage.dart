@@ -599,17 +599,7 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                           AutoSizeText('₹' +
                                               (snapshot.data['total'] +
-                                                      (Geolocator.distanceBetween(
-                                                              snap.data['cord']
-                                                                  ['lat'],
-                                                              snap.data['cord']
-                                                                  ['lon'],
-                                                              widget.latlng
-                                                                  .latitude,
-                                                              widget.latlng
-                                                                  .longitude) /
-                                                          1000 *
-                                                          7) +
+                                                     (Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6) + 25 +
                                                       (snapshot.data['total'] *
                                                           0.05) +
                                                       (snapshot.data['products']

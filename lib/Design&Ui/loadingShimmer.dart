@@ -121,7 +121,7 @@ class ShimmerGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        height:150,
+        height:120,
         child: GridView.builder(
           itemCount: 5,
           scrollDirection: Axis.horizontal,
