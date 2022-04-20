@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:104838460930:android:021a574a3c0eab7a89991b",
         "android_client_info": {
-          "package_name": "com.example.foodorder_userapp"
+          "package_name": "com.foodorder_userapp"
         }
       },
       "oauth_client": [

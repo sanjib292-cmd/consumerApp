@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
@@ -32,7 +31,7 @@ class AllRestaurent extends ChangeNotifier {
       return null;
     } on Exception catch (e) {
       //EasyLoading.dismiss();
-      return e;
+      return ;
     }
   }
 
@@ -151,7 +150,7 @@ class AllRestaurent extends ChangeNotifier {
       //print('not');
     } on Exception catch (e) {
       //await EasyLoading.dismiss();
-      snackBar(e.toString(), context);
+      //snackBar(e.toString(), context);
       return;
     }
   }

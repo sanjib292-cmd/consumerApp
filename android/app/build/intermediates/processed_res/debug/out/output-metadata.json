@@ -4,7 +4,7 @@
     "type": "PROCESSED_RES",
     "kind": "Directory"
   },
-  "applicationId": "com.example.foodorder_userapp",
+  "applicationId": "com.foodorder_userapp",
   "variantName": "processDebugResources",
   "elements": [
     {

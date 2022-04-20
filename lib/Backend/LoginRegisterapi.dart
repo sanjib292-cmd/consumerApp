@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:foodorder_userapp/Design&Ui/Cartpage/addedcartSnackbar.dart';
@@ -229,6 +228,7 @@ class RegisterUser extends ChangeNotifier {
           return;
     } on Exception catch (e) {
       print(e);
+      return;
     }
 
   }

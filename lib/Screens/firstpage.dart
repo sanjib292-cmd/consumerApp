@@ -16,7 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:async/async.dart';
-import 'dart:async';
+
 
 class FirstPage extends StatefulWidget {
   var lat;
@@ -129,47 +129,54 @@ class _FirstPageState extends State<FirstPage> {
                                               );
                                             }));
                                           },
-                                          child: CircleAvatar(
-                                            minRadius: 26,
-                                            maxRadius: 36,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+    color: Colors.white,
+    shape: BoxShape.circle,
+    boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 0.5)],
+  ),
                                             child: CircleAvatar(
-                                              minRadius: 25,
-                                              maxRadius: 35,
-                                              child: AspectRatio(
-                                                aspectRatio: 1 / 1,
-                                                child: ClipOval(
-                                                  // borderRadius: BorderRadius.circular(100.0),
-                                                  child: FadeInImage(
-                                                    fit: BoxFit.cover,
-                                                    //fit: BoxFit.cover,
-                                                    imageErrorBuilder:
-                                                        (con, obj, stack) {
-                                                      print('er');
-                                                      return CircleAvatar(
-                                                        minRadius: 25,
-                                                        maxRadius: 35,
-                                                        // height: 120,
-                                                        // width: 100,
-                                                        backgroundImage:
-                                                            AssetImage(
-                                                          'images/cusine.jpg',
-                                                          // height: double
-                                                          //     .infinity,
-                                                          // fit: BoxFit
-                                                          //     .cover
-                                                        ),
-                                                      );
-                                                    },
-                                                    placeholder: AssetImage(
-                                                      'images/cusine.jpg',
+                                              minRadius: 26,
+                                              maxRadius: 36,
+                                              child: CircleAvatar(
+                                                minRadius: 25,
+                                                maxRadius: 35,
+                                                child: AspectRatio(
+                                                  aspectRatio: 1 / 1,
+                                                  child: ClipOval(
+                                                    // borderRadius: BorderRadius.circular(100.0),
+                                                    child: FadeInImage(
+                                                      fit: BoxFit.cover,
+                                                      //fit: BoxFit.cover,
+                                                      imageErrorBuilder:
+                                                          (con, obj, stack) {
+                                                        print('er');
+                                                        return CircleAvatar(
+                                                          minRadius: 25,
+                                                          maxRadius: 35,
+                                                          // height: 120,
+                                                          // width: 100,
+                                                          backgroundImage:
+                                                              AssetImage(
+                                                            'images/cusine.jpg',
+                                                            // height: double
+                                                            //     .infinity,
+                                                            // fit: BoxFit
+                                                            //     .cover
+                                                          ),
+                                                        );
+                                                      },
+                                                      placeholder: AssetImage(
+                                                        'images/cusine.jpg',
+                                                      ),
+                                                      image: snapshot.data[indx]
+                                                                  ['imgUrl'] !=
+                                                              null
+                                                          ? NetworkImage(
+                                                              snapshot.data[indx]
+                                                                  ['imgUrl'])
+                                                          : NetworkImage(''),
                                                     ),
-                                                    image: snapshot.data[indx]
-                                                                ['imgUrl'] !=
-                                                            null
-                                                        ? NetworkImage(
-                                                            snapshot.data[indx]
-                                                                ['imgUrl'])
-                                                        : NetworkImage(''),
                                                   ),
                                                 ),
                                               ),
@@ -376,7 +383,7 @@ class _FirstPageState extends State<FirstPage> {
                                                               },
                                                               placeholder:
                                                                   AssetImage(
-                                                                'images/LOGO.png',
+                                                                'images/LOGO.png', 
                                                               ),
                                                               image: snapshot.data[
                                                                               index]

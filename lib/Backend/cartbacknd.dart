@@ -148,6 +148,8 @@ class Cart extends ChangeNotifier {
       delfail = res.body;
       notifyListeners();
       return res.body;
-    } catch (e) {}
+    } catch (e) {
+      return;
+    }
   }
 }

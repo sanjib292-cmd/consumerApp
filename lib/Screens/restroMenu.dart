@@ -127,7 +127,10 @@ class _RestroMenuState extends State<RestroMenu> {
                         return Column(
                           children: [
                             Card(
+                              //elevation: 0.5,
                               child: ExpansionTile(
+                                //childrenPadding: ,
+                                //tilePadding: EdgeInsets.all(2),
                                 initiallyExpanded: true,
                                   children: [
                                     ListView.builder(
@@ -146,16 +149,16 @@ class _RestroMenuState extends State<RestroMenu> {
                                           return Container(
                                             height: 155,
                                             margin: const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 10),
+                                                horizontal: 10, vertical: 8),
                                             decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.all(
-                                                    Radius.circular(20.0)),
+                                                    Radius.circular(15.0)),
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Colors.black
                                                           .withAlpha(100),
-                                                      blurRadius: 10.0),
+                                                      blurRadius: 5.0),
                                                 ]),
                                             child: Column(
                                               // mainAxisAlignment: MainAxisAlignment.start,

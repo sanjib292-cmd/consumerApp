@@ -267,7 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                          // elevation: 15,
                                           child: ClipPath(
                                             child: Container(
-                          height: 20,
+                          height: 15,
                           width:55,
                           decoration: BoxDecoration(
                             border: Border(
@@ -291,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       SizedBox(
-                        height: 6,
+                        height: 5,
                       ),
                       Row(
                         children: [
@@ -308,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                          // elevation: 15,
                                           child: ClipPath(
                                             child: Container(
-                          height: 20,
+                          height: 15,
                           width:100,
                           decoration: BoxDecoration(
                             border: Border(

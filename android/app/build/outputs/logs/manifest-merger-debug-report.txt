@@ -87,7 +87,7 @@ INJECTED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consu
 INJECTED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 	package
-		ADDED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml:1:70-109
+		ADDED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml:1:70-101
 		INJECTED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/debug/AndroidManifest.xml
 	android:versionName
@@ -252,7 +252,7 @@ MERGED from [com.jakewharton.threetenabp:threetenabp:1.2.3] /Users/sanjib292/.gr
 		ADDED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml:27:16-38
 	android:icon
 		ADDED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml:27:39-73
-activity#com.example.foodorder_userapp.MainActivity
+activity#com.foodorder_userapp.MainActivity
 ADDED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml:28:5-45:16
 	android:launchMode
 		ADDED from /Users/sanjib292/Desktop/foodorderApp/Food Delivery Consumer/consumerApp/android/app/src/main/AndroidManifest.xml:28:44-74

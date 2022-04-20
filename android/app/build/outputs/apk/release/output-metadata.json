@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.foodorder_userapp",
+  "applicationId": "com.foodorder_userapp",
   "variantName": "processReleaseResources",
   "elements": [
     {

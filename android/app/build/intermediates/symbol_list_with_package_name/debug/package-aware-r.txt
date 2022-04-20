@@ -1,4 +1,4 @@
-com.example.foodorder_userapp
+com.foodorder_userapp
 attr activityAction
 attr activityName
 attr alpha
