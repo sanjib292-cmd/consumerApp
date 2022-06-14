@@ -83,7 +83,7 @@ class _RestroMenuState extends State<RestroMenu> {
                 child: Container(
                   decoration: BoxDecoration(color: Colors.white.withOpacity(0.6),borderRadius: BorderRadius.circular(8)),
                   height: 30,
-                  width: 80,
+                  //width: 80,
                   //color: Colors.grey[200],
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(4, 5, 3, 5),

@@ -26,15 +26,15 @@ Center CartemptyOrnull(function) {
                                   color: Colors.black.withOpacity(.5))),
                           Container(
                             width: 150,
-                            child: OutlineButton(
+                            child: TextButton(
                               child: new Text(
                                 "FIND FOOD",
                                 style: GoogleFonts.poppins(
                                     color: Colors.orange,
                                     fontWeight: FontWeight.w500),
                               ),
-                              borderSide:
-                                  BorderSide(color: Colors.orange, width: 2),
+                              // borderSide:
+                              //     BorderSide(color: Colors.orange, width: 2),
                               onPressed: function
                             ),
                           ),

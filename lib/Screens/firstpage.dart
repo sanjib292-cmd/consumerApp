@@ -17,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:async/async.dart';
 
-
 class FirstPage extends StatefulWidget {
   var lat;
   var lon;
@@ -48,7 +47,7 @@ class _FirstPageState extends State<FirstPage> {
             fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.5)));
     var restroandMenu = Provider.of<AllRestaurent>(context, listen: false);
     var user = RegisterUser();
-    var pro=[];
+    var pro = [];
     // print(restroandMenu.getCusinetypes());
 
     //restroandMenu.getCusinetypes(context);
@@ -85,9 +84,14 @@ class _FirstPageState extends State<FirstPage> {
                                         flex: 3,
                                         child: GestureDetector(
                                           onTap: () {
+                                            print('taped');
+                                            print(
+                                                '>>>>>>>>>${snapshot.data[indx]}');
                                             pro.clear();
+
                                             snapshot.data[indx]['restro']
                                                 .forEach((e) {
+                                              print(">>>>>>>${e['restroNam']}");
                                               if (Geolocator.distanceBetween(
                                                           e['restroNam']['cord']
                                                               [
@@ -98,8 +102,8 @@ class _FirstPageState extends State<FirstPage> {
                                                           widget.lat,
                                                           widget.lon) /
                                                       1000 <
-                                                  10000) {
-                                                    pro.add(e);
+                                                  100000) {
+                                                pro.add(e);
                                                 print(
                                                     'sd ${e['restroNam']['name']}');
                                               }
@@ -131,10 +135,15 @@ class _FirstPageState extends State<FirstPage> {
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-    color: Colors.white,
-    shape: BoxShape.circle,
-    boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey, spreadRadius: 0.5)],
-  ),
+                                              color: Colors.white,
+                                              shape: BoxShape.circle,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    blurRadius: 5,
+                                                    color: Colors.grey,
+                                                    spreadRadius: 0.5)
+                                              ],
+                                            ),
                                             child: CircleAvatar(
                                               minRadius: 26,
                                               maxRadius: 36,
@@ -173,7 +182,8 @@ class _FirstPageState extends State<FirstPage> {
                                                                   ['imgUrl'] !=
                                                               null
                                                           ? NetworkImage(
-                                                              snapshot.data[indx]
+                                                              snapshot.data[
+                                                                      indx]
                                                                   ['imgUrl'])
                                                           : NetworkImage(''),
                                                     ),
@@ -218,13 +228,13 @@ class _FirstPageState extends State<FirstPage> {
                   //   return SliverToBoxAdapter(child: Text('No nearby restaurants',style: GoogleFonts.poppins(color:Colors.red),),);
                   // }
                   print(snapshot.data.length);
-                  if(snapshot.data.length==0){
+                  if (snapshot.data.length == 0) {
                     return SliverToBoxAdapter();
                   }
-                  if(snapshot.data.length<3){
+                  if (snapshot.data.length < 3) {
                     return SliverToBoxAdapter();
                   }
-                 // snapshot.data.length==0?
+                  // snapshot.data.length==0?
 
                   return SliverToBoxAdapter(
                       //delegate: SliverChildBuilderDelegate((con, inx) {
@@ -383,7 +393,7 @@ class _FirstPageState extends State<FirstPage> {
                                                               },
                                                               placeholder:
                                                                   AssetImage(
-                                                                'images/LOGO.png', 
+                                                                'images/LOGO.png',
                                                               ),
                                                               image: snapshot.data[
                                                                               index]
@@ -548,13 +558,21 @@ class _FirstPageState extends State<FirstPage> {
                                                                   alignment:
                                                                       Alignment
                                                                           .topLeft,
-                                                                  child: AutoSizeText(
-                                                                      snapshot.data[
-                                                                              index]
-                                                                          [
-                                                                          'name'],
-                                                                      style:
-                                                                          semiBigTextstyle),
+                                                                  child:
+                                                                      Container(
+                                                                    // height: 10,
+                                                                    width: 150 -
+                                                                        16,
+                                                                    child: AutoSizeText(
+                                                                        snapshot.data[index]
+                                                                            [
+                                                                            'name'],
+                                                                        overflow:
+                                                                            TextOverflow
+                                                                                .fade,
+                                                                        style:
+                                                                            restroCardtxtStyle),
+                                                                  ),
                                                                 ),
                                                               ]),
                                                         ),
@@ -692,9 +710,13 @@ class _FirstPageState extends State<FirstPage> {
                   if (snapshot.data == null) {
                     return ShimmerContainer();
                   }
-                  if(snapshot.data.length==0){
+                  if (snapshot.data.length == 0) {
                     return SliverToBoxAdapter(
-                      child: Center(child: Text('No nearby restaurants',style: GoogleFonts.poppins(color:Colors.red),)),
+                      child: Center(
+                          child: Text(
+                        'No nearby restaurants',
+                        style: GoogleFonts.poppins(color: Colors.red),
+                      )),
                     );
                   }
                   return SliverList(

@@ -112,7 +112,7 @@ class _CartPageState extends State<CartPage> {
     print('ok $orderid');
     //var startpaymnt=Provider.of<Paymentrzrpay>(context,listen: false);
     var options = {
-      'key': 'rzp_test_bSgdTgaBOb05KI',
+      'key': '0sWjPBzEEUwn0pzV9fbrsssC',
       'amount': sum * 100,
       'order_id': orderid,
       'name': 'Chefoo',

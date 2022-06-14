@@ -662,15 +662,15 @@ class _AccountPageState extends State<AccountPage> {
                             padding: const EdgeInsets.all(5.0),
                             child: Container(
                               width: MediaQuery.of(context).size.width,
-                              child: OutlineButton(
+                              child: TextButton(
                                   child: new Text(
                                     "Logout",
                                     style: GoogleFonts.poppins(
                                         color: Colors.orange,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  borderSide: BorderSide(
-                                      color: Colors.orange, width: 2),
+                                  // borderSide: BorderSide(
+                                  //     color: Colors.orange, width: 2),
                                   onPressed: () async {
                                     final SharedPreferences _sp =
                                         await SharedPreferences.getInstance();

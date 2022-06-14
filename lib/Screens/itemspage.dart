@@ -176,12 +176,15 @@ class _ItemsPageState extends State<ItemsPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(
-                                            "${snapshot.data[index]['restroNam']['name']}",
-                                            style: TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                          Container(
+                                            height: 35,
+                                            child: Text(
+                                              "${snapshot.data[index]['restroNam']['name']}",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                           Text(
                                             (Geolocator.distanceBetween(

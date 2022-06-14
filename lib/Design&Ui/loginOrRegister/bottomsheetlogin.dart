@@ -73,7 +73,7 @@ class _ShowBottomsheetState extends State<ShowBottomsheet> {
                       decoration: InputDecoration(labelText: "+91"),
                       keyboardType: TextInputType.number,
                       maxLength: 10,
-                      maxLengthEnforced: true,
+                     // maxLengthEnforced: true,
                     ))),
             Padding(
               padding:
