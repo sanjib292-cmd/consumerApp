@@ -22,6 +22,7 @@ class Paymentrzrpay extends ChangeNotifier {
         },
         body: json.encode({'amount': payment}));
         if(res.statusCode==200){
+          print(">>>>>>>>>>>>>>>${res.body}");
          var decoded=jsonDecode(res.body);
          msg=decoded['id'];
          notifyListeners();
