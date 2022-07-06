@@ -81,7 +81,7 @@ class _RestroMenuState extends State<RestroMenu> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Container(
-                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.6),borderRadius: BorderRadius.circular(8)),
+                 // decoration: BoxDecoration(color: Colors.white.withOpacity(0.6),borderRadius: BorderRadius.circular(8)),
                   height: 30,
                   //width: 80,
                   //color: Colors.grey[200],
@@ -90,7 +90,7 @@ class _RestroMenuState extends State<RestroMenu> {
                     child: Row(
                       children: [
                         Icon(
-                          FontAwesomeIcons.clock,
+                          Icons.timer,
                           size: 19,
                           color: Colors.orange,
                         ),
@@ -98,8 +98,8 @@ class _RestroMenuState extends State<RestroMenu> {
                         Align(
                             alignment: Alignment.center,
                             child: AutoSizeText(
-                              '${widget.restroDetails['preaprationTime']}',
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                              '${widget.restroDetails['preaprationTime']}'.substring(0,6),
+                              style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),
                             ))
                       ],
                     ),
@@ -200,20 +200,30 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                 const EdgeInsets
                                                                         .fromLTRB(
                                                                     8, 4, 8, 4),
-                                                            child: Text(
-                                                              widget.restroDetails['cusineType']
-                                                                              [
-                                                                              index]
-                                                                          [
-                                                                          'restro']
-                                                                      [
-                                                                      0]['items']
-                                                                  [
-                                                                  indx]['itemName'],
-                                                              style: GoogleFonts.poppins(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
+                                                            child: Container(
+                                                              height: 60,
+                                                              width: 190,
+                                                              //color: Colors.red,
+                                                              child: Center(
+                                                                child: Align(
+                                                                  alignment: Alignment.centerLeft,
+                                                                  child: Text(
+                                                                    widget.restroDetails['cusineType']
+                                                                                    [
+                                                                                    index]
+                                                                                [
+                                                                                'restro']
+                                                                            [
+                                                                            0]['items']
+                                                                        [
+                                                                        indx]['itemName'],overflow: TextOverflow.ellipsis,maxLines: 2,
+                                                                    style: GoogleFonts.poppins(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700),
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
