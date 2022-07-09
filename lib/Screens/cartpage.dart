@@ -41,16 +41,16 @@ class _CartPageState extends State<CartPage> {
   var postedOrder;
   var desc, contact, email;
   var paymentId, delBoycharge;
-  bool paymentsucess=false;
-  bool paid=false;
+  bool paymentsucess = false;
+  bool paid = false;
   Razorpay _razorpay = Razorpay();
-   postOrder() async {
-     var postOrder = Provider.of<OrderBackend>(context, listen: false);
-     try {
+  postOrder() async {
+    var postOrder = Provider.of<OrderBackend>(context, listen: false);
+    try {
       print(postOrder.sucessFullyaded);
       print('posting order');
 
-     await postOrder
+      await postOrder
           .postOrder(
               tOken,
               restronam,
@@ -74,27 +74,27 @@ class _CartPageState extends State<CartPage> {
                       orderDetails: value,
                     ));
               })));
-          // print(orderpost);
-          // return orderpost;
+      // print(orderpost);
+      // return orderpost;
     } on Exception catch (e) {
       snackBar('this $e', context);
       print('$e is lol');
     }
-    
-  }
-  sums(){
-    print(2+2);
   }
 
-  Future _handlePaymentSuccess(PaymentSuccessResponse response)async{
+  sums() {
+    print(2 + 2);
+  }
+
+  Future _handlePaymentSuccess(PaymentSuccessResponse response) async {
     setState(() {
-      paymentsucess=true;
+      paymentsucess = true;
     });
-    
+
     snackBar('Sucessfull', context);
     sums();
     await postOrder();
-    }
+  }
 
   void _handlePaymentError(PaymentFailureResponse response) {
     print(response.message);
@@ -125,7 +125,7 @@ class _CartPageState extends State<CartPage> {
         return snackBar('ordrid null', this.context);
       }
       _razorpay.open(options);
-      if(paymentsucess){
+      if (paymentsucess) {
         postOrder();
       }
       snackBar('Payment failed', context);
@@ -181,9 +181,8 @@ class _CartPageState extends State<CartPage> {
                       setState(() {
                         paymentId = createPayment.msg;
                       });
-                     await startPayment(createPayment.msg);
-                    }, 
-                    () async {
+                      await startPayment(createPayment.msg);
+                    }, () async {
                       await postOrder
                           .postOrder(
                               tOken,
@@ -222,7 +221,8 @@ class _CartPageState extends State<CartPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      child: Image.network('https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Ftaco.png?alt=media&token=780931bb-32e7-4f01-a1e7-e9c64766aecb'),
+                      child: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2Ftaco.png?alt=media&token=780931bb-32e7-4f01-a1e7-e9c64766aecb'),
                     ),
                     Text(
                       'Login to view your cart items',
@@ -461,8 +461,9 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                   snapshot.data['couPonapplied'] == true
                                       ? Padding(
-                                        padding: const EdgeInsets.only(right:8.0),
-                                        child: Row(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: Row(
                                             children: [
                                               Icon(
                                                 FontAwesomeIcons.checkCircle,
@@ -475,7 +476,7 @@ class _CartPageState extends State<CartPage> {
                                               ),
                                             ],
                                           ),
-                                      )
+                                        )
                                       : Container()
                                 ],
                               ),
@@ -492,7 +493,7 @@ class _CartPageState extends State<CartPage> {
                             // height: MediaQuery.of(context).size.height /
                             //     3.5, //*MediaQuery.of(context).devicePixelRatio,
                             width: MediaQuery.of(context).size.width,
-                          
+
                             //margin: EdgeInsets.only(left: 30),
                             child: FutureBuilder(
                                 future: getcart,
@@ -521,7 +522,8 @@ class _CartPageState extends State<CartPage> {
                                       //   height: 10,
                                       // ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top:8.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -538,7 +540,8 @@ class _CartPageState extends State<CartPage> {
                                       //   height: 10,
                                       // ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top:8.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -554,7 +557,8 @@ class _CartPageState extends State<CartPage> {
                                       //   height: 10,
                                       // ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top:8.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -570,7 +574,8 @@ class _CartPageState extends State<CartPage> {
                                       //   height: 10,
                                       // ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top:8.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -599,7 +604,18 @@ class _CartPageState extends State<CartPage> {
                                           ),
                                           AutoSizeText('₹' +
                                               (snapshot.data['total'] +
-                                                     (Geolocator.distanceBetween(snap.data['cord']['lat'], snap.data['cord']['lon'], widget.latlng.latitude, widget.latlng.longitude) / 1000 * 6) + 25 +
+                                                      (Geolocator.distanceBetween(
+                                                              snap.data['cord']
+                                                                  ['lat'],
+                                                              snap.data['cord']
+                                                                  ['lon'],
+                                                              widget.latlng
+                                                                  .latitude,
+                                                              widget.latlng
+                                                                  .longitude) /
+                                                          1000 *
+                                                          6) +
+                                                      25 +
                                                       (snapshot.data['total'] *
                                                           0.05) +
                                                       (snapshot.data['products']
@@ -629,7 +645,9 @@ class _CartPageState extends State<CartPage> {
                                   Align(
                                       alignment: Alignment.topLeft,
                                       child: AutoSizeText(
-                                          'Order will deliver here..',style: GoogleFonts.poppins(),)),
+                                        'Order will deliver here..',
+                                        style: GoogleFonts.poppins(),
+                                      )),
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -648,7 +666,8 @@ class _CartPageState extends State<CartPage> {
                                               widget.latlng.longitude),
                                           builder: (con, AsyncSnapshot snap) {
                                             if (snap.data == null) {
-                                              return Text('Locating..',style: GoogleFonts.poppins());
+                                              return Text('Locating..',
+                                                  style: GoogleFonts.poppins());
                                             }
                                             return Container(
                                               height: 60,
@@ -722,7 +741,9 @@ class _CartPageState extends State<CartPage> {
                                               } else if (snip.data['isOpen'] ==
                                                   false) {
                                                 return Container(
-                                                  width: MediaQuery.of(context).size.width,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
                                                   padding: EdgeInsets.all(8),
                                                   decoration: BoxDecoration(
                                                       color: Colors.white,
@@ -731,7 +752,13 @@ class _CartPageState extends State<CartPage> {
                                                               8)),
                                                   child: Center(
                                                     child: Text(
-                                                        'Restaurant is closed for delivery',style: GoogleFonts.poppins(fontWeight: FontWeight.w600),),
+                                                      'Restaurant is closed for delivery',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                    ),
                                                   ),
                                                 );
                                               }
@@ -742,75 +769,88 @@ class _CartPageState extends State<CartPage> {
                                                 children: [
                                                   RaisedButton(
                                                     onPressed: () {
-                                                      setState(() {
-                                                        delBoycharge = (Geolocator.distanceBetween(
-                                                                    snapshot.data[
-                                                                            'cord']
-                                                                        ['lat'],
-                                                                    snapshot.data[
-                                                                            'cord']
-                                                                        ['lon'],
-                                                                    widget
-                                                                        .latlng
-                                                                        .latitude,
-                                                                    widget
-                                                                        .latlng
-                                                                        .longitude) /
-                                                                1000 *
-                                                                7)
-                                                            .round();
-                                                        sum = (snapshot.data['total'] +
-                                                                (Geolocator.distanceBetween(
-                                                                        snapshot.data['cord'][
-                                                                            'lat'],
-                                                                        snapshot.data['cord']
-                                                                            [
-                                                                            'lon'],
-                                                                        widget
-                                                                            .latlng
-                                                                            .latitude,
-                                                                        widget
-                                                                            .latlng
-                                                                            .longitude) /
-                                                                    1000 *
-                                                                    7) +
-                                                                (snapshot.data[
-                                                                        'total'] *
-                                                                    0.05) +
-                                                                (snapshot
-                                                                        .data[
-                                                                            'products']
-                                                                        .length *
-                                                                    10) -
-                                                                snapshot.data[
-                                                                    'discountValue'])
-                                                            .round();
-                                                        destloc = LatLng(
-                                                            snapshot.data[
-                                                                'cord']['lat'],
-                                                            snapshot.data[
-                                                                'cord']['lon']);
-                                                        ////destloc.latitude=snapshot.data['cord']['lat'];
-                                                        restronam = snapshot
-                                                            .data['restroId'];
-                                                        orderItm = snapshot
-                                                            .data['products'];
-                                                        user = snapshot
-                                                            .data['userId'];
-                                                        contact = snapshot
-                                                                .data['userId']
-                                                            ['phoneNumber'];
-                                                        email = snapshot
-                                                                .data['userId']
-                                                            ['email'];
-                                                        desc = snapshot.data[
-                                                                    'products']
-                                                                [0]['item']
-                                                            ['itemName'];
-                                                      });
-                                                      // print(sum);
+                                                      showDialog(context: context, builder: (ctx){
+                                    return  AlertDialog(
+                                      title: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Sorry',style: GoogleFonts.poppins(fontWeight: FontWeight.w500),),
+                                          Text('This feature will available soon..  till then use COD....',style: GoogleFonts.poppins(fontWeight: FontWeight.w400,fontSize: 16),),
+                                        ],
+                                      ),
+                                    );
+                                  });
 
-                                                      checkoutonpress();
+                                                      // setState(() {
+                                                      //   delBoycharge = (Geolocator.distanceBetween(
+                                                      //               snapshot.data[
+                                                      //                       'cord']
+                                                      //                   ['lat'],
+                                                      //               snapshot.data[
+                                                      //                       'cord']
+                                                      //                   ['lon'],
+                                                      //               widget
+                                                      //                   .latlng
+                                                      //                   .latitude,
+                                                      //               widget
+                                                      //                   .latlng
+                                                      //                   .longitude) /
+                                                      //           1000 *
+                                                      //           7)
+                                                      //       .round();
+                                                      //   sum = (snapshot.data['total'] +
+                                                      //           (Geolocator.distanceBetween(
+                                                      //                   snapshot.data['cord'][
+                                                      //                       'lat'],
+                                                      //                   snapshot.data['cord']
+                                                      //                       [
+                                                      //                       'lon'],
+                                                      //                   widget
+                                                      //                       .latlng
+                                                      //                       .latitude,
+                                                      //                   widget
+                                                      //                       .latlng
+                                                      //                       .longitude) /
+                                                      //               1000 *
+                                                      //               7) +
+                                                      //           (snapshot.data[
+                                                      //                   'total'] *
+                                                      //               0.05) +
+                                                      //           (snapshot
+                                                      //                   .data[
+                                                      //                       'products']
+                                                      //                   .length *
+                                                      //               10) -
+                                                      //           snapshot.data[
+                                                      //               'discountValue'])
+                                                      //       .round();
+                                                      //   destloc = LatLng(
+                                                      //       snapshot.data[
+                                                      //           'cord']['lat'],
+                                                      //       snapshot.data[
+                                                      //           'cord']['lon']);
+                                                      //   ////destloc.latitude=snapshot.data['cord']['lat'];
+                                                      //   restronam = snapshot
+                                                      //       .data['restroId'];
+                                                      //   orderItm = snapshot
+                                                      //       .data['products'];
+                                                      //   user = snapshot
+                                                      //       .data['userId'];
+                                                      //   contact = snapshot
+                                                      //           .data['userId']
+                                                      //       ['phoneNumber'];
+                                                      //   email = snapshot
+                                                      //           .data['userId']
+                                                      //       ['email'];
+                                                      //   desc = snapshot.data[
+                                                      //               'products']
+                                                      //           [0]['item']
+                                                      //       ['itemName'];
+                                                      // });
+                                                      // // print(sum);
+
+                                                      // checkoutonpress();
                                                     },
                                                     color: Colors.green,
                                                     padding: EdgeInsets.only(
