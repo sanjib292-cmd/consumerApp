@@ -63,7 +63,6 @@ class _FirstPageState extends State<FirstPage> {
                 builder: (con, AsyncSnapshot snapshot) {
                   //  print(snapshot.data());
                   if (snapshot.data != null) {
-                   
                     return SliverAppBar(
                       automaticallyImplyLeading: false,
                       backgroundColor: Colors.white,
@@ -560,7 +559,7 @@ class _FirstPageState extends State<FirstPage> {
                                                                           .topLeft,
                                                                   child:
                                                                       Container(
-                                                                       // color: Colors.red,
+                                                                    // color: Colors.red,
                                                                     // height: 90,
                                                                     width: 150 -
                                                                         16,
@@ -568,7 +567,8 @@ class _FirstPageState extends State<FirstPage> {
                                                                         snapshot.data[index]
                                                                             [
                                                                             'name'],
-                                                                            maxLines: 2,
+                                                                        maxLines:
+                                                                            2,
                                                                         overflow:
                                                                             TextOverflow
                                                                                 .fade,

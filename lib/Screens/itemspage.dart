@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
@@ -178,7 +179,7 @@ class _ItemsPageState extends State<ItemsPage> {
                                         children: <Widget>[
                                           Container(
                                             height: 35,
-                                            child: Text(
+                                            child: AutoSizeText(
                                               "${snapshot.data[index]['restroNam']['name']}",
                                               style: TextStyle(
                                                   fontSize: 18,
@@ -287,12 +288,16 @@ class _ItemsPageState extends State<ItemsPage> {
                                               padding:
                                                   const EdgeInsets.fromLTRB(
                                                       8, 4, 8, 4),
-                                              child: Text(
-                                                widget.product[indexofRestro]
-                                                    ['items'][ind]["itemName"],
-                                                style: GoogleFonts.poppins(
-                                                    fontWeight:
-                                                        FontWeight.w700),
+                                              child: Container(
+                                                height: 60,
+                                                width: 190,
+                                                child: Text(
+                                                  widget.product[indexofRestro]
+                                                      ['items'][ind]["itemName"],
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -518,6 +523,7 @@ class _ItemsPageState extends State<ItemsPage> {
                                 ],
                               ),
                             );
+                            
                             // Container(
                             //     height: 150,
                             //     margin: const EdgeInsets.symmetric(
