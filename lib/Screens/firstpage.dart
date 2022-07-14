@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/LoginRegisterapi.dart';
@@ -334,81 +336,95 @@ class _FirstPageState extends State<FirstPage> {
                                                           //         .circular(
                                                           //             8.0),
                                                           child: ColorFiltered(
-                                                            colorFilter: snapshot
-                                                                            .data[
-                                                                        index]
-                                                                    ['isOpen']
-                                                                ? ColorFilter
-                                                                    .matrix(<
-                                                                        double>[
-                                                                    1,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    1,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    1,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                    1,
-                                                                    0,
-                                                                  ])
-                                                                : ColorFilter.mode(
-                                                                    Colors.grey,
-                                                                    BlendMode
-                                                                        .saturation),
-                                                            child: FadeInImage(
-                                                              fit: BoxFit.fill,
+                                                              colorFilter: snapshot
+                                                                          .data[index]
+                                                                      ['isOpen']
+                                                                  ? ColorFilter
+                                                                      .matrix(<
+                                                                          double>[
+                                                                      1,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      1,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      1,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      0,
+                                                                      1,
+                                                                      0,
+                                                                    ])
+                                                                  : ColorFilter.mode(
+                                                                      Colors
+                                                                          .grey,
+                                                                      BlendMode
+                                                                          .saturation),
+                                                              child: CachedNetworkImage(
+                                                                  fit: BoxFit.cover,
+                                                                  imageUrl: snapshot.data[index]['imgurl'],
+                                                                  placeholder: (context, url) => Container(
+                                                                      height: 30,
+                                                                      width: 30,
+                                                                      child: CupertinoActivityIndicator(
+                                                                        color: Colors
+                                                                            .purple,
+                                                                      )),
+                                                                  errorWidget: (context, url, error) => Container(
+                                                                        decoration:
+                                                                            BoxDecoration(image: DecorationImage(image: AssetImage('images/LOGO.png'), fit: BoxFit.cover)),
+                                                                      ))
+                                                              // FadeInImage(
+                                                              //   fit: BoxFit.fill,
 
-                                                              //fit: BoxFit.cover,
-                                                              imageErrorBuilder:
-                                                                  (con, obj,
-                                                                      stack) {
-                                                                print('er');
-                                                                return Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(
-                                                                              8)),
-                                                                          image:
-                                                                              DecorationImage(
-                                                                            // invertColors: snapshot.data[
-                                                                            //       index]['isOpen'],
-                                                                            image:
-                                                                                AssetImage('images/LOGO.png'),
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          )),
-                                                                );
-                                                              },
-                                                              placeholder:
-                                                                  AssetImage(
-                                                                'images/LOGO.png',
+                                                              //   //fit: BoxFit.cover,
+                                                              //   imageErrorBuilder:
+                                                              //       (con, obj,
+                                                              //           stack) {
+                                                              //     print('er');
+                                                              //     return Container(
+                                                              //       decoration:
+                                                              //           BoxDecoration(
+                                                              //               borderRadius: BorderRadius.all(Radius.circular(
+                                                              //                   8)),
+                                                              //               image:
+                                                              //                   DecorationImage(
+                                                              //                 // invertColors: snapshot.data[
+                                                              //                 //       index]['isOpen'],
+                                                              //                 image:
+                                                              //                     AssetImage('images/LOGO.png'),
+                                                              //                 fit:
+                                                              //                     BoxFit.cover,
+                                                              //               )),
+                                                              //     );
+                                                              //   },
+                                                              //   placeholder:
+                                                              //       AssetImage(
+                                                              //     'images/LOGO.png',
+                                                              //   ),
+                                                              //   image: snapshot.data[
+                                                              //                   index]
+                                                              //               [
+                                                              //               'imgurl'] !=
+                                                              //           null
+                                                              //       ? NetworkImage(
+                                                              //           snapshot.data[
+                                                              //                   index]
+                                                              //               [
+                                                              //               'imgurl'],
+                                                              //         )
+                                                              //       : NetworkImage(
+                                                              //           ''),
+                                                              // ),
                                                               ),
-                                                              image: snapshot.data[
-                                                                              index]
-                                                                          [
-                                                                          'imgurl'] !=
-                                                                      null
-                                                                  ? NetworkImage(
-                                                                      snapshot.data[
-                                                                              index]
-                                                                          [
-                                                                          'imgurl'],
-                                                                    )
-                                                                  : NetworkImage(
-                                                                      ''),
-                                                            ),
-                                                          ),
                                                         ),
                                                         //fit: BoxFit.fill,
                                                       ),
@@ -823,49 +839,77 @@ class _FirstPageState extends State<FirstPage> {
                                                                   Colors.grey,
                                                                   BlendMode
                                                                       .saturation),
-                                                          child: FadeInImage(
-                                                            fit: BoxFit.fill,
+                                                          child:
+                                                              CachedNetworkImage(
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  imageUrl: snapshot
+                                                                              .data[
+                                                                          index][
+                                                                      'imgurl'],
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      Container(
+                                                                          height:
+                                                                              30,
+                                                                          width:
+                                                                              30,
+                                                                          child:
+                                                                              CupertinoActivityIndicator(
+                                                                            color:
+                                                                                Colors.purple,
+                                                                          )),
+                                                                  errorWidget: (context,
+                                                                          url,
+                                                                          error) =>
+                                                                      Container(
+                                                                        decoration:
+                                                                            BoxDecoration(image: DecorationImage(image: AssetImage('images/LOGO.png'), fit: BoxFit.cover)),
+                                                                      )),
+                                                          // FadeInImage(
+                                                          //   fit: BoxFit.fill,
 
-                                                            //fit: BoxFit.cover,
-                                                            imageErrorBuilder:
-                                                                (con, obj,
-                                                                    stack) {
-                                                              print('er');
-                                                              return Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(
-                                                                                8)),
-                                                                        image:
-                                                                            DecorationImage(
-                                                                          // invertColors: snapshot.data[
-                                                                          //       index]['isOpen'],
-                                                                          image:
-                                                                              AssetImage('images/LOGO.png'),
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        )),
-                                                              );
-                                                            },
-                                                            placeholder:
-                                                                AssetImage(
-                                                              'images/LOGO.png',
-                                                            ),
-                                                            image: snapshot.data[
-                                                                            index]
-                                                                        [
-                                                                        'imgurl'] !=
-                                                                    null
-                                                                ? NetworkImage(
-                                                                    snapshot.data[
-                                                                            index]
-                                                                        [
-                                                                        'imgurl'],
-                                                                  )
-                                                                : NetworkImage(
-                                                                    ''),
-                                                          ),
+                                                          //   //fit: BoxFit.cover,
+                                                          //   imageErrorBuilder:
+                                                          //       (con, obj,
+                                                          //           stack) {
+                                                          //     print('er');
+                                                          //     return Container(
+                                                          //       decoration:
+                                                          //           BoxDecoration(
+                                                          //               borderRadius:
+                                                          //                   BorderRadius.all(Radius.circular(
+                                                          //                       8)),
+                                                          //               image:
+                                                          //                   DecorationImage(
+                                                          //                 // invertColors: snapshot.data[
+                                                          //                 //       index]['isOpen'],
+                                                          //                 image:
+                                                          //                     AssetImage('images/LOGO.png'),
+                                                          //                 fit: BoxFit
+                                                          //                     .cover,
+                                                          //               )
+                                                          //               ),
+                                                          //     );
+                                                          //   },
+                                                          //   placeholder:
+                                                          //       AssetImage(
+                                                          //     'images/LOGO.png',
+                                                          //   ),
+                                                          //   image: snapshot.data[
+                                                          //                   index]
+                                                          //               [
+                                                          //               'imgurl'] !=
+                                                          //           null
+                                                          //       ? NetworkImage(
+                                                          //           snapshot.data[
+                                                          //                   index]
+                                                          //               [
+                                                          //               'imgurl'],
+                                                          //         )
+                                                          //       : NetworkImage(
+                                                          //           ''),
+                                                          // ),
                                                         ),
                                                       ),
                                                       //fit: BoxFit.fill,

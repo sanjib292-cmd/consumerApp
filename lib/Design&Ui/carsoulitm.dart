@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CarouselItms extends StatelessWidget {
-  const CarouselItms({this.img,this.imgt});
+  const CarouselItms({this.img, this.imgt});
   final img;
   final imgt;
 
@@ -22,18 +24,18 @@ class CarouselItms extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 // image: DecorationImage(
-            
+
                 //   fit: BoxFit.fill,
                 //   image:
                 //   img
                 // ),
               ),
-            
+
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 child: FadeInImage(
                   fit: BoxFit.fill,
-            
+
                   //fit: BoxFit.cover,
                   // imageErrorBuilder: (con, obj, stack) {
                   //   print('ers');
@@ -54,7 +56,7 @@ class CarouselItms extends StatelessWidget {
                   image: NetworkImage(img),
                 ),
               ),
-            
+
               // child: Padding(
               //   padding: const EdgeInsets.all(8.0),
               //   child: Image.network(
@@ -89,19 +91,34 @@ class nulCarasoul extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 0)
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              // image: DecorationImage(
 
-                  boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black, spreadRadius: 0)],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                image: DecorationImage(
-                  
-                  fit: BoxFit.fill,
-                  image: AssetImage(
-                  img
+              //   fit: BoxFit.fill,
+              //   image: AssetImage(
+              //   img
+              // )),
+            ),
+            child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: img,
+                placeholder: (context, url) => Container(
+                    height: 30,
+                    width: 30,
+                    child: CupertinoActivityIndicator(
+                      color: Colors.purple,
+                    )),
+                errorWidget: (context, url, error) => Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('images/LOGO.png'),
+                          fit: BoxFit.cover)),
                 )),
-                
-                ),
-                
+
             // child: Padding(
             //   padding: const EdgeInsets.all(8.0),
             //   child: Image.network(
@@ -110,13 +127,13 @@ class nulCarasoul extends StatelessWidget {
             //   ),
             // ),
           ),
-        //   Container(
-        //   height: 350.0,
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.all(Radius.circular(20)),
-        //       color: Colors.white,
-        //     ),
-        // )
+          //   Container(
+          //   height: 350.0,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.all(Radius.circular(20)),
+          //       color: Colors.white,
+          //     ),
+          // )
         ],
       ),
     );

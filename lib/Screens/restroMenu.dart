@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
@@ -285,30 +287,43 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           10),
-                                                              child:
-                                                                  FadeInImage(
-                                                                imageErrorBuilder:
-                                                                    (con, obj,
-                                                                        stack) {
-                                                                  return Container(
-                                                                    height: 120,
-                                                                    width: 100,
-                                                                    child: Image.network(
-                                                                        'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
-                                                                        height: double
-                                                                            .infinity,
-                                                                        fit: BoxFit
-                                                                            .cover),
-                                                                  );
-                                                                },
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                image: NetworkImage(
-                                                                    "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}"),
-                                                                placeholder:
-                                                                    NetworkImage(
-                                                                        'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
-                                                              ),
+                                                              child:CachedNetworkImage(
+                                                                  fit: BoxFit.cover,
+                                                                  imageUrl:  "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}",
+                                                                  placeholder: (context, url) => Container(
+                                                                      height: 30,
+                                                                      width: 30,
+                                                                      child: CupertinoActivityIndicator(
+                                                                        color: Colors
+                                                                            .purple,
+                                                                      )),
+                                                                  errorWidget: (context, url, error) => Container(
+                                                                        decoration:
+                                                                            BoxDecoration(image: DecorationImage(image: AssetImage('images/LOGO.png'), fit: BoxFit.cover)),
+                                                                      ))
+                                                              //     FadeInImage(
+                                                              //   imageErrorBuilder:
+                                                              //       (con, obj,
+                                                              //           stack) {
+                                                              //     return Container(
+                                                              //       height: 120,
+                                                              //       width: 100,
+                                                              //       child: Image.network(
+                                                              //           'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
+                                                              //           height: double
+                                                              //               .infinity,
+                                                              //           fit: BoxFit
+                                                              //               .cover),
+                                                              //     );
+                                                              //   },
+                                                              //   fit: BoxFit
+                                                              //       .cover,
+                                                              //   image: NetworkImage(
+                                                              //       "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}"),
+                                                              //   placeholder:
+                                                              //       NetworkImage(
+                                                              //           'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
+                                                              // ),
                                                             ),
                                                           ),
                                                           Container(
