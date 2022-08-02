@@ -47,7 +47,7 @@ android {
         applicationId "com.foodorder_userapp"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode flutterVersionCode.toInteger()
+        versionCode 7
         versionName flutterVersionName
         
     }

@@ -283,6 +283,7 @@ class _CartPageState extends State<CartPage> {
               }));
             });
           } else {
+            print(snapshot.data);
             //print(snapshot.data);
             var cart = Provider.of<Cart>(context, listen: false);
             var location = Provider.of<Location>(context, listen: false);
@@ -305,11 +306,24 @@ class _CartPageState extends State<CartPage> {
                   shrinkWrap: true,
                   primary: false,
                   itemBuilder: (context, position) {
+                    // num sum = 0;
+
+                    // var tot=snapshot.data['products']
+                    //  .forEach((product){
+
+                    //      var tot=    sum+product['price'];
+                    //      print('>>$tot');
+                    //           });
+                    // print('tot $tot');
+                    // .forEach((product){
+                    //             print("price  >${sum+product['price']}");
+                    //           });
                     finitemcount =
                         snapshot.data['products'][position]['quantity'];
                     return createCartListItem(
                         snapshot.data['products'][position]['item']['itemName'],
-                        snapshot.data['products'][position]['price'],
+                        snapshot.data['products'][position]['item']['price'] *
+                            snapshot.data['products'][position]['quantity'],
                         snapshot.data['products'][position]['item']['itmImg'],
                         () async {
                           final SharedPreferences sharedPreferences =
@@ -317,7 +331,7 @@ class _CartPageState extends State<CartPage> {
                           var token =
                               sharedPreferences.getString('Account Details');
                           Map<String, dynamic> payloads = Jwt.parseJwt(token!);
-
+                          setState(() {});
                           await cart.addToCart(
                               id: payloads['id'],
                               item: snapshot.data['products'][position]['item'],
@@ -350,7 +364,8 @@ class _CartPageState extends State<CartPage> {
                           var token =
                               sharedPreferences.getString('Account Details');
                           Map<String, dynamic> payloads = Jwt.parseJwt(token!);
-                          print(token);
+                           setState(() {});
+                          // print(token);
                           await cart.removequentity(
                               snapshot.data['products'][position]['item']
                                   ['_id'],
@@ -502,6 +517,7 @@ class _CartPageState extends State<CartPage> {
                                   if (snap.data == null) {
                                     return CircularProgressIndicator();
                                   }
+                                  print(snapshot.data['total']);
                                   return Column(
                                     children: [
                                       AutoSizeText(
@@ -769,18 +785,37 @@ class _CartPageState extends State<CartPage> {
                                                 children: [
                                                   RaisedButton(
                                                     onPressed: () {
-                                                      showDialog(context: context, builder: (ctx){
-                                    return  AlertDialog(
-                                      title: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Sorry',style: GoogleFonts.poppins(fontWeight: FontWeight.w500),),
-                                          Text('This feature will available soon..  till then use COD....',style: GoogleFonts.poppins(fontWeight: FontWeight.w400,fontSize: 16),),
-                                        ],
-                                      ),
-                                    );
-                                  });
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (ctx) {
+                                                            return AlertDialog(
+                                                              title: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    'Sorry',
+                                                                    style: GoogleFonts.poppins(
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
+                                                                  ),
+                                                                  Text(
+                                                                    'This feature will available soon..  till then use COD....',
+                                                                    style: GoogleFonts.poppins(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        fontSize:
+                                                                            16),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          });
 
                                                       // setState(() {
                                                       //   delBoycharge = (Geolocator.distanceBetween(
@@ -891,8 +926,8 @@ class _CartPageState extends State<CartPage> {
                                                                         .latlng
                                                                         .longitude) /
                                                                 1000 *
-                                                                7)
-                                                            .round();
+                                                                7) +
+                                                            25.round();
 
                                                         sum = (snapshot.data['total'] +
                                                                 (Geolocator.distanceBetween(
@@ -916,7 +951,8 @@ class _CartPageState extends State<CartPage> {
                                                                         .data[
                                                                             'products']
                                                                         .length *
-                                                                    10) -
+                                                                    10) +
+                                                                25 -
                                                                 snapshot.data[
                                                                     'discountValue'])
                                                             .round();

@@ -20,19 +20,21 @@ class RestroMenu extends StatefulWidget {
 }
 
 class _RestroMenuState extends State<RestroMenu> {
+  bool isPressed = false;
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<Cart>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-         iconTheme: IconThemeData(
-    color: Colors.black, //change your color here
-  ),
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
         centerTitle: true,
         title: Text("${widget.restroDetails['name']}",
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                        fontSize: 21, fontWeight: FontWeight.w600)),
+            style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 21,
+                fontWeight: FontWeight.w600)),
         backgroundColor: Colors.white,
       ),
       body: Padding(
@@ -40,15 +42,17 @@ class _RestroMenuState extends State<RestroMenu> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-          
             Container(
               padding: EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(6),
-                image: DecorationImage(image: NetworkImage('${widget.restroDetails['imgurl']}'),fit:BoxFit.fill,
-                colorFilter:new ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.dstATop))),
-              height: MediaQuery.of(context).size.height/4.8,
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(6),
+                  image: DecorationImage(
+                      image: NetworkImage('${widget.restroDetails['imgurl']}'),
+                      fit: BoxFit.fill,
+                      colorFilter: new ColorFilter.mode(
+                          Colors.black.withOpacity(0.6), BlendMode.dstATop))),
+              height: MediaQuery.of(context).size.height / 4.8,
               child: Column(
                 children: [
                   Align(
@@ -63,55 +67,67 @@ class _RestroMenuState extends State<RestroMenu> {
                           return AutoSizeText(
                               '${widget.restroDetails['cusineType'][indx]['cusineType']} ,',
                               style: GoogleFonts.poppins(
-                                  fontSize: 19, fontWeight: FontWeight.bold,color: Colors.white));
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white));
                         },
                       ),
                     ),
                   ),
-                       Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    child: AutoSizeText('${widget.restroDetails['address']['city']}',
-                        style: GoogleFonts.poppins(
-                            fontSize: 19, fontWeight: FontWeight.w600,color: Colors.white)),
-                  )),
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('${widget.restroDetails['address']['zipcode']}',
-                      style: GoogleFonts.poppins(
-                         fontSize: 19, fontWeight: FontWeight.w600,color: Colors.white))),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                 // decoration: BoxDecoration(color: Colors.white.withOpacity(0.6),borderRadius: BorderRadius.circular(8)),
-                  height: 30,
-                  //width: 80,
-                  //color: Colors.grey[200],
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 5, 3, 5),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.timer,
-                          size: 19,
-                          color: Colors.orange,
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        child: AutoSizeText(
+                            '${widget.restroDetails['address']['city']}',
+                            style: GoogleFonts.poppins(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white)),
+                      )),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                          '${widget.restroDetails['address']['zipcode']}',
+                          style: GoogleFonts.poppins(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white))),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      // decoration: BoxDecoration(color: Colors.white.withOpacity(0.6),borderRadius: BorderRadius.circular(8)),
+                      height: 30,
+                      //width: 80,
+                      //color: Colors.grey[200],
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(4, 5, 3, 5),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.timer,
+                              size: 19,
+                              color: Colors.orange,
+                            ),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Align(
+                                alignment: Alignment.center,
+                                child: AutoSizeText(
+                                  '${widget.restroDetails['preaprationTime']}'
+                                      .substring(0, 6),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ))
+                          ],
                         ),
-                        SizedBox(width: 2,),
-                        Align(
-                            alignment: Alignment.center,
-                            child: AutoSizeText(
-                              '${widget.restroDetails['preaprationTime']}'.substring(0,6),
-                              style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),
-                            ))
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
                 ],
               ),
             ),
-       
             SizedBox(
               height: 5,
             ),
@@ -119,7 +135,7 @@ class _RestroMenuState extends State<RestroMenu> {
               height: 25,
               color: Colors.grey[300],
             ),
-            Expanded( 
+            Expanded(
               child: SingleChildScrollView(
                   child: ListView.builder(
                       itemCount: widget.restroDetails['cusineType'].length,
@@ -131,9 +147,9 @@ class _RestroMenuState extends State<RestroMenu> {
                             Card(
                               //elevation: 0.5,
                               child: ExpansionTile(
-                                //childrenPadding: ,
-                                //tilePadding: EdgeInsets.all(2),
-                                initiallyExpanded: true,
+                                  //childrenPadding: ,
+                                  //tilePadding: EdgeInsets.all(2),
+                                  initiallyExpanded: true,
                                   children: [
                                     ListView.builder(
                                         shrinkWrap: true,
@@ -208,21 +224,22 @@ class _RestroMenuState extends State<RestroMenu> {
                                                               //color: Colors.red,
                                                               child: Center(
                                                                 child: Align(
-                                                                  alignment: Alignment.centerLeft,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerLeft,
                                                                   child: Text(
-                                                                    widget.restroDetails['cusineType']
-                                                                                    [
-                                                                                    index]
-                                                                                [
-                                                                                'restro']
+                                                                    widget.restroDetails['cusineType'][index]['restro'][0]['items']
                                                                             [
-                                                                            0]['items']
+                                                                            indx]
                                                                         [
-                                                                        indx]['itemName'],overflow: TextOverflow.ellipsis,maxLines: 2,
+                                                                        'itemName'],
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    maxLines: 2,
                                                                     style: GoogleFonts.poppins(
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .w700),
+                                                                            FontWeight.w700),
                                                                   ),
                                                                 ),
                                                               ),
@@ -265,7 +282,7 @@ class _RestroMenuState extends State<RestroMenu> {
                                                         ),
                                                       ],
                                                     ),
-                                          
+
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
@@ -283,48 +300,48 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                         .circular(
                                                                             5)),
                                                             child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                              child:CachedNetworkImage(
-                                                                  fit: BoxFit.cover,
-                                                                  imageUrl:  "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}",
-                                                                  placeholder: (context, url) => Container(
-                                                                      height: 30,
-                                                                      width: 30,
-                                                                      child: CupertinoActivityIndicator(
-                                                                        color: Colors
-                                                                            .purple,
-                                                                      )),
-                                                                  errorWidget: (context, url, error) => Container(
-                                                                        decoration:
-                                                                            BoxDecoration(image: DecorationImage(image: AssetImage('images/LOGO.png'), fit: BoxFit.cover)),
-                                                                      ))
-                                                              //     FadeInImage(
-                                                              //   imageErrorBuilder:
-                                                              //       (con, obj,
-                                                              //           stack) {
-                                                              //     return Container(
-                                                              //       height: 120,
-                                                              //       width: 100,
-                                                              //       child: Image.network(
-                                                              //           'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
-                                                              //           height: double
-                                                              //               .infinity,
-                                                              //           fit: BoxFit
-                                                              //               .cover),
-                                                              //     );
-                                                              //   },
-                                                              //   fit: BoxFit
-                                                              //       .cover,
-                                                              //   image: NetworkImage(
-                                                              //       "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}"),
-                                                              //   placeholder:
-                                                              //       NetworkImage(
-                                                              //           'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
-                                                              // ),
-                                                            ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                child: CachedNetworkImage(
+                                                                    fit: BoxFit.cover,
+                                                                    imageUrl: "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}",
+                                                                    placeholder: (context, url) => Container(
+                                                                        height: 30,
+                                                                        width: 30,
+                                                                        child: CupertinoActivityIndicator(
+                                                                          color:
+                                                                              Colors.purple,
+                                                                        )),
+                                                                    errorWidget: (context, url, error) => Container(
+                                                                          decoration:
+                                                                              BoxDecoration(image: DecorationImage(image: AssetImage('images/LOGO.png'), fit: BoxFit.cover)),
+                                                                        ))
+                                                                //     FadeInImage(
+                                                                //   imageErrorBuilder:
+                                                                //       (con, obj,
+                                                                //           stack) {
+                                                                //     return Container(
+                                                                //       height: 120,
+                                                                //       width: 100,
+                                                                //       child: Image.network(
+                                                                //           'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e',
+                                                                //           height: double
+                                                                //               .infinity,
+                                                                //           fit: BoxFit
+                                                                //               .cover),
+                                                                //     );
+                                                                //   },
+                                                                //   fit: BoxFit
+                                                                //       .cover,
+                                                                //   image: NetworkImage(
+                                                                //       "${widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['itmImg']}"),
+                                                                //   placeholder:
+                                                                //       NetworkImage(
+                                                                //           'https://firebasestorage.googleapis.com/v0/b/mealtime-7fd6c.appspot.com/o/app%20asets%2F1757_SkVNQSBGQU1PIDgxNy0zOQ.jpg?alt=media&token=af42e3fb-2815-4ed6-95e6-13e198d7242e'),
+                                                                // ),
+                                                                ),
                                                           ),
                                                           Container(
                                                               width: 90,
@@ -334,121 +351,71 @@ class _RestroMenuState extends State<RestroMenu> {
                                                                       [
                                                                       'inStock']
                                                                   ? MaterialButton(
-                                                                      color: Colors
-                                                                          .green,
-                                                                      onPressed:
-                                                                          () async {
-                                                                        final SharedPreferences
-                                                                            sp =
-                                                                            await SharedPreferences.getInstance();
-                                                                        var userId =
-                                                                            sp.getString('Account Details');
-                                                                        if (userId ==
-                                                                            null) {
-                                                                          return snackBar(
-                                                                              'Please login to add this to cart',
-                                                                              context);
-                                                                        }
-                                                                        Map<String,
-                                                                                dynamic>
-                                                                            payload =
-                                                                            Jwt.parseJwt(userId);
-                                                                            print(widget.restroDetails['cord']['lon']);
-                                                                        await cart.addToCart(
-                                                                            id:payload['id'],
-                                                                            item:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx],
-                                                                            quantity:1,
-                                                                            price:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['price'],
-                                                                            token:userId,
-                                                                            restroId:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'],
-                                                                           itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'],
-                                                                            lat:widget.restroDetails['cord']['coordinates'][1],
-                                                                            lon:widget.restroDetails['cord']['coordinates'][0]);
-                                                                        // cart.sucessFullyaded !=
-                                                                        //         null
-                                                                        //     ? 
-                                                                           cart.sucessFullyaded !=
-                                                                  null
-                                                              ? snackBar(
-                                                                  '${cart.sucessFullyaded}',
-                                                                  context)
-                                                              : Alert(
-                                                                  context:
-                                                                      context,
-                                                                  type: AlertType
-                                                                      .warning,
-                                                                  title: "Cart",
-                                                                  desc:
-                                                                      "Your cart contains item from another restraunt",
-                                                                  buttons: [
-                                                                    DialogButton(
-                                                                      child:
-                                                                          Text(
-                                                                        "Replace",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontSize: 20),
-                                                                      ),
-                                                                      onPressed:
-                                                                          () async {
-                                                                        await cart
-                                                                            .deletCart(userId);
-                                                                        await cart.addToCart(
-                                                                            id:payload['id'],
-                                                                            item:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx],
-                                                                            quantity:1,
-                                                                            price:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['price'],
-                                                                            token:userId,
-                                                                            restroId:widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'],
-                                                                           itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'],
-                                                                            lat:widget.restroDetails['cord']['coordinates'][1],
-                                                                            lon:widget.restroDetails['cord']['coordinates'][0]);
-                                                                        snackBar(
-                                                                            '${cart.sucessFullyaded}',
-                                                                            context);
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      color: Color.fromRGBO(
-                                                                          0,
-                                                                          179,
-                                                                          134,
-                                                                          1.0),
-                                                                    ),
-                                                                    DialogButton(
-                                                                      child:
-                                                                          Text(
-                                                                        "Cancel",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontSize: 20),
-                                                                      ),
-                                                                      onPressed:
-                                                                          () =>
-                                                                              Navigator.pop(context),
-                                                                      gradient:
-                                                                          LinearGradient(
-                                                                              colors: [
-                                                                            Color.fromRGBO(
-                                                                                116,
-                                                                                116,
-                                                                                191,
-                                                                                1.0),
-                                                                            Color.fromRGBO(
-                                                                                52,
-                                                                                138,
-                                                                                199,
-                                                                                1.0)
-                                                                          ]),
-                                                                    )
-                                                                  ],
-                                                                ).show();
-                                                        
-                                                                      },
-                                                                      child:
-                                                                          Text(
+                                                                      color: isPressed
+                                                                          ? Colors
+                                                                              .grey
+                                                                          : Colors
+                                                                              .green,
+                                                                      onPressed: isPressed
+                                                                          ? () {}
+                                                                          : () async {
+                                                                              final SharedPreferences sp = await SharedPreferences.getInstance();
+                                                                              var userId = sp.getString('Account Details');
+                                                                              if (userId == null) {
+                                                                                return snackBar('Please login to add this to cart', context);
+                                                                              }
+                                                                              Map<String, dynamic> payload = Jwt.parseJwt(userId);
+                                                                              print(widget.restroDetails['cord']['lon']);
+                                                                              setState(() {
+                                                                                isPressed = true;
+                                                                              });
+                                                                              //  Navigator.pop(context);
+                                                                              await cart.addToCart(id: payload['id'], item: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx], quantity: 1, price: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['price'], token: userId, restroId: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'], itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'], lat: widget.restroDetails['cord']['coordinates'][1], lon: widget.restroDetails['cord']['coordinates'][0]).then((value) {
+                                                                                setState(() {
+                                                                                  isPressed = false;
+                                                                                });
+                                                                              });
+                                                                              // cart.sucessFullyaded !=
+                                                                              //         null
+                                                                              //     ?
+                                                                              cart.sucessFullyaded != null
+                                                                                  ? snackBar('${cart.sucessFullyaded}', context)
+                                                                                  : Alert(
+                                                                                      context: context,
+                                                                                      type: AlertType.warning,
+                                                                                      title: "Cart",
+                                                                                      desc: "Your cart contains item from another restraunt",
+                                                                                      buttons: [
+                                                                                        DialogButton(
+                                                                                          child: Text(
+                                                                                            "Replace",
+                                                                                            style: TextStyle(color: Colors.white, fontSize: 20),
+                                                                                          ),
+                                                                                          onPressed: () async {
+                                                                                            Navigator.pop(context);
+                                                                                            await cart.deletCart(userId);
+                                                                                            // Navigator.pop(context);
+                                                                                            cart.addToCart(id: payload['id'], item: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx], quantity: 1, price: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['price'], token: userId, restroId: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['restroId'], itmid: widget.restroDetails['cusineType'][index]['restro'][0]['items'][indx]['_id'], lat: widget.restroDetails['cord']['coordinates'][1], lon: widget.restroDetails['cord']['coordinates'][0]).then((value) => Navigator.of(context).pop());
+                                                                                            snackBar('${cart.sucessFullyaded}', context);
+                                                                                            Navigator.pop(context);
+                                                                                          },
+                                                                                          color: isPressed ? Colors.grey : Color.fromRGBO(0, 179, 134, 1.0),
+                                                                                        ),
+                                                                                        DialogButton(
+                                                                                          child: Text(
+                                                                                            "Cancel",
+                                                                                            style: TextStyle(color: Colors.white, fontSize: 20),
+                                                                                          ),
+                                                                                          onPressed: () => Navigator.pop(context),
+                                                                                          gradient: LinearGradient(colors: [
+                                                                                            Color.fromRGBO(116, 116, 191, 1.0),
+                                                                                            Color.fromRGBO(52, 138, 199, 1.0)
+                                                                                          ]),
+                                                                                        )
+                                                                                      ],
+                                                                                    ).show();
+                                                                            },
+                                                                      child: Text(
                                                                         'ADD',
                                                                         style: GoogleFonts.poppins(
                                                                             color:

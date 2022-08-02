@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodorder_userapp/Backend/cartbacknd.dart';
 import 'package:foodorder_userapp/Design&Ui/addedcartSnackbar.dart';
 import 'package:foodorder_userapp/LocationService/Location.dart';
+import 'package:foodorder_userapp/Screens/homepage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -54,6 +55,9 @@ class _ItemsPageState extends State<ItemsPage> {
       //print(e);
     }
   }
+
+  bool isPressed = false;
+  bool isReplace=false;
 
   @override
   Widget build(BuildContext context) {
@@ -406,8 +410,8 @@ class _ItemsPageState extends State<ItemsPage> {
                                                               ['items'][ind]
                                                           ["inStock"]
                                                       ? MaterialButton(
-                                                          color: Colors.green,
-                                                          onPressed: () async {
+                                                          color:isPressed?Colors.grey: Colors.green,
+                                                          onPressed:isPressed?(){}: () async {
                                                             final SharedPreferences
                                                                 sp =
                                                                 await SharedPreferences
@@ -425,27 +429,43 @@ class _ItemsPageState extends State<ItemsPage> {
                                                                 payload =
                                                                 Jwt.parseJwt(
                                                                     userId);
+                                                            setState(() {
+                                                              isPressed = true;
+                                                            });
+                                                            // Navigator.pop(context);
+                                                            // Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                            //             return MyHomePage();
+                                                            //           }));
                                                             // print(widget.restroDetails['cord']['lon']);
-                                                            await cart.addToCart(
-                                                                id: payload[
-                                                                    'id'],
-                                                                item: widget.product[indexofRestro]
-                                                                        ['items']
-                                                                    [ind],
-                                                                quantity: 1,
-                                                                price: widget.product[indexofRestro]
-                                                                        ['items'][ind]
-                                                                    ['price'],
-                                                                token: userId,
-                                                                restroId: widget.product[indexofRestro]
+                                                            await cart
+                                                                .addToCart(
+                                                                    id: payload[
+                                                                        'id'],
+                                                                    item: widget.product[indexofRestro]
                                                                             ['items']
-                                                                        [ind][
-                                                                    'restroId'],
-                                                                itmid: widget.product[indexofRestro]
-                                                                        ['items']
-                                                                    [ind]['_id'],
-                                                                lat: widget.product[indexofRestro]['restroNam']['cord']['coordinates'][1],
-                                                                lon: widget.product[indexofRestro]['restroNam']['cord']['coordinates'][0]);
+                                                                        [ind],
+                                                                    quantity: 1,
+                                                                    price: widget.product[indexofRestro]
+                                                                            ['items'][ind][
+                                                                        'price'],
+                                                                    token:
+                                                                        userId,
+                                                                    restroId: widget.product[indexofRestro]['items']
+                                                                            [ind][
+                                                                        'restroId'],
+                                                                    itmid: widget.product[indexofRestro]
+                                                                            ['items'][ind]
+                                                                        ['_id'],
+                                                                    lat: widget.product[indexofRestro]
+                                                                            ['restroNam']['cord']
+                                                                        ['coordinates'][1],
+                                                                    lon: widget.product[indexofRestro]['restroNam']['cord']['coordinates'][0])
+                                                                .then((value) {
+                                                              setState(() {
+                                                                isPressed =
+                                                                    false;
+                                                              });
+                                                            });
                                                             cart.sucessFullyaded !=
                                                                     null
                                                                 ? snackBar(
@@ -469,10 +489,19 @@ class _ItemsPageState extends State<ItemsPage> {
                                                                               color: Colors.white,
                                                                               fontSize: 20),
                                                                         ),
-                                                                        onPressed:
+                                                                        onPressed:isReplace?(){}:
                                                                             () async {
+                                                                              Navigator.pop(context);
+                                                                            // setState(() {
+                                                                            //   isReplace=true;
+                                                                            // });
                                                                           await cart
                                                                               .deletCart(userId);
+                                                                          // Navigator.pop(context);
+                                                                          // Navigator.push(context, MaterialPageRoute(builder: (context){
+                                                                          //   return MyHomePage();
+                                                                          // }));
+                                                                          // b  Navigator.pop(context);
                                                                           await cart.addToCart(
                                                                               id: payload['id'],
                                                                               item: widget.product[indexofRestro]['items'][ind],
@@ -482,14 +511,16 @@ class _ItemsPageState extends State<ItemsPage> {
                                                                               restroId: widget.product[indexofRestro]['items'][ind]['restroId'],
                                                                               itmid: widget.product[indexofRestro]['items'][ind]['_id'],
                                                                               lat: widget.product[indexofRestro]['restroNam']['cord']['coordinates'][1],
-                                                                              lon: widget.product[indexofRestro]['restroNam']['cord']['coordinates'][0]);
+                                                                              lon: widget.product[indexofRestro]['restroNam']['cord']['coordinates'][0]).then((value) {setState(() {
+                                                                                isReplace=false;
+                                                                              });});
                                                                           snackBar(
                                                                               '${cart.sucessFullyaded}',
                                                                               context);
-                                                                          Navigator.pop(
-                                                                              context);
+                                                                          // Navigator.pop(
+                                                                          //     context);
                                                                         },
-                                                                        color: Color.fromRGBO(
+                                                                        color:isReplace?Colors.grey: Color.fromRGBO(
                                                                             0,
                                                                             179,
                                                                             134,
